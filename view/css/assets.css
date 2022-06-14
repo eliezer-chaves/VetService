@@ -1,0 +1,97 @@
+:root {
+  --color-blue: #81b3ff;
+}
+
+body {
+  background-color: #d3d3d3;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+.link:visited {
+  text-decoration: none;
+  color: inherit;
+}
+.link:active {
+  text-decoration: none;
+  color: inherit;
+}
+.link:hover {
+  color: white;
+  font-weight: bold;
+}
+
+/*Padrão dos Inputs*/
+input[type="text"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+input[type="radio"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+input[type="search"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
+select[name="select"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
+.btn:focus {
+  box-shadow: none;
+}
+.btn:active {
+  box-shadow: none;
+}
+input[type="time"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
+input[type="date"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+#floatingTextarea:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+#animal_especie:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+#porte_opcao:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+#animal_porte:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+#veterinario_opcao:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+.title::after {
+  content: "";
+  height: 2px;
+  width: 300px;
+  background-color: currentColor;
+  display: block;
+  margin: 0 auto;
+  margin-top: 5px;
+}
+
+.alert {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 9999;
+  border-radius: 0px;
+}

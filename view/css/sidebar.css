@@ -1,0 +1,30 @@
+/*Sidebar*/
+#sidebar{
+    flex-basis: auto;
+    width: 200px;
+}
+#box{
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+}
+.accordion-button:focus{
+    background-color: white;
+    color: #1a1a1a;
+    box-shadow: none;
+    border: solid 1px var(--color-blue);
+}
+.accordion-button:active{
+    background-color: white;
+    color: #1a1a1a;
+    box-shadow: none;
+    border: solid 1px var(--color-blue);
+}
+.accordion-button:not(.collapsed) {
+    color: #1a1a1a;
+    background-color: white;
+}
+.accordion-button:not(.collapsed):hover {
+    color: #1a1a1a;
+    background-color: #f8f9fa;
+}
