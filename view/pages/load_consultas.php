@@ -40,7 +40,7 @@
         <div class="bg-body shadow mt-5 p-3 bg-body rounded">
           <div class="d-flex justify-content-between">
             <div>
-              <a href="../html/add-Consulta.html">
+              <a href="../pages/add_consulta.php">
                 <button class="btn btn-success" type="submit">
                   <i class="me-2 fa-solid fa-calendar-days"></i>
                   Adicionar consulta

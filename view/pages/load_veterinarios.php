@@ -40,13 +40,11 @@
         <div class="">
           <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between">
             <div>
-              <a href="../html/add-Veterinario.html">
-                <a href="../html/add-Veterinario.html">
+              <a href="../pages/add_veterinario.php">
                   <button class="btn btn-success" type="submit">
                     <i class="me-2 fa-solid fa-user-doctor"></i>
                     Adicionar veterinário
                   </button>
-                </a>
               </a>
             </div>
             <div class="d-flex w-50">

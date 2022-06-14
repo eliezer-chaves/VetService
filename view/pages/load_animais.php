@@ -38,13 +38,11 @@
       <div class="container-fluid w-75">
         <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between">
           <div>
-            <a href="../html/add-Animais.html">
-              <a href="../html/add-Animais.html">
+            <a href="../pages/add_animais.php">
                 <button class="btn btn-success" type="submit">
                   <i class="me-2 fa-solid fa-dog"></i>
                   Adicionar animal
                 </button>
-              </a>
             </a>
           </div>
           <div class="d-flex w-50">
