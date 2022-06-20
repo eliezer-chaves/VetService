@@ -41,6 +41,10 @@ select[name="select"]:focus {
   box-shadow: none;
   border: solid 1px var(--color-blue);
 }
+.pagination{
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
 
 .btn:focus {
   box-shadow: none;

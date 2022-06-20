@@ -192,6 +192,7 @@
     $("#numero").val("");
     $("#complemento").val("");
     $("#bairro").val("");
+    $("#cidade").val("");
     $("#uf").val("");
     $("#telefone").val("");
     $("#donoNome").val("");
@@ -199,7 +200,6 @@
   }
 
   $("#cadastrar").click(function() {
-    //$("#resultado").text("");
     var nome = $("#nome").val();
     var cpf = $("#cpf").val();
     var cep = $("#cep").val();
@@ -207,6 +207,7 @@
     var numero = $("#numero").val();
     var complemento = $("#complemento").val();
     var bairro = $("#bairro").val();
+    var cidade = $("#cidade").val();
     var uf = $("#uf").val();
     var telefone = $("#telefone").val();
 
@@ -221,11 +222,13 @@
         numero: numero,
         complemento: complemento,
         bairro: bairro,
+        cidade: cidade,
         uf: uf,
         telefone: telefone,
         operation: "create",
       },
     }).done(function(resposta) {
+      
       var obj = $.parseJSON(resposta);
       var nome = obj.dono;
       if (obj.status == "cadastrado") {
@@ -238,7 +241,7 @@
       if (obj.status == "exists") {
         $("#modalExists").modal("show");
         $("#donoExists").html(obj.cpf);
-        clearFilds();
+        //clearFilds();
       }
     });
   });

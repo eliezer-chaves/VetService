@@ -22,6 +22,7 @@ if ($_POST["operation"] == "create") {
         $numero = $_POST["numero"];
         $complemento = $_POST["complemento"];
         $bairro = $_POST["bairro"];
+        $cidade = $_POST["cidade"];
         $uf = $_POST["uf"];
         $telefone = $_POST["telefone"];
 
@@ -30,13 +31,13 @@ if ($_POST["operation"] == "create") {
         $dono = $resultado->fetch();
 
         if (!(empty($dono))) {
-            echo '{"status":"exists", "cpf" : "' . $cpf . '"}';
+            echo '{"status": "exists", "cpf" : "' . $cpf . '"}';
             return;
         } else {
             $sql = "insert into " . $table .
-                "(DON_NOME, DON_CPF, DON_CEP, DON_RUA, DON_NUMCASA, DON_COMPLEMENTO, DON_BAIRRO, DON_UF, DON_TELEFONE)" .
+                "(DON_NOME, DON_CPF, DON_CEP, DON_RUA, DON_NUMCASA, DON_COMPLEMENTO, DON_BAIRRO, DON_UF, DON_TELEFONE, DON_CIDADE)" .
                 " values " .
-                "(:DON_NOME, :DON_CPF, :DON_CEP, :DON_RUA, :DON_NUMCASA, :DON_COMPLEMENTO, :DON_BAIRRO, :DON_UF, :DON_TELEFONE);";
+                "(:DON_NOME, :DON_CPF, :DON_CEP, :DON_RUA, :DON_NUMCASA, :DON_COMPLEMENTO, :DON_BAIRRO, :DON_UF, :DON_TELEFONE, :DON_CIDADE);";
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':DON_NOME', $nome);
@@ -46,6 +47,7 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':DON_NUMCASA', $numero);
             $stmt->bindParam(':DON_COMPLEMENTO', $complemento);
             $stmt->bindParam(':DON_BAIRRO', $bairro);
+            $stmt->bindParam(':DON_CIDADE', $cidade);
             $stmt->bindParam(':DON_UF', $uf);
             $stmt->bindParam(':DON_TELEFONE', $telefone);
             $stmt->execute();
@@ -53,10 +55,12 @@ if ($_POST["operation"] == "create") {
             echo '{ "resultado": "Dono cadastrado", "status": "cadastrado", "dono": "' . $nome . '" }';
         }
     } catch (Exception $e) {
-        echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
+        echo '{ "Exceção_capturada": "' . $e->getMessage() . '", "status": "incomplete"}';
     }
 } else if ($_POST["operation"] == "read_all") {
-    $sql = "SELECT * FROM $table";
+
+    $total = $_POST["quantidade"];
+    $sql = "SELECT * FROM $table ORDER BY DON_NOME LIMIT $total";
     $resultado = executarQuery($conexao, $sql);
 
     $donos = [];
@@ -161,4 +165,77 @@ if ($_POST["operation"] == "create") {
     } catch (Exception $e) {
         echo '{"status":"nao-deletado"}';
     }
+} else if ($_POST["operation"] == "load_page") {
+    $sql = "SELECT * FROM $table ORDER BY DON_NOME LIMIT 5";
+    $resultado = executarQuery($conexao, $sql);
+
+    $donos = [];
+
+    while ($row = $resultado->fetch()) {
+        $donos[] = [
+            'donoCodigo' => $row['DON_CODIGO'],
+            'donoNome' => $row['DON_NOME'],
+            'donoCPF' => $row['DON_CPF'],
+            'donoCEP' => $row['DON_CEP'],
+            'donoRua' => $row['DON_RUA'],
+            'donoNumCasa' => $row['DON_NUMCASA'],
+            'donoComplemento' => $row['DON_COMPLEMENTO'],
+            'donoBairro' => $row['DON_BAIRRO'],
+            'donoUF' => $row['DON_UF'],
+            'donoTelefone' => $row['DON_TELEFONE'],
+            'donoCidade' => $row['DON_CIDADE']
+        ];
+    }
+    if (empty($donos)) {
+        echo '{"status":"vazio"}';
+    } else {
+        echo json_encode($donos);
+    }
+} else if ($_POST["operation"] == "search") {
+    try {
+        if (isset($_POST["nome"])) {
+            $nome = $_POST["nome"];
+            if ($_POST["quantidade"] == 5) {
+                $sql = 'SELECT * FROM ' . $table . ' WHERE DON_NOME LIKE :DON_NOME ORDER BY DON_NOME LIMIT 5';
+            } else {
+                $sql = 'SELECT * FROM ' . $table . ' WHERE DON_NOME LIKE :DON_NOME ORDER BY DON_NOME';
+            }
+
+
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute(['DON_NOME' => '%' . $nome . '%']);
+
+            $donos = [];
+
+            while ($row = $stmt->fetch()) {
+                $donos[] = [
+                    'donoCodigo' => $row['DON_CODIGO'],
+                    'donoNome' => $row['DON_NOME'],
+                    'donoCPF' => $row['DON_CPF'],
+                    'donoCEP' => $row['DON_CEP'],
+                    'donoRua' => $row['DON_RUA'],
+                    'donoNumCasa' => $row['DON_NUMCASA'],
+                    'donoComplemento' => $row['DON_COMPLEMENTO'],
+                    'donoBairro' => $row['DON_BAIRRO'],
+                    'donoUF' => $row['DON_UF'],
+                    'donoTelefone' => $row['DON_TELEFONE'],
+                    'donoCidade' => $row['DON_CIDADE']
+                ];
+            }
+            if (empty($donos)) {
+                echo '{"status":"vazio"}';
+            } else {
+                echo json_encode($donos);
+            }
+        }
+    } catch (Exception $e) {
+        echo '{"status" : "erro-select", "erro":"' . $e . '"}';
+    }
+} else if ($_POST["operation"] == "count") {
+
+    $sql = "SELECT COUNT(*) FROM " . $table . ";";
+    $stmt = executarQuery($conexao, $sql);
+    $totalROWS = $stmt->fetchColumn();
+
+    echo $totalROWS ;
 }
