@@ -163,13 +163,9 @@
         </div>
       </div>
     </div>
-    <div>
-      <!-- Footer -->
+    <!-- <div>
       <?php include 'componentes/footer.html'; ?>
-    </div>
-    <script>
-
-    </script>
+    </div> -->
     <!-- <script src="../../controller/add_animais.js"></script> -->
     <script>
       datanasc.max = new Date().toISOString().split("T")[0];

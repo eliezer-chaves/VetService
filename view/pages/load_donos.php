@@ -53,8 +53,8 @@
             </button>
           </div>
         </div>
-        <div class="mt-2 shadow p-3 bg-body rounded">
-          <div style="display: flex;" id="total_resultados">
+        <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+          <div class="d-flex align-midle" id="total_resultados">
             <div class="me-1">
               Mostrando
             </div>
@@ -85,7 +85,7 @@
           <div class="d-flex justify-content-center algin-middle">
             <p id="aviso">Nenhum dono encontrado, faça uma nova pesquisa.</p>
           </div>
-
+          
         </div>
       </div>
     </div>
@@ -341,6 +341,9 @@
             operation: "count"
           }
         }).done(function(resposta) {
+          if (resposta == 0) {
+            $("#content").hide()
+          }
           $("#total").html(resposta)
         })
       }
@@ -423,76 +426,77 @@
       $('#nome_search').on('keydown', function(e) {
         if (e.keyCode === 13) {
           var nome = $("#nome_search").val()
-        $("#aviso").hide();
-        $("#table").show();
-        $('#table_count').val('5')
-        var quantidade;
-        if (nome == "") {
-          $("#total_resultados").show()
-          quantidade = 5;
-        } else {
-          $("#total_resultados").hide()
-          quantidade = 0;
-        }
-
-        $.ajax({
-          method: "POST",
-          url: "../../model/crud_dono.php",
-          data: {
-            operation: "search",
-            nome: nome,
-            quantidade: quantidade
-          }
-        }).done(function(resposta) {
-          var obj = $.parseJSON(resposta)
-
-          $('#donos').empty();
-          var obj = $.parseJSON(resposta)
-          var donos = []
-          var quantidade = 0
-          if (obj.status != "vazio") {
-            Object.keys(obj).forEach((item) => {
-              var dono = obj[item]
-              donos.push(dono)
-              quantidade++
-              var donoCodigo = obj[item].donoCodigo
-              var donoNome = obj[item].donoNome
-              var donoCPF = obj[item].donoCPF
-              var donoTelefone = obj[item].donoTelefone
-
-              if (donoTelefone == "") {
-                donoTelefone = "Não informado"
-              }
-
-              var nova_linha = '';
-              var nova_linha =
-                '<tr class="item"> ' +
-                '<th scope="row" class="text-center align-middle" id="donoCodigo' + donoCodigo + '">' + donoCodigo + '</th>' +
-                '<td class="align-middle text-center">' + donoNome + '</td>' +
-                '<td class="align-middle text-center">' + donoCPF + '</td>' +
-                '<td class="align-middle text-center">' + donoTelefone + '</td>' +
-                '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + donoCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-                '<i class="fa-solid fa-pen-to-square"></i>' +
-                '</button>' +
-                '<button class="btn btn-danger" id="excluir' + donoCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-                '<i class="fa-solid fa-trash-can"></i>' +
-                '</button>' +
-                '</td>' +
-                '</tr>'
-
-              $('#donos').append(nova_linha);
-            });
-
-
+          $("#aviso").hide();
+          $("#table").show();
+          $('#table_count').val('5')
+          var quantidade;
+          if (nome == "") {
+            $("#total_resultados").show()
+            quantidade = 5;
           } else {
-            $("#table").hide()
-            $("#aviso").show()
+            $("#total_resultados").hide()
+            quantidade = 0;
           }
 
-        })
+          $.ajax({
+            method: "POST",
+            url: "../../model/crud_dono.php",
+            data: {
+              operation: "search",
+              nome: nome,
+              quantidade: quantidade
+            }
+          }).done(function(resposta) {
+            var obj = $.parseJSON(resposta)
+
+            $('#donos').empty();
+            var obj = $.parseJSON(resposta)
+            var donos = []
+            var quantidade = 0
+            if (obj.status != "vazio") {
+              Object.keys(obj).forEach((item) => {
+                var dono = obj[item]
+                donos.push(dono)
+                quantidade++
+                var donoCodigo = obj[item].donoCodigo
+                var donoNome = obj[item].donoNome
+                var donoCPF = obj[item].donoCPF
+                var donoTelefone = obj[item].donoTelefone
+
+                if (donoTelefone == "") {
+                  donoTelefone = "Não informado"
+                }
+
+                var nova_linha = '';
+                var nova_linha =
+                  '<tr class="item"> ' +
+                  '<th scope="row" class="text-center align-middle" id="donoCodigo' + donoCodigo + '">' + donoCodigo + '</th>' +
+                  '<td class="align-middle text-center">' + donoNome + '</td>' +
+                  '<td class="align-middle text-center">' + donoCPF + '</td>' +
+                  '<td class="align-middle text-center">' + donoTelefone + '</td>' +
+                  '<td class="text-center text-center">' +
+                  '<button class="btn btn-warning me-2" id="editar' + donoCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                  '<i class="fa-solid fa-pen-to-square"></i>' +
+                  '</button>' +
+                  '<button class="btn btn-danger" id="excluir' + donoCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                  '<i class="fa-solid fa-trash-can"></i>' +
+                  '</button>' +
+                  '</td>' +
+                  '</tr>'
+
+                $('#donos').append(nova_linha);
+              });
+
+
+            } else {
+              $("#table").hide()
+              $("#aviso").show()
+            }
+
+          })
         }
       })
+      
       $("#search").click(function() {
         var nome = $("#nome_search").val()
         $("#aviso").hide();

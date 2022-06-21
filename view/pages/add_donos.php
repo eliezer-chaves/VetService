@@ -176,10 +176,9 @@
         </div>
       </div>
     </div>
-    <div>
-      <!-- Footer -->
+    <!-- <div>
       <?php include 'componentes/footer.html'; ?>
-    </div>
+    </div> -->
 
 </body>
 <!-- <script src="../../controller/add_donos.js"></script> -->
