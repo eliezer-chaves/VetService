@@ -73,34 +73,64 @@ if ($_POST["operation"] == "create") {
             echo json_encode($animal);
         }
     } catch (Exception $e) {
-        echo '{"status" : "erro-select", "erro" : "'.$e.'" }';
+        echo '{"status" : "erro-select", "erro" : "' . $e . '" }';
     }
 } else if ($_POST["operation"] == "read_animal_fk") {
     if (isset($_POST['query'])) {
         $inpText = $_POST['query'];
 
-        $sql =   'SELECT * FROM tbl_animal INNER JOIN tbl_dono ON tbl_animal.DON_CODIGO = tbl_dono.DON_CODIGO WHERE ANI_NOME LIKE :ANI_NOME limit 5';
+        $sql = 'SELECT * FROM tbl_dono WHERE DON_NOME LIKE :DON_NOME LIMIT 5';
 
         $stmt = $conexao->prepare($sql);
-        $stmt->execute(['ANI_NOME' => '%' . $inpText . '%']);
+        $stmt->execute(['DON_NOME' => '%' . $inpText . '%']);
 
         $dados = [];
 
         while ($row = $stmt->fetch()) {
             $dados[] = [
-                'animalnome' => $row['ANI_NOME'],
-                'animalCodigo' => $row['ANI_CODIGO'],
                 'donoCodigo' => $row['DON_CODIGO'],
                 'donoNome' => $row['DON_NOME'],
-                'donoCPF' => $row['DON_CPF'],
-                'donoTelefone' => $row['DON_TELEFONE']
             ];
         }
 
         echo json_encode($dados);
     }
 } else if ($_POST["operation"] == "update") {
+    try {
+        $ANI_CODIGO = $_POST["animalCodigo"];
+        $ANI_NOME = $_POST["animalNome"];
+        $ANI_NASCIMENTO = $_POST["animalNascimento"];
+        $ANI_ESPECIE = $_POST["especie"];
+        $ANI_SEXO = $_POST["sexo"];
+        $DON_CODIGO = $_POST["donoCodigo"];
+
+        $sql = "UPDATE " . $table . " SET ANI_NOME = :ANI_NOME, ANI_NASCIMENTO = :ANI_NASCIMENTO, ANI_ESPECIE = :ANI_ESPECIE, ANI_SEXO = :ANI_SEXO, DON_CODIGO = :DON_CODIGO WHERE ANI_CODIGO = :ANI_CODIGO;";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':ANI_CODIGO', $ANI_CODIGO);
+        $stmt->bindParam(':DON_CODIGO', $DON_CODIGO);
+        $stmt->bindParam(':ANI_NOME', $ANI_NOME);
+        $stmt->bindParam(':ANI_NASCIMENTO', $ANI_NASCIMENTO);
+        $stmt->bindParam(':ANI_SEXO', $ANI_SEXO);
+        $stmt->bindParam(':ANI_ESPECIE', $ANI_ESPECIE);
+        $stmt->execute();
+
+        echo '{"status" : "alterado"}';
+    } catch (Exception $e) {
+        echo '{"status":"erro", "erro" : "'.$e.'"}';
+    }
 } else if ($_POST["operation"] == "delete") {
+    try {
+        $ANI_CODIGO = $_POST["codigo"];
+        $sql = "DELETE FROM " . $table . " WHERE ANI_CODIGO = :ANI_CODIGO;";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':ANI_CODIGO', $ANI_CODIGO);
+        $stmt->execute();
+        echo '{"status":"deletado"}';
+    } catch (Exception $e) {
+        echo '{"status":"nao-deletado"}';
+    }
 } else if ($_POST["operation"] == "count") {
 
     $sql = "SELECT COUNT(*) FROM " . $table . ";";

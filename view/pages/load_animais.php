@@ -104,26 +104,59 @@
             <form class="">
               <div class="row">
                 <div class="input-group mb-3">
+                  <span class="input-group-text">Código</span>
+                  <input type="text" class="form-control" id="modalCodigoAnimal" disabled />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text">Dono código</span>
+                  <input type="text" class="form-control" id="modalCodigoDono" disabled />
+                </div>
+              </div>
+              <div class="row">
+                <!-- <div class="input-group mb-3">
                   <span class="input-group-text">Nome</span>
                   <input type="text" class="form-control" id="modalNomeAnimal" />
+                </div> -->
+                <div class="form-group">
+                  <label for="dono">Nome:</label>
+                  <input type="text" id="modalNomeAnimal" class="form-control" autocomplete="off" />
                 </div>
+
               </div>
               <div class="row">
-                <div class="input-group mb-3">
+                <!-- <div class="input-group mb-3">
                   <span class="input-group-text">Dono</span>
                   <input type="text" class="form-control" id="modalNomeDono" />
+                </div> -->
+                <div class="form-group">
+                  <label for="dono">Dono:</label>
+                  <input type="text" id="modalNomeDono" class="form-control" autocomplete="off" />
+                  <div class="list-group shadow-lg" id="resultado" style="position: absolute; z-index: 1;"></div>
                 </div>
+
+
               </div>
               <div class="row">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">Nascimento</span>
+                <div class="form-group">
+                  <label for="nascimento">Nascimento:</label>
                   <input type="date" class="form-control datepicker" id="modalNascimentoAnimal" onkeydown="function block(){return false}" />
                 </div>
               </div>
-              <div class="row">
 
-                <div class="input-group mb-3">
+              <div class="row">
+                <!-- <div class="input-group mb-3">
                   <label class="input-group-text" for="dropdown_especie">Espécie</label>
+                  <select name="select" class="form-select" id="dropdown_especie">
+                    <option selected style="display: none;" value="0">Escolha</option>
+                    <option value="1">Canina</option>
+                    <option value="2">Felina</option>
+                    <option value="3">Réptil</option>
+                    <option value="4">Ave</option>
+                  </select>
+                </div> -->
+
+                <div class="form-group">
+                  <label for="dropdown_especie">Espécie:</label>
                   <select name="select" class="form-select" id="dropdown_especie">
                     <option selected style="display: none;" value="0">Escolha</option>
                     <option value="1">Canina</option>
@@ -136,14 +169,16 @@
 
               <div class="row">
                 <div class="col">
+                  <label for="radioSexo">Sexo:</label>
+
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="sexoM" />
+                    <input class="form-check-input" type="radio" name="radioSexo" id="sexoM" value="M" />
                     <label class="form-check-label" for="sexoM">
                       Macho
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="sexoF" />
+                    <input class="form-check-input" type="radio" name="radioSexo" id="sexoF" value="F" />
                     <label class="form-check-label" for="sexoF">
                       Fêmea
                     </label>
@@ -156,7 +191,7 @@
             <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
               Fechar
             </button>
-            <button type="button" class="btn btn-success" id="btn-alterar-modal">
+            <button type="button" class="btn btn-success" id="updateAnimal">
               Confirmar alteração
             </button>
           </div>
@@ -204,7 +239,7 @@
             <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
               Fechar
             </button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalConfirmacao" id="btn-alterar-modal">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" id="deleteAnimal">
               Excluir
             </button>
           </div>
@@ -336,9 +371,9 @@
         } else if (id == "updateAnimal") {
           var codigo = $("#codigo").val()
           updateAnimal(codigo)
-        } else if (id == "modalExcluirAnimal") {
+        } else if (id == "deleteAnimal") {
           var codigo = $("#modalExcluirAnimalCodigo").val()
-          deleteDono(codigo)
+          deleteAnimal(codigo)
         }
       })
 
@@ -486,6 +521,50 @@
         })
       })
 
+      $("#modalNomeDono").keyup(function() {
+        let searchText = $("#modalNomeDono").val();
+        if (searchText != "") {
+          $.ajax({
+            url: "../../model/crud_animal.php",
+            method: "post",
+            data: {
+              query: searchText,
+              operation: "read_animal_fk"
+            }
+          }).done(function(resposta) {
+            var obj = $.parseJSON(resposta)
+            var nova_linha = ""
+            $('#resultado').html("");
+
+            Object.keys(obj).forEach((item) => {
+              nova_linha += '<button  class=" list-group-item list-group-item-action " id="donoCodigo' + obj[item].donoCodigo + '">' + obj[item].donoNome + '</button><span></span>'
+            });
+
+            var stringExemplo = nova_linha;
+            var resultado = stringExemplo.split("<span></span>");
+
+            $('#resultado').append(resultado);
+
+          });
+        } else {
+          $('#resultado').html("");
+        }
+
+      });
+
+      $(document).on("click", "button", function(element) {
+        var id = element.currentTarget.id
+        var array = id.split("_")
+        if (id.includes("donoCodigo")) {
+          $('#resultado').html("");
+          var nome = element.currentTarget.textContent
+          var codigo = element.currentTarget.id
+          var codigo = id.replace("donoCodigo", "");
+          $("#modalNomeDono").val(nome)
+          $("#modalCodigoDono").val(codigo)
+        }
+      });
+
       function loadData() {
         quantidade = $("#table_count").val();
         $.ajax({
@@ -499,6 +578,7 @@
         }).done(function(resposta) {
           countTable()
           $('#animais').empty();
+          var obj = $.parseJSON(resposta)
           var animais = []
           var quantidade = 0
           if (obj.status != "vazio") {
@@ -513,6 +593,7 @@
               var animalNascimento = obj[item].animalNascimento
               var animalEspecie = obj[item].animalEspecie
               var animalSexo = obj[item].animalSexo
+
 
               var nova_linha = '';
               var nova_linha =
@@ -530,8 +611,10 @@
                 '</button>' +
                 '</td>' +
                 '</tr>'
-              $('#donos').append(nova_linha);
+
+              $('#animais').append(nova_linha);
             });
+
             if (quantidade < 5) {
               $("#total_resultados").hide()
             } else {
@@ -542,40 +625,35 @@
       }
 
       function updateAnimal() {
-        var donoCodigo = $('#codigo').val()
-        var donoNome = $('#modalNome').val()
-        var donoCEP = $('#cep').val()
-        var donoCPF = $('#cpf').val()
-        var donoRua = $('#rua').val()
-        var donoNumCasa = $('#numeroCasa').val()
-        var donoComplemento = $('#complemento').val()
-        var donoBairro = $('#bairro').val()
-        var donoCidade = $('#cidade').val()
-        var donoUF = $('#uf').val()
-        var donoTelefone = $('#telefone').val()
+        var animalCodigo = $('#modalCodigoAnimal').val()
+        var animalNome = $('#modalNomeAnimal').val()
+        var animalNascimento = $('#modalNascimentoAnimal').val()
+        var donoCodigo = $("#modalCodigoDono").val()
 
+        var especie
+        if ($('#dropdown_especie :selected').text() != 'Escolha') {
+          var especie = $('#dropdown_especie :selected').text();
+        } else {
+          var especie = ''
+        }
+        var sexo = $("input[name='radioSexo']:checked").val();
         $.ajax({
           method: "POST",
           url: "../../model/crud_animal.php",
           data: {
-            codigo: donoCodigo,
-            donoNome: donoNome,
-            donoCPF: donoCPF,
-            donoCEP: donoCEP,
-            donoRua: donoRua,
-            donoNumCasa: donoNumCasa,
-            donoComplemento: donoComplemento,
-            donoBairro: donoBairro,
-            donoCidade: donoCidade,
-            donoUF: donoUF,
-            donoTelefone: donoTelefone,
+            animalCodigo: animalCodigo,
+            animalNome: animalNome,
+            animalNascimento: animalNascimento,
+            donoCodigo: donoCodigo,
+            especie: especie,
+            sexo: sexo,
             operation: "update"
           }
         }).done(function(resposta) {
           var obj = $.parseJSON(resposta)
           if (obj.status == "alterado") {
             clearFillds()
-            $("#modalEditarDono").modal('hide')
+            $("#modalEditarAnimal").modal('hide')
             loadData()
             showAlertSuccess()
           } else {
@@ -584,7 +662,7 @@
         })
       }
 
-      function deleteDono(codigo) {
+      function deleteAnimal(codigo) {
         $.ajax({
           method: "POST",
           url: "../../model/crud_animal.php",
@@ -594,10 +672,9 @@
           }
         }).done(function(resposta) {
           var obj = $.parseJSON(resposta)
-
           if (obj.status == "deletado") {
             clearFillds()
-            $("#modalExcluirDono").modal('hide')
+            $("#modalExcluirAnimal").modal('hide')
             loadData()
             showAlertSuccessDeletado()
           } else {
@@ -616,7 +693,6 @@
             operation: "read_one"
           }
         }).done(function(resposta) {
-          //console.log(resposta)
           var obj = $.parseJSON(resposta)
           var donoCodigo = obj.DON_CODIGO
           var donoNome = obj.DON_NOME
@@ -625,45 +701,49 @@
           var animalNascimento = obj.ANI_NASCIMENTO
           var animalEspecie = obj.ANI_ESPECIE
           var animalSexo = obj.ANI_SEXO
-          
-          if (animalSexo == "M"){
+
+          if (animalSexo == "M") {
             $("#sexoM").prop("checked", true);
-          } else if (animalSexo == "F"){
+          } else if (animalSexo == "F") {
             $("#sexoF").prop("checked", true);
-
           }
-
-          if (animalEspecie == "Canina"){
+          if (animalEspecie == "Canina") {
             $('#dropdown_especie').val(1)
-          } else if (animalEspecie == "Felina"){
+          } else if (animalEspecie == "Felina") {
             $('#dropdown_especie').val(2)
-          } else if (animalEspecie == "Réptil"){
+          } else if (animalEspecie == "Réptil") {
             $('#dropdown_especie').val(3)
-          } else if (animalEspecie == "Ave"){
+          } else if (animalEspecie == "Ave") {
             $('#dropdown_especie').val(4)
           }
-
+          $("#modalCodigoAnimal").val(animalCodigo)
+          $("#modalCodigoDono").val(donoCodigo)
           $('#modalNomeAnimal').val(animalNome)
           $('#modalNomeDono').val(donoNome)
-          
-          $("#flexRadio_macho").prop("checked", false);
-          $("#flexRadio_femea").prop("checked", false);
-          $("#dropdown_especie").val();
+          $('#modalNascimentoAnimal').val(animalNascimento)
 
           //Modal Excluir
           $('#modalExcluirAnimalCodigo').val(donoCodigo)
           $('#modalExcluirAnimalNome').val(animalNome)
+          $('#modalExcluirAnimalDonoNome').val(donoNome)
           $('#modalExcluirAnimalCodigo').val(animalCodigo)
         })
       }
 
       function clearFillds() {
+        $("#modalCodigoAnimal").val("")
         $('#modalNomeAnimal').val("")
         $('#modalNomeDono').val("")
         $('#modalNascimentoAnimal').val("")
-        $("#flexRadio_macho").prop("checked", false);
-        $("#flexRadio_femea").prop("checked", false);
+        $("#sexoM").prop("checked", false);
+        $("#sexoF").prop("checked", false);
         $("#dropdown_especie").val("");
+
+        $("#modalCodigoDono").val("")
+        $('#modalExcluirAnimalCodigo').val("")
+        $('#modalExcluirAnimalNome').val("")
+        $('#modalExcluirAnimalDonoNome').val("")
+        $('#modalExcluirAnimalCodigo').val("")
       }
     </script>
 </body>
