@@ -43,7 +43,8 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "read_all") {
     $total = $_POST["quantidade"];
-    $sql = "SELECT * FROM $table ORDER BY ANI_NOME LIMIT $total";
+    $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME LIMIT $total;";
+    //$sql = "SELECT * FROM $table ORDER BY ANI_NOME LIMIT $total";
     $resultado = executarQuery($conexao, $sql);
 
     $animais = [];
@@ -53,13 +54,14 @@ if ($_POST["operation"] == "create") {
             'animalCodigo' => $row['ANI_CODIGO'],
             'animalNome' => $row['ANI_NOME'],
             'animalSexo' => $row['ANI_SEXO'],
-            'donoCodigo' => $row['DON_CODIGO']
+            'donoCodigo' => $row['DON_CODIGO'],
+            'donoNome' => $row['DON_NOME'],
         ];
     }
-    if (empty($donos)) {
+    if (empty($animais)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($donos);
+        echo json_encode($animais);
     }
 } else if ($_POST["operation"] == "read_one") {
     try {

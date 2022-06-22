@@ -47,7 +47,7 @@
           </div>
           <div class="d-flex w-50">
             <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
-            <button class="btn btn-primary" type="submit">
+            <button class="btn btn-primary" type="submit" id="search">
               <i class="fa-solid fa-magnifying-glass"></i>
             </button>
           </div>
@@ -113,21 +113,12 @@
                 </div>
               </div>
               <div class="row">
-                <!-- <div class="input-group mb-3">
-                  <span class="input-group-text">Nome</span>
-                  <input type="text" class="form-control" id="modalNomeAnimal" />
-                </div> -->
                 <div class="form-group">
                   <label for="dono">Nome:</label>
                   <input type="text" id="modalNomeAnimal" class="form-control" autocomplete="off" />
                 </div>
-
               </div>
               <div class="row">
-                <!-- <div class="input-group mb-3">
-                  <span class="input-group-text">Dono</span>
-                  <input type="text" class="form-control" id="modalNomeDono" />
-                </div> -->
                 <div class="form-group">
                   <label for="dono">Dono:</label>
                   <input type="text" id="modalNomeDono" class="form-control" autocomplete="off" />
@@ -144,17 +135,6 @@
               </div>
 
               <div class="row">
-                <!-- <div class="input-group mb-3">
-                  <label class="input-group-text" for="dropdown_especie">Espécie</label>
-                  <select name="select" class="form-select" id="dropdown_especie">
-                    <option selected style="display: none;" value="0">Escolha</option>
-                    <option value="1">Canina</option>
-                    <option value="2">Felina</option>
-                    <option value="3">Réptil</option>
-                    <option value="4">Ave</option>
-                  </select>
-                </div> -->
-
                 <div class="form-group">
                   <label for="dropdown_especie">Espécie:</label>
                   <select name="select" class="form-select" id="dropdown_especie">
@@ -330,7 +310,6 @@
               var animalEspecie = obj[item].animalEspecie
               var animalSexo = obj[item].animalSexo
 
-
               var nova_linha = '';
               var nova_linha =
                 '<tr class="item"> ' +
@@ -391,7 +370,6 @@
             $("#total_resultados").hide()
             quantidade = 0;
           }
-
           $.ajax({
             method: "POST",
             url: "../../model/crud_animal.php",
@@ -402,7 +380,6 @@
             }
           }).done(function(resposta) {
             var obj = $.parseJSON(resposta)
-
             $('#animais').empty();
             var obj = $.parseJSON(resposta)
             var animais = []
@@ -419,8 +396,6 @@
                 var animalNascimento = obj[item].animalNascimento
                 var animalEspecie = obj[item].animalEspecie
                 var animalSexo = obj[item].animalSexo
-
-
 
                 var nova_linha = '';
                 var nova_linha =
@@ -439,15 +414,12 @@
                   '</td>' +
                   '</tr>'
 
-                $('#donos').append(nova_linha);
+                $('#animais').append(nova_linha);
               });
-
-
             } else {
               $("#table").hide()
               $("#aviso").show()
             }
-
           })
         }
       })
@@ -509,15 +481,12 @@
                 '</td>' +
                 '</tr>'
 
-              $('#donos').append(nova_linha);
+              $('#animais').append(nova_linha);
             });
-
-
           } else {
             $("#table").hide()
             $("#aviso").show()
           }
-
         })
       })
 
@@ -563,6 +532,60 @@
           $("#modalNomeDono").val(nome)
           $("#modalCodigoDono").val(codigo)
         }
+      });
+      
+      var total;
+      $('#table_count').on('change', function() {
+        var total = this.value;
+        
+        $.ajax({
+          method: "POST",
+          url: "../../model/crud_animal.php",
+          data: {
+            operation: "read_all",
+            quantidade: total
+          }
+
+        }).done(function(resposta) {
+          $('#animais').empty();
+          var obj = $.parseJSON(resposta)
+          var animais = []
+          var quantidade = 0
+          if (obj.status != "vazio") {
+            Object.keys(obj).forEach((item) => {
+              var animal = obj[item]
+              animais.push(animal)
+              quantidade++
+              var donoCodigo = obj[item].donoCodigo
+              var donoNome = obj[item].donoNome
+              var animalCodigo = obj[item].animalCodigo
+              var animalNome = obj[item].animalNome
+              var animalNascimento = obj[item].animalNascimento
+              var animalEspecie = obj[item].animalEspecie
+              var animalSexo = obj[item].animalSexo
+
+              var nova_linha = '';
+              var nova_linha =
+                '<tr class="item"> ' +
+                '<th scope="row" class="text-center align-middle" id="animalCodigo' + animalCodigo + '">' + animalCodigo + '</th>' +
+                '<td class="align-middle text-center">' + animalNome + '</td>' +
+                '<td class="align-middle text-center">' + donoNome + '</td>' +
+                '<td class="align-middle text-center">' + animalSexo + '</td>' +
+                '<td class="text-center text-center">' +
+                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<i class="fa-solid fa-pen-to-square"></i>' +
+                '</button>' +
+                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<i class="fa-solid fa-trash-can"></i>' +
+                '</button>' +
+                '</td>' +
+                '</tr>'
+
+              $('#animais').append(nova_linha);
+            });
+          }
+        })
+
       });
 
       function loadData() {

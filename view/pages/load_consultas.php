@@ -208,9 +208,9 @@
         </div>
       </div>
     </div>
-    <!-- Footer -->
+    <!-- Footer 
     <?php include 'componentes/footer.html'; ?>
-  </div>
+  </div> -->
 </body>
 
 </html>

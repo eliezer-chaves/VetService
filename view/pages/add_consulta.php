@@ -159,10 +159,10 @@
         </div>
       </div>
     </div>
-    <div>
+    <!-- <div> -->
       <!-- Footer -->
       <?php include 'componentes/footer.html'; ?>
-    </div>
+    <!-- </div> -->
 
     <script>
       data_consulta.min = new Date().toISOString().split("T")[0];
