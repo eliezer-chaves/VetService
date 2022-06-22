@@ -166,7 +166,6 @@ if ($_POST["operation"] == "create") {
     try {
         if (isset($_POST["nome"])) {
             $nome = $_POST["nome"];
-            $sql = "SELECT * FROM $table ORDER BY ANI_NOME LIMIT 5";
 
             if ($_POST["quantidade"] == 5) {
                 $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO WHERE ANI_NOME LIKE :ANI_NOME ORDER BY ANI_NOME LIMIT 5;";

@@ -50,22 +50,136 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "read_all") {
     try {
-        $sql = "SELECT VET_NOME, VET_CODIGO FROM $table";
+        $total = $_POST["quantidade"];
+        $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total;";
         $resultado = executarQuery($conexao, $sql);
 
         $veterinarios = [];
 
         while ($row = $resultado->fetch()) {
             $veterinarios[] = [
+                'veterinarioCodigo' => $row['VET_CODIGO'],
                 'veterinarioNome' => $row['VET_NOME'],
-                'veterinarioCodigo' => $row['VET_CODIGO']
+                'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
+                'veterinarioTelefone' => $row['VET_TELEFONE'],
+                'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
             ];
         }
-        echo json_encode($veterinarios);
+        if (empty($veterinarios)) {
+            echo '{"status":"vazio"}';
+        } else {
+            echo json_encode($veterinarios);
+        }
     } catch (Exception $e) {
         echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
     }
 } else if ($_POST["operation"] == "read_one") {
+    try {
+        if (isset($_POST["codigo"])) {
+            $codigo = $_POST["codigo"];
+
+            $sql = "SELECT * FROM $table WHERE VET_CODIGO = $codigo;";
+            $resultado = executarQuery($conexao, $sql);
+            $veterinario = $resultado->fetch();
+
+            echo json_encode($veterinario);
+        }
+    } catch (Exception $e) {
+        echo '{"status" : "erro-select", "erro" : "' . $e . '" }';
+    }
 } else if ($_POST["operation"] == "update") {
+    try {
+        $VET_CODIGO = $_POST["veterinarioCodigo"];
+        $VET_NOME = $_POST["veterinarioNome"];
+        $VET_CRMV = $_POST["veterinarioCRMV"];
+        $VET_CRMV_UF = $_POST["veterinarioCRMV_UF"];
+        $VET_ESPECIALIDADE = $_POST["veterinarioEspecialidade"];
+        $VET_TELEFONE = $_POST["veterinarioTelefone"];
+
+        $sql = "UPDATE " . $table . " SET VET_NOME = :VET_NOME, VET_CRMV = :VET_CRMV, VET_CRMV_UF = :VET_CRMV_UF, VET_ESPECIALIDADE = :VET_ESPECIALIDADE, VET_TELEFONE = :VET_TELEFONE WHERE VET_CODIGO = :VET_CODIGO;";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
+        $stmt->bindParam(':VET_TELEFONE', $VET_TELEFONE);
+        $stmt->bindParam(':VET_NOME', $VET_NOME);
+        $stmt->bindParam(':VET_CRMV', $VET_CRMV);
+        $stmt->bindParam(':VET_ESPECIALIDADE', $VET_ESPECIALIDADE);
+        $stmt->bindParam(':VET_CRMV_UF', $VET_CRMV_UF);
+        $stmt->execute();
+
+        echo '{"status" : "alterado"}';
+    } catch (Exception $e) {
+        echo '{"status":"erro", "erro" : "'.$e.'"}';
+    }
 } else if ($_POST["operation"] == "delete") {
+    try {
+        $VET_CODIGO = $_POST["codigo"];
+        $sql = "DELETE FROM " . $table . " WHERE VET_CODIGO = :VET_CODIGO;";
+
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
+        $stmt->execute();
+        echo '{"status":"deletado"}';
+    } catch (Exception $e) {
+        echo '{"status":"nao-deletado"}';
+    }
+} else if ($_POST["operation"] == "count") {
+    $sql = "SELECT COUNT(*) FROM " . $table . ";";
+    $stmt = executarQuery($conexao, $sql);
+    $totalROWS = $stmt->fetchColumn();
+
+    echo $totalROWS;
+} else if ($_POST["operation"] == "load_page") {
+    $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT 5";
+    $resultado = executarQuery($conexao, $sql);
+
+    $veterinarios = [];
+
+    while ($row = $resultado->fetch()) {
+        $veterinarios[] = [
+            'veterinarioCodigo' => $row['VET_CODIGO'],
+            'veterinarioNome' => $row['VET_NOME'],
+            'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
+            'veterinarioTelefone' => $row['VET_TELEFONE'],
+            'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+        ];
+    }
+    if (empty($veterinarios)) {
+        echo '{"status":"vazio"}';
+    } else {
+        echo json_encode($veterinarios);
+    }
+} else if ($_POST["operation"] == "search") {
+    try {
+        if (isset($_POST["nome"])) {
+            $nome = $_POST["nome"];
+            if ($_POST["quantidade"] == 5) {
+                $sql = "SELECT * FROM $table WHERE VET_NOME LIKE :VET_NOME ORDER BY VET_NOME LIMIT 5;";
+            } else {
+                $sql = "SELECT * FROM $table WHERE VET_NOME LIKE :VET_NOME ORDER BY VET_NOME;";
+            }
+
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute(['VET_NOME' => '%' . $nome . '%']);
+
+            $veterinarios = [];
+
+            while ($row = $stmt->fetch()) {
+                $veterinarios[] = [
+                    'veterinarioCodigo' => $row['VET_CODIGO'],
+                    'veterinarioNome' => $row['VET_NOME'],
+                    'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
+                    'veterinarioTelefone' => $row['VET_TELEFONE'],
+                    'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+                ];
+            }
+            if (empty($veterinarios)) {
+                echo '{"status":"vazio"}';
+            } else {
+                echo json_encode($veterinarios);
+            }
+        }
+    } catch (Exception $e) {
+        echo '{"status" : "erro-select", "erro":"' . $e . '"}';
+    }
 }

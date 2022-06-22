@@ -46,22 +46,7 @@
       <!-- Sidebar -->
       <div class="bg-white shadow" id="sidebar">
         <div class="accordion accordion-flush" id="accordion">
-          <!-- Item do accordion -->
-          <div class="accordion-item">
-            <h2 class="accordion-header" id="accordion-donos-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-donos">
-                <i class="me-2 fa-solid fa-person"></i>Donos
-              </button>
-            </h2>
-            <div id="accordion-donos" class="accordion-collapse collapse">
-              <div class="">
-                <div class="list-group">
-                  <a href="pages/add_donos.php" class="list-group-item list-group-item-action">Adicionar donos</a>
-                  <a href="pages/load_donos.php" class="list-group-item list-group-item-action">Listar donos</a>
-                </div>
-              </div>
-            </div>
-          </div>
+
           <!-- Item do accordion -->
           <div class="accordion-item">
             <h2 class="accordion-header" id="accordion-animais-header">
@@ -90,6 +75,22 @@
                 <div class="list-group">
                   <a href="pages/add_consulta.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar consulta</a>
                   <a href="pages/load_consultas.php" class="list-group-item list-group-item-action">Listar consultas</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Item do accordion -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-donos-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-donos">
+                <i class="me-2 fa-solid fa-person"></i>Donos
+              </button>
+            </h2>
+            <div id="accordion-donos" class="accordion-collapse collapse">
+              <div class="">
+                <div class="list-group">
+                  <a href="pages/add_donos.php" class="list-group-item list-group-item-action">Adicionar donos</a>
+                  <a href="pages/load_donos.php" class="list-group-item list-group-item-action">Listar donos</a>
                 </div>
               </div>
             </div>

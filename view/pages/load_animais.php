@@ -537,7 +537,7 @@
       var total;
       $('#table_count').on('change', function() {
         var total = this.value;
-        
+        //$("#nome_search").val("")
         $.ajax({
           method: "POST",
           url: "../../model/crud_animal.php",
