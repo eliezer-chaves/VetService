@@ -49,7 +49,7 @@
                 <input type="text" id="input_animal" class="form-control" autocomplete="off" />
                 <div class="list-group shadow-lg" id="resultado" style="position: absolute;   z-index: 1;"></div>
               </div>
-              <div class="input-group mt-3 d-none">
+              <div class="input-group mt-3 ">
                 <span class="input-group-text">Animal Código:</span>
                 <input type="text" class="form-control" id="input_animal_codigo" disabled readonly />
               </div>
@@ -191,11 +191,11 @@
           method: "POST",
           url: "../../model/crud_veterinario.php",
           data:{
-            operation: "read_all"
+            operation: "load_dropdown"
           }
 
         }).done(function(resposta) {
-
+          
           var obj = $.parseJSON(resposta)
 
           novo_item = ''
@@ -279,8 +279,8 @@
           let searchText = $(this).val();
           if (searchText != "") {
             $.ajax({
-              url: "../../model/crud_animal.php",
-              method: "post",
+              url: "../../model/crud_consulta.php",
+              method: "POST",
               data: {
                 query: searchText,
                 operation: "read_animal_fk"
@@ -296,9 +296,9 @@
                   '_donoCPF' + obj[item].donoCPF +
                   '_donoCodigo' + obj[item].donoCodigo +
                   '_donoNome' + obj[item].donoNome +
-                  '_animalNome' + obj[item].animalnome +
+                  '_animalNome' + obj[item].animalNome +
                   '_animalCodigo' + obj[item].animalCodigo +
-                  '">' + obj[item].animalnome + ' - ' + obj[item].donoNome +
+                  '">' + obj[item].animalNome + ' - ' + obj[item].donoNome +
                   '</button><span></span>'
               });
               var stringExemplo = nova_linha;

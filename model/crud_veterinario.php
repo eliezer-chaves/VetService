@@ -182,4 +182,28 @@ if ($_POST["operation"] == "create") {
     } catch (Exception $e) {
         echo '{"status" : "erro-select", "erro":"' . $e . '"}';
     }
+} else if ($_POST["operation"] == "load_dropdown") {
+    try {
+        $sql = "SELECT * FROM $table ORDER BY VET_NOME;";
+        $resultado = executarQuery($conexao, $sql);
+
+        $veterinarios = [];
+
+        while ($row = $resultado->fetch()) {
+            $veterinarios[] = [
+                'veterinarioCodigo' => $row['VET_CODIGO'],
+                'veterinarioNome' => $row['VET_NOME'],
+                'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
+                'veterinarioTelefone' => $row['VET_TELEFONE'],
+                'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+            ];
+        }
+        if (empty($veterinarios)) {
+            echo '{"status":"vazio"}';
+        } else {
+            echo json_encode($veterinarios);
+        }
+    } catch (Exception $e) {
+        echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
+    }
 }

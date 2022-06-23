@@ -329,10 +329,10 @@
                 '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
                 '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -410,20 +410,20 @@
 
                 var nova_linha = '';
                 var nova_linha =
-                  '<tr class="item"> ' +
-                  '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' + veterinarioCodigo + '">' + veterinarioCodigo + '</th>' +
-                  '<td class="align-middle text-center">' + veterinarioNome + '</td>' +
-                  '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
-                  '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
-                  '<td class="text-center text-center">' +
-                  '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-                  '<i class="fa-solid fa-pen-to-square"></i>' +
-                  '</button>' +
-                  '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-                  '<i class="fa-solid fa-trash-can"></i>' +
-                  '</button>' +
-                  '</td>' +
-                  '</tr>'
+                '<tr class="item"> ' +
+                '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' + veterinarioCodigo + '">' + veterinarioCodigo + '</th>' +
+                '<td class="align-middle text-center">' + veterinarioNome + '</td>' +
+                '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
+                '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
+                '<td class="text-center text-center">' +
+                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
+                '<i class="fa-solid fa-pen-to-square"></i>' +
+                '</button>' +
+                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
+                '<i class="fa-solid fa-trash-can"></i>' +
+                '</button>' +
+                '</td>' +
+                '</tr>'
 
                 $('#veterinarios').append(nova_linha);
               });
@@ -483,10 +483,10 @@
                 '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
                 '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -538,10 +538,10 @@
                 '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
                 '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -591,10 +591,10 @@
                 '<td class="align-middle text-center">' + veterinarioCRMVUF + '</td>' +
                 '<td class="align-middle text-center">' + veterinarioTelefone + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + veterinarioCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +

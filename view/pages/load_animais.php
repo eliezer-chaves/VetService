@@ -318,10 +318,10 @@
                 '<td class="align-middle text-center">' + donoNome + '</td>' +
                 '<td class="align-middle text-center">' + animalSexo + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -405,10 +405,10 @@
                   '<td class="align-middle text-center">' + donoNome + '</td>' +
                   '<td class="align-middle text-center">' + animalSexo + '</td>' +
                   '<td class="text-center text-center">' +
-                  '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                  '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
                   '<i class="fa-solid fa-pen-to-square"></i>' +
                   '</button>' +
-                  '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                  '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
                   '<i class="fa-solid fa-trash-can"></i>' +
                   '</button>' +
                   '</td>' +
@@ -472,10 +472,10 @@
                 '<td class="align-middle text-center">' + donoNome + '</td>' +
                 '<td class="align-middle text-center">' + animalSexo + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -533,7 +533,7 @@
           $("#modalCodigoDono").val(codigo)
         }
       });
-      
+
       var total;
       $('#table_count').on('change', function() {
         var total = this.value;
@@ -572,10 +572,10 @@
                 '<td class="align-middle text-center">' + donoNome + '</td>' +
                 '<td class="align-middle text-center">' + animalSexo + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
@@ -626,10 +626,10 @@
                 '<td class="align-middle text-center">' + donoNome + '</td>' +
                 '<td class="align-middle text-center">' + animalSexo + '</td>' +
                 '<td class="text-center text-center">' +
-                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+                '<button class="btn btn-warning me-2" id="editar' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
                 '<i class="fa-solid fa-pen-to-square"></i>' +
                 '</button>' +
-                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+                '<button class="btn btn-danger" id="excluir' + animalCodigo + '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
                 '<i class="fa-solid fa-trash-can"></i>' +
                 '</button>' +
                 '</td>' +
