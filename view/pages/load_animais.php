@@ -113,13 +113,13 @@
                   <input type="text" class="form-control" id="modalCodigoDono" disabled />
                 </div>
               </div>
-              <div class="row">
+              <div class="row mb-2">
                 <div class="form-group">
                   <label for="dono">Nome:</label>
                   <input type="text" id="modalNomeAnimal" class="form-control" autocomplete="off" />
                 </div>
               </div>
-              <div class="row">
+              <div class="row mb-2">
                 <div class="form-group">
                   <label for="dono">Dono:</label>
                   <input type="text" id="modalNomeDono" class="form-control" autocomplete="off" />
@@ -128,14 +128,14 @@
 
 
               </div>
-              <div class="row">
+              <div class="row mb-2">
                 <div class="form-group">
                   <label for="nascimento">Nascimento:</label>
                   <input type="date" class="form-control datepicker" id="modalNascimentoAnimal" onkeydown="function block(){return false}" />
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-2">
                 <div class="form-group">
                   <label for="dropdown_especie">Espécie:</label>
                   <select name="select" class="form-select" id="dropdown_especie">
@@ -148,7 +148,7 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-2">
                 <div class="col">
                   <label for="radioSexo">Sexo:</label>
 
@@ -228,9 +228,7 @@
       </div>
     </div>
     <!-- Footer -->
-    <!-- <div>
-      <?php include 'componentes/footer.html'; ?>
-    </div> -->
+    <!-- <?php include 'componentes/footer.html'; ?> -->
     <!-- Alerta Success -->
     <div class="alert alert-success text-center" id="animalAlterado" role="alert">
       Animal alterado com sucesso!

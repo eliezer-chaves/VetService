@@ -86,9 +86,9 @@
             <div class="row">
 
               <div class="col">
-                <div class="input-group mb-3">
-                  <label class="input-group-text" for="dropdown_especie">Espécie</label>
-                  <select name="select" class="form-select" id="dropdown_especie">
+                <div class="form-group mb-3">
+                <label for="dropdown_especie">Espécie:</label>
+                <select name="select" class="form-select" id="dropdown_especie">
                     <option selected style="display: none;" value="0">Escolha</option>
                     <option value="1">Canina</option>
                     <option value="2">Felina</option>
@@ -117,7 +117,6 @@
 
             </div>
 
-
             <div class="row mt-3 d-flex justify-content-center">
               <button type="submit" id="cadastrar" class="btn btn-primary w-50">
                 Cadastrar animal
@@ -144,7 +143,7 @@
               </div>
             </div>
           </div>
-          <!-- Modal Warning -->
+          <!-- Modal Aviso -->
           <div id="modalAviso" class="modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
