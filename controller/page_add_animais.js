@@ -1,22 +1,21 @@
 datanasc.max = new Date().toISOString().split("T")[0];
 
-var inputNome = $("#nome");
-var inputNomeDono = $("#input_dono");
-var inputCodigoDono = $("#dono_codigo");
-var inputCPFDono = $("#dono_cpf");
-var inputTelefoneDono = $("#dono_telefone");
-var inputDataNascimento = $("#datanasc");
-var radioSexoMacho = $("#flexRadio_macho");
-var radioSexoFemea = $("#flexRadio_femea");
-var dropdownEspecie = $("#dropdown_especie");
-var spanNomeDono = $("#donoNome");
-var spanAnimalNome = $("#animalNome");
-var modalAnimalCadastrado = $("#modalAnimalCadastrado");
-var modalAviso = $("#modalAviso");
-var buttonCadastrar = $("#cadastrar");
-var urlCRUDAnimal = "../../model/crud_animal.php";
-var urlCRUDDono = "../../model/crud_dono.php";
-var divSugestaoDonos = $("resultado");
+var inputNome = $("#nome")
+var inputNomeDono = $("#input_dono")
+var inputCodigoDono = $("#dono_codigo")
+var inputCPFDono = $("#dono_cpf")
+var inputTelefoneDono = $("#dono_telefone")
+var inputDataNascimento =  $("#datanasc")
+var radioSexoMacho = $("#flexRadio_macho")
+var radioSexoFemea = $("#flexRadio_femea")
+var dropdownEspecie = $("#dropdown_especie")
+var spanNomeDono = $("#donoNome")
+var spanAnimalNome = $("#animalNome")
+var modalAnimalCadastrado = $("#modalAnimalCadastrado")
+var modalAviso = $("#modalAviso")
+var buttonCadastrar = $("#cadastrar")
+var urlCRUDAnimal = "../../model/crud_animal.php"
+var urlCRUDDono = "../../model/crud_dono.php"
 
 function clearFilds() {
   inputNome.val("");
@@ -30,7 +29,7 @@ function clearFilds() {
   dropdownEspecie.val("");
   spanNomeDono.val("");
   spanAnimalNome.val("");
-};
+}
 
 buttonCadastrar.click(function () {
   var nome = inputNome.val();
@@ -81,14 +80,13 @@ $(document).ready(function () {
           operation: "read_dono_fk",
         },
       }).done(function (resposta) {
-        console.log(resposta);
         var obj = $.parseJSON(resposta);
-        var resultadoBusca = "";
-        divSugestaoDonos.html("");
+        var nova_linha = "";
+        $("#resultado").html("");
 
         Object.keys(obj).forEach((item) => {
-          resultadoBusca +=
-            '<button class=" list-group-item list-group-item-action " id="donoTelefone' +
+          nova_linha +=
+            '<button  class=" list-group-item list-group-item-action " id="donoTelefone' +
             obj[item].telefone +
             "_donoCPF" +
             obj[item].cpf +
@@ -99,12 +97,13 @@ $(document).ready(function () {
             "</button><span></span>";
         });
 
-        var resultadoBusca = string.split("<span></span>");
+        var stringExemplo = nova_linha;
+        var resultado = stringExemplo.split("<span></span>");
 
-        divSugestaoDonos.append(resultadoBusca);
+        $("#resultado").append(resultado);
       });
     } else {
-      divSugestaoDonos.html("");
+      $("#resultado").html("");
     }
   });
 
@@ -114,7 +113,7 @@ $(document).ready(function () {
     var array = id.split("_");
 
     if (id.includes("donoCodigo")) {
-      divSugestaoDonos.html("");
+      $("#resultado").html("");
       var nome = element.currentTarget.textContent;
       var telefone = array[0].replace("donoTelefone", "");
       var cpf = array[1].replace("donoCPF", "");

@@ -56,7 +56,7 @@
               <div class="form-group">
                 <label for="dono">Dono:</label>
                 <input type="text" id="input_dono" class="form-control" autocomplete="off" />
-                <div class="list-group shadow-lg" id="resultado" style="position: absolute;   z-index: 1;"></div>
+                <div class="list-group shadow-lg" id="resultado" style="position: absolute; z-index: 1;"></div>
               </div>
             </div>
 
