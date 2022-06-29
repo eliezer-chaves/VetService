@@ -56,6 +56,7 @@ if ($_POST["operation"] == "create") {
             'animalSexo' => $row['ANI_SEXO'],
             'donoCodigo' => $row['DON_CODIGO'],
             'donoNome' => $row['DON_NOME'],
+            'donoCPF' => $row['DON_CPF']
         ];
     }
     if (empty($animais)) {
@@ -92,6 +93,7 @@ if ($_POST["operation"] == "create") {
             $dados[] = [
                 'donoCodigo' => $row['DON_CODIGO'],
                 'donoNome' => $row['DON_NOME'],
+                'donoCPF' => $row['DON_CPF']
             ];
         }
 
@@ -150,6 +152,7 @@ if ($_POST["operation"] == "create") {
         $animais[] = [
             'donoCodigo' => $row['DON_CODIGO'],
             'donoNome' => $row['DON_NOME'],
+            'donoCPF' => $row['DON_CPF'],
             'animalCodigo' => $row['ANI_CODIGO'],
             'animalNome' => $row['ANI_NOME'],
             'animalNascimento' => $row['ANI_NASCIMENTO'],
@@ -182,6 +185,7 @@ if ($_POST["operation"] == "create") {
                 $animais[] = [
                     'donoCodigo' => $row['DON_CODIGO'],
                     'donoNome' => $row['DON_NOME'],
+                    'donoCPF' => $row['DON_CPF'],
                     'animalCodigo' => $row['ANI_CODIGO'],
                     'animalNome' => $row['ANI_NOME'],
                     'animalNascimento' => $row['ANI_NASCIMENTO'],
