@@ -1,64 +1,87 @@
-data_consulta.min = new Date().toISOString().split("T")[0];
+data_consulta.min = new Date().toISOString().split("T")[0]
+
+var inputNomeAnimal = $("#input_animal")
+var inputCodigoAnimal = $("#input_animal_codigo")
+var inputNomeDono = $("#input_dono")
+var inputCodigoDono = $("#dono_codigo")
+var inputCPFDono = $("#dono_cpf")
+var inputTelefoneDono = $("#dono_telefone")
+var dropdownVeterinario = $("#veterinario_opcao")
+var inputCodigoVeterinario = $("#veterinario_codigo")
+var inputDataConsulta = $("#data_consulta")
+var inputHoraConsulta = $("#hora_consulta")
+var inputDataConsultaModal = $("#dataModal")
+var inputHoraConsultaModal = $("#horaModal")
+var inputNomeAnimalModal = $("#animalNomeModal")
+var inputNomeDonoModal = $("#donoNomeModal")
+var inputVeterinarioModal = $("#veterinarioModal")
+var buttonCadastrar = $("#cadastrar")
+var urlCRUDVeterinario = "../../model/crud_veterinario.php"
+var urlCRUDConsulta = "../../model/crud_consulta.php"
+var modalConsultaCadastrada = $("#modalConsultaCadastrada")
+var modalAviso = $("#modalAviso")
+var modalExists = $("#modalExists")
 
 function clearFilds() {
-  $("#input_animal").val("");
-  $("#input_animal_codigo").val("")
-  $("#input_dono").val("");
-  $("#dono_codigo").val("");
-  $("#dono_cpf").val("");
-  $("#dono_telefone").val("");
-  $("#veterinario_opcao").val("");
-  $("#veterinario_codigo").val("");
-  $("#data_consulta").val("");
-  $("#hora_consulta").val("");
-  $("#dataModal").val("");
-  $("#horaModal").val("");
-  $("#animalNomeModal").val("");
-  $("#donoNomeModal").val("");
-  $("#veterinarioModal").val("");
-
+  inputNomeAnimal.val("")
+  inputCodigoAnimal.val("")
+  inputNomeDono.val("")
+  inputCodigoDono.val("")
+  inputCPFDono.val("")
+  inputTelefoneDono.val("")
+  dropdownVeterinario.val("")
+  inputCodigoVeterinario.val("")
+  inputDataConsulta.val("")
+  inputHoraConsulta.val("")
+  inputDataConsultaModal.val("")
+  inputHoraConsultaModal.val("")
+  inputNomeAnimalModal.val("")
+  inputNomeDonoModal.val("")
+  inputVeterinarioModal.val("")
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
-    data:{
-      operation: "load_dropdown"
-    }
-
-  }).done(function(resposta) {
-    
+    url: urlCRUDVeterinario,
+    data: {
+      operation: "load_dropdown",
+    },
+  }).done(function (resposta) {
     var obj = $.parseJSON(resposta)
-
-    novo_item = ''
-
+    novo_item = ""
     Object.keys(obj).forEach((item) => {
-      novo_item += '<option value="' + obj[item].veterinarioNome + '" id="' + obj[item].veterinarioCodigo + '"><button>' + obj[item].veterinarioNome + '</button></option>'
-    });
-    $('#veterinario_opcao').append(novo_item);
+      novo_item +=
+        '<option value="' +
+        obj[item].veterinarioNome +
+        '" id="' +
+        obj[item].veterinarioCodigo +
+        '"><button>' +
+        obj[item].veterinarioNome +
+        "</button></option>"
+    })
+    $("#veterinario_opcao").append(novo_item)
 
-    $("#veterinario_opcao").change(function() {
-      var value = $('#veterinario_opcao :selected').attr('id');
+    dropdownVeterinario.change(function () {
+      var value = $("#veterinario_opcao :selected").attr("id")
+      inputCodigoVeterinario.val(value)
+    })
+  })
+})
 
-      $("#veterinario_codigo").val(value)
-    });
-  });
-});
-
-$("#cadastrar").click(function() {
-  var animalCodigo = $("#input_animal_codigo").val();
-  var donoCodigo = $("#dono_codigo").val();
-  var veterinario_codigo = $('#veterinario_codigo').val();
-  var data = $("#data_consulta").val();
-  var hora = $("#hora_consulta").val();
-  var animalNome = $("#input_animal").val();
-  var dono = $("#input_dono").val();
-  var veterinario = $('#veterinario_opcao :selected').text()
+buttonCadastrar.click(function () {
+  var animalCodigo = inputCodigoAnimal.val()
+  var donoCodigo = inputCodigoDono.val()
+  var veterinario_codigo = $("#veterinario_codigo").val()
+  var data = inputDataConsulta.val()
+  var hora = inputHoraConsulta.val()
+  var animalNome = inputNomeAnimal.val()
+  var dono = inputNomeDono.val()
+  var veterinario = $("#veterinario_opcao :selected").text()
 
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       animalCodigo: animalCodigo,
       donoCodigo: donoCodigo,
@@ -68,104 +91,112 @@ $("#cadastrar").click(function() {
       animalNome: animalNome,
       dono: dono,
       veterinario: veterinario,
-      operation: "create"
+      operation: "create",
     },
-  }).done(function(resposta) {
-    var obj = $.parseJSON(resposta);
+  }).done(function (resposta) {
+    var obj = $.parseJSON(resposta)
     if (obj.status == "cadastrado") {
-      var dia = obj.data.split("-")[0];
-      var mes = obj.data.split("-")[1];
-      var ano = obj.data.split("-")[2];
+      var dia = obj.data.split("-")[0]
+      var mes = obj.data.split("-")[1]
+      var ano = obj.data.split("-")[2]
 
-      obj.data = ("0" + ano).slice(-2) + '/' + ("0" + mes).slice(-2) + '/' + dia;
+      obj.data =
+        ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia
 
-      $("#modalConsultaCadastrada").modal("show");
-      $("#dataModal").html(obj.data);
-      $("#horaModal").html(obj.hora);
-      $("#animalNomeModal").html(obj.animal);
-      $("#donoNomeModal").html(obj.dono);
-      $("#veterinarioModal").html(obj.veterinario);
-
+      modalConsultaCadastrada.modal("show")
+      inputDataConsultaModal.html(obj.data)
+      inputHoraConsultaModal.html(obj.hora)
+      inputNomeAnimalModal.html(obj.animal)
+      inputNomeDonoModal.html(obj.dono)
+      inputVeterinarioModal.html(obj.veterinario)
     }
     if (obj.status == "incomplete") {
-      $("#modalAviso").modal("show");
+      modalAviso.modal("show")
     }
-  });
-});
+  })
+})
 
-$(document).on("click", 'button', function(element) {
-  var id = element.currentTarget.id;
+$(document).on("click", "button", function (element) {
+  var id = element.currentTarget.id
   if (id == "btn-consulta-cadastrado-modal") {
-    $('#modalConsultaCadastrada').modal('hide');
-    clearFilds();
+    modalConsultaCadastrada.modal("hide")
+    clearFilds()
   }
   if (id == "btn-aviso-modal") {
-    $('#modalAviso').modal('hide');
+    modalAviso.modal("hide")
   }
   if (id == "btn-ok-modal-exists") {
-    $('#modalExists').modal('hide');
+    modalExists.modal("hide")
   }
-});
+})
 
-$(document).ready(function() {
-  $("#input_animal").keyup(function() {
-    let searchText = $(this).val();
+$(document).ready(function () {
+  inputNomeAnimal.keyup(function () {
+    let searchText = $(this).val()
     if (searchText != "") {
       $.ajax({
         url: "../../model/crud_consulta.php",
         method: "POST",
         data: {
           query: searchText,
-          operation: "read_animal_fk"
-        }
-      }).done(function(resposta) {
+          operation: "read_animal_fk",
+        },
+      }).done(function (resposta) {
         var obj = $.parseJSON(resposta)
         var nova_linha = ""
-        $('#resultado').html("");
+        $("#resultado").html("")
 
         Object.keys(obj).forEach((item) => {
-          nova_linha += '<button class="list-group-item list-group-item-action " ' +
-            'id="donoTelefone' + obj[item].donoTelefone +
-            '_donoCPF' + obj[item].donoCPF +
-            '_donoCodigo' + obj[item].donoCodigo +
-            '_donoNome' + obj[item].donoNome +
-            '_animalNome' + obj[item].animalNome +
-            '_animalCodigo' + obj[item].animalCodigo +
-            '">' + obj[item].animalNome + ' - ' + obj[item].donoNome +
-            '</button><span></span>'
-        });
-        var stringExemplo = nova_linha;
-        var resultado = stringExemplo.split("<span></span>");
+          nova_linha +=
+            '<button class="list-group-item list-group-item-action " ' +
+            'id="donoTelefone' +
+            obj[item].donoTelefone +
+            "_donoCPF" +
+            obj[item].donoCPF +
+            "_donoCodigo" +
+            obj[item].donoCodigo +
+            "_donoNome" +
+            obj[item].donoNome +
+            "_animalNome" +
+            obj[item].animalNome +
+            "_animalCodigo" +
+            obj[item].animalCodigo +
+            '">' +
+            obj[item].animalNome +
+            " - " +
+            obj[item].donoNome +
+            "</button><span></span>"
+        })
+        var stringExemplo = nova_linha
+        var resultado = stringExemplo.split("<span></span>")
 
-        $('#resultado').append(resultado);
-
-      });
+        $("#resultado").append(resultado)
+      })
     } else {
-      $('#resultado').html("");
+      $("#resultado").html("")
     }
+  })
 
-  });
-
-  $(document).on("click", "button", function(element) {
+  $(document).on("click", "button", function (element) {
     var id = element.currentTarget.id
 
     var array = id.split("_")
 
     if (id.includes("donoCodigo")) {
-      $('#resultado').html("");
-      var telefone = array[0].replace("donoTelefone", "");
-      var cpf = array[1].replace("donoCPF", "");
-      var donoCodigo = array[2].replace("donoCodigo", "");
-      var donoNome = array[3].replace("donoNome", "");
-      var animalNome = array[4].replace("animalNome", "");
-      var animalCodigo = array[5].replace("animalCodigo", "");
+      $("#resultado").html("")
+      var telefone = array[0].replace("donoTelefone", "")
+      var cpf = array[1].replace("donoCPF", "")
+      var donoCodigo = array[2].replace("donoCodigo", "")
+      var donoNome = array[3].replace("donoNome", "")
+      var animalNome = array[4].replace("animalNome", "")
+      var animalCodigo = array[5].replace("animalCodigo", "")
 
-      $("#input_animal").val(animalNome)
-      $("#input_animal_codigo").val(animalCodigo)
-      $("#input_dono").val(donoNome)
-      $("#dono_codigo").val(donoCodigo)
-      $("#dono_cpf").val(cpf)
-      $("#dono_telefone").val(telefone)
+      inputNomeAnimal.val(animalNome)
+      inputCodigoAnimal.val(animalCodigo)
+      inputNomeDono.val(donoNome)
+      inputCodigoDono.val(donoCodigo)
+      inputCPFDono.val(cpf)
+      inputTelefoneDono.val(telefone)
     }
-  });
-});
+  })
+})

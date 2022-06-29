@@ -49,7 +49,7 @@
                 <input type="text" id="input_animal" class="form-control" autocomplete="off" />
                 <div class="list-group shadow-lg" id="resultado" style="position: absolute;   z-index: 1;"></div>
               </div>
-              <div class="input-group mt-3 ">
+              <div class="input-group mt-3 d-none">
                 <span class="input-group-text">Animal Código:</span>
                 <input type="text" class="form-control" id="input_animal_codigo" disabled readonly />
               </div>
@@ -85,11 +85,10 @@
             </div>
 
             <div class="row">
-              <div class="input-group mb-3">
-                <label class="input-group-text" for="veterinario_opcao">Veterinário</label>
+              <div class="form-group mb-3">
+                <label for="veterinario_opcao">Veterinário:</label>
                 <select class="form-select" id="veterinario_opcao">
                   <option id="veterinario_opcao" selected>Escolha...</option>
-
                 </select>
 
                 <div class="input-group mt-3 d-none">
@@ -100,14 +99,14 @@
             </div>
             <div class="row">
               <div class="col">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">Data</span>
+                <div class="form-group mb-3">
+                  <span for="data_consulta">Data:</span>
                   <input type="date" class="form-control" id="data_consulta" />
                 </div>
               </div>
               <div class="col">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">Hora</span>
+                <div class="form-group mb-3">
+                  <span for="hora_consulta">Hora:</span>
                   <input type="time" class="form-control" id="hora_consulta" />
                 </div>
               </div>
@@ -159,10 +158,7 @@
         </div>
       </div>
     </div>
-    <!-- <div> -->
-    <!-- Footer -->
-    <?php include 'componentes/footer.html'; ?>
-    <!-- </div> -->
+    <!-- <?php include 'componentes/footer.html'; ?> -->
     <script src="../../controller/page_add_consultas.js"></script>
 
 </body>
