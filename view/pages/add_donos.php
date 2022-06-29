@@ -47,71 +47,70 @@
             <div class="p-3">
               <div class="row">
                 <div class="col-8">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">Nome</span>
+                  <div class="form-group mb-3">
+                    <label for="nome">Nome:</label>
                     <input type="text" id="nome" class="form-control" required />
                   </div>
                 </div>
                 <div class="col">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">CPF</span>
+                  <div class="form-group mb-3">
+                    <label for="cpf">CPF:</label>
                     <input type="text" class="form-control" id="cpf" required />
                   </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-6">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">CEP</span>
+                  <div class="form-group mb-3">
+                    <label for="cep">CEP:</label>
                     <input type="text" class="form-control" id="cep" required />
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-9">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">Logradouro</span>
+                  <div class="form-group mb-3">
+                    <label for="rua">Rua:</label>
                     <input type="text" class="form-control" id="rua" required />
                   </div>
                 </div>
                 <div class="col">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">Número</span>
+                  <div class="form-group mb-3">
+                    <label for="numero">Número</label>
                     <input type="text" class="form-control" id="numero" required />
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">Complemento</span>
+                <div class="form-group mb-3">
+                  <label for="complemento">Complemento:</label>
                   <input type="text" class="form-control" id="complemento" />
                 </div>
               </div>
               <div class="row">
-                <div class="col-6">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">Bairro</span>
+                <div class="col-5">
+                  <div class="form-group mb-3">
+                    <label for="bairro">Bairro:</label>
                     <input type="text" class="form-control" id="bairro" required />
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">Cidade</span>
+                  <div class="form-group mb-3">
+                    <label for="cidade">Cidade:</label>
                     <input type="text" class="form-control" id="cidade" required />
                   </div>
                 </div>
-                <div class="col-2">
-                  <div class="input-group mb-3">
-                    <span class="input-group-text">UF</span>
+                <div class="col-3">
+                  <div class="form-group mb-3">
+                    <label for="uf">UF:</label>
                     <input type="text" class="form-control" id="uf" required />
                   </div>
                 </div>
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
-                  <span class="input-group-text">Telefone</span>
+                <div class="form-group mb-3">
+                  <label for="telefone">Telefone:</label>
                   <input type="text" class="form-control" id="telefone" required />
                 </div>
               </div>
@@ -128,7 +127,7 @@
                         <h4 class="modal-title" id="modal-header-cadastrado">Dono(a) Cadastrado!</h4>
                       </div>
                       <div class="modal-body">
-                        <p>Dono(a) cadastrado com sucesso: <b><span id="donoNome"></span></b></p>
+                        <p>Dono(a) cadastrado com sucesso: <b><span id="ModalNomeDono"></span></b></p>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-primary " id="btn-dono-cadastrado-modal" data-bs-target="#modalDonoCadastrado" data-dismiss="modal">Ok</button>
@@ -168,7 +167,6 @@
                     </div>
                   </div>
                 </div>
-
               </div>
               </form>
             </div>

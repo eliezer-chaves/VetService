@@ -1,33 +1,51 @@
+var inputNome = $("#nome");
+var inputCPF = $("#cpf");
+var inputCEP = $("#cep");
+var inputRua = $("#rua");
+var inputNumero = $("#numero");
+var inputComplemento = $("#complemento");
+var inputBairro = $("#bairro");
+var inputCidade = $("#cidade");
+var inputUF = $("#uf");
+var inputTelefone = $("#telefone");
+var inputModalNomeDono = $("#ModalNomeDono");
+var inputModalExistsNomeDono = $("#donoExists");
+var buttonCadastrar = $("#cadastrar");
+var urlCRUDDono = "../../model/crud_dono.php";
+var modalDonoCadastrado = $("#modalDonoCadastrado");
+var modalAviso = $("#modalAviso");
+var modalExists = $("#modalExists");
+
 function clearFilds() {
-  $("#nome").val("");
-  $("#cpf").val("");
-  $("#cep").val("");
-  $("#rua").val("");
-  $("#numero").val("");
-  $("#complemento").val("");
-  $("#bairro").val("");
-  $("#cidade").val("");
-  $("#uf").val("");
-  $("#telefone").val("");
-  $("#donoNome").val("");
-  $("#donoExists").val("");
+  inputNome.val("");
+  inputCPF.val("");
+  inputCEP.val("");
+  inputRua.val("");
+  inputNumero.val("");
+  inputComplemento.val("");
+  inputBairro.val("");
+  inputCidade.val("");
+  inputUF.val("");
+  inputTelefone.val("");
+  inputModalNomeDono.val("");
+  inputModalExistsNomeDono.val("");
 }
 
-$("#cadastrar").click(function () {
-  var nome = $("#nome").val();
-  var cpf = $("#cpf").val();
-  var cep = $("#cep").val();
-  var rua = $("#rua").val();
-  var numero = $("#numero").val();
-  var complemento = $("#complemento").val();
-  var bairro = $("#bairro").val();
-  var cidade = $("#cidade").val();
-  var uf = $("#uf").val();
-  var telefone = $("#telefone").val();
+buttonCadastrar.click(function () {
+  var nome = inputNome.val();
+  var cpf = inputCPF.val();
+  var cep = inputCEP.val();
+  var rua = inputRua.val();
+  var numero = inputNumero.val();
+  var complemento = inputComplemento.val();
+  var bairro = inputBairro.val();
+  var cidade = inputCidade.val();
+  var uf = inputUF.val();
+  var telefone = inputTelefone.val();
 
   $.ajax({
     method: "POST",
-    url: "../../model/crud_dono.php",
+    url: urlCRUDDono,
     data: {
       nome: nome,
       cep: cep,
@@ -45,16 +63,15 @@ $("#cadastrar").click(function () {
     var obj = $.parseJSON(resposta);
     var nome = obj.dono;
     if (obj.status == "cadastrado") {
-      $("#modalDonoCadastrado").modal("show");
-      $("#donoNome").html(nome);
+      modalDonoCadastrado.modal("show");
+      inputModalNomeDono.html(nome);
     }
     if (obj.status == "incomplete") {
-      $("#modalAviso").modal("show");
+      modalAviso.modal("show");
     }
     if (obj.status == "exists") {
-      $("#modalExists").modal("show");
-      $("#donoExists").html(obj.cpf);
-      //clearFilds();
+      modalExists.modal("show");
+      inputModalExistsNomeDono.html(obj.cpf);
     }
   });
 });
@@ -62,25 +79,24 @@ $("#cadastrar").click(function () {
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
   if (id == "btn-dono-cadastrado-modal") {
-    $("#modalDonoCadastrado").modal("hide");
+    modalDonoCadastrado.modal("hide");
     clearFilds();
   }
   if (id == "btn-aviso-modal") {
-    $("#modalAviso").modal("hide");
+    modalAviso.modal("hide");
   }
   if (id == "btn-ok-modal-exists") {
-    $("#modalExists").modal("hide");
+    modalExists.modal("hide");
   }
 });
 
 $(document).ready(function () {
-  var $seuCampoCpf = $("#cpf");
+  var $seuCampoCpf = inputCPF;
   $seuCampoCpf.mask("000.000.000-00", {
     reverse: false,
   });
 });
 
-//Mask Telefone
 var behavior = function (val) {
     return val.replace(/\D/g, "").length === 11
       ? "(00) 00000-0000"
@@ -92,67 +108,102 @@ var behavior = function (val) {
     },
   };
 
-$("#telefone").mask(behavior, options);
+inputTelefone.mask(behavior, options);
 
-//Mask do CEP
 $(document).ready(function () {
-  $("#cep").mask("99.999-999");
+  inputCEP.mask("99.999-999");
 });
-//Função para o CEP
-function limpa_formulário_cep() {
-  // Limpa valores do formulário de cep.
-  $("#rua").val("");
-  $("#bairro").val("");
-  $("#cidade").val("");
-  $("#uf").val("");
-  $("#numero").val("");
-}
-$("#cep").blur(function () {
-  //Nova variável "cep" somente com dígitos.
-  var cep = $(this).val().replace(/\D/g, "");
 
-  //Verifica se campo cep possui valor informado.
+$(buttonBuscarCEP).click(function () {
+  var cep = inputCEP.val().replace(/\D/g, "");
+
   if (cep != "") {
-    //Expressão regular para validar o CEP.
     var validacep = /^[0-9]{8}$/;
 
-    //Valida o formato do CEP.
     if (validacep.test(cep)) {
-      //Preenche os campos com "..." enquanto consulta webservice.
-      $("#rua").val("...");
-      $("#bairro").val("...");
-      $("#cidade").val("...");
-      $("#uf").val("...");
-      $("#ibge").val("...");
+      inputRua.val("Buscando...");
+      inputBairro.val("Buscando...");
+      inputCidade.val("Buscando...");
+      inputUF.val("Buscando...");
 
-      //Consulta o webservice viacep.com.br/
       $.getJSON(
         "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
         function (dados) {
           if (!("erro" in dados)) {
-            //Atualiza os campos com os valores da consulta.
-            $("#rua").val(dados.logradouro);
-            $("#bairro").val(dados.bairro);
-            $("#cidade").val(dados.localidade);
-            $("#uf").val(dados.uf);
-            $("#ibge").val(dados.ibge);
-          } //end if.
-          else {
-            //CEP pesquisado não foi encontrado.
-            limpa_formulario_cep();
+            inputRua.val(dados.logradouro);
+            inputBairro.val(dados.bairro);
+            inputCidade.val(dados.localidade);
+            inputUF.val(dados.uf);
+          } else {
+            inputCEP.val("");
+            inputRua.val("");
+            inputBairro.val("");
+            inputCidade.val("");
+            inputUF.val("");
             alert("CEP não encontrado.");
           }
         }
       );
-    } //end if.
-    else {
-      //cep é inválido.
-      limpa_formulario_cep();
+    } else {
+      inputCEP.val("");
+      inputRua.val("");
+      inputBairro.val("");
+      inputCidade.val("");
+      inputUF.val("");
       alert("Formato de CEP inválido.");
     }
-  } //end if.
-  else {
-    //cep sem valor, limpa formulário.
-    limpa_formulario_cep();
+  } else {
+    inputCEP.val("");
+    inputRua.val("");
+    inputBairro.val("");
+    inputCidade.val("");
+    inputUF.val("");
+  }
+})
+
+inputCEP.blur(function () {
+  var cep = inputCEP.val().replace(/\D/g, "");
+
+  if (cep != "") {
+    var validacep = /^[0-9]{8}$/;
+
+    if (validacep.test(cep)) {
+      inputRua.val("Buscando...");
+      inputBairro.val("Buscando...");
+      inputCidade.val("Buscando...");
+      inputUF.val("Buscando...");
+
+      $.getJSON(
+        "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
+        function (dados) {
+          if (!("erro" in dados)) {
+            inputRua.val(dados.logradouro);
+            inputBairro.val(dados.bairro);
+            inputCidade.val(dados.localidade);
+            inputUF.val(dados.uf);
+          } else {
+            inputCEP.val("");
+            inputRua.val("");
+            inputBairro.val("");
+            inputCidade.val("");
+            inputUF.val("");
+            alert("CEP não encontrado.");
+          }
+        }
+      );
+    } else {
+      inputCEP.val("");
+      inputRua.val("");
+      inputBairro.val("");
+      inputCidade.val("");
+      inputUF.val("");
+      alert("Formato de CEP inválido.");
+    }
+  } else {
+    inputCEP.val("");
+    inputRua.val("");
+    inputBairro.val("");
+    inputCidade.val("");
+    inputUF.val("");
   }
 });
