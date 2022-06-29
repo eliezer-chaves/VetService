@@ -223,9 +223,12 @@ if ($_POST["operation"] == "create") {
                 ];
             }
             if (empty($donos)) {
+               
                 echo '{"status":"vazio"}';
             } else {
-                echo json_encode($donos);
+                $total = count($donos);
+                $donos = json_encode($donos);
+                echo '{"total" : "'.$total.'", "dados" : '.$donos.'}';
             }
         }
     } catch (Exception $e) {

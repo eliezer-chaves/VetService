@@ -37,58 +37,69 @@
       </div>
       <!-- Content -->
       <div class="container-fluid w-75 mb-3">
-        <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between">
-          <div>
-            <a href="../pages/add_donos.php">
-              <button class="btn btn-success" type="submit">
-                <i class="me-2 fa-solid fa-person"></i>
-                Adicionar dono
+        <div id="conteudo">
+          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between" id="content-header">
+            <div>
+              <a href="../pages/add_donos.php">
+                <button class="btn btn-success" type="submit">
+                  <i class="me-2 fa-solid fa-person"></i>
+                  Adicionar dono
+                </button>
+              </a>
+            </div>
+            <div class="d-flex w-50">
+              <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
+              <button class="btn btn-primary" type="submit" id="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
               </button>
-            </a>
+            </div>
           </div>
-          <div class="d-flex w-50">
-            <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
-            <button class="btn btn-primary" type="submit" id="search">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+          <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+            <div class="d-flex align-midle" id="total_resultados">
+              <div class="me-1">
+                Mostrando
+              </div>
+              <div style="width: 70px; " class="me-1">
+                <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
+                  <option selected value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+              <div class="me-1">
+                de <b> <a id="total"></a></b>
+              </div>
+            </div>
+            <table class="table table-hover table-bordered" id="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">Id</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">CPF</th>
+                  <th scope="col">Telefone</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="donos">
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-center algin-middle mt-2">
+              <p id="aviso">Nenhum dono encontrado, faça uma nova pesquisa.</p>
+            </div>
           </div>
         </div>
-        <div class="mt-2 shadow p-3 bg-body rounded" id="content">
-          <div class="d-flex align-midle" id="total_resultados">
-            <div class="me-1">
-              Mostrando
-            </div>
-            <div style="width: 70px; " class="me-1">
-              <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
-                <option selected value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <div class="me-1">
-              de <b> <a id="total"></a></b>
-            </div>
-          </div>
-          <table class="table table-hover table-bordered" id="table">
-            <thead>
-              <tr class="text-center">
-                <th scope="col">Id</th>
-                <th scope="col">Nome</th>
-                <th scope="col">CPF</th>
-                <th scope="col">Telefone</th>
-                <th scope="col">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="donos">
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-center algin-middle">
-            <p id="aviso">Nenhum dono encontrado, faça uma nova pesquisa.</p>
+
+        <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
+        
+          <div>
+            <b class="h3">Nenhum dono cadastrado!</b>
           </div>
           
         </div>
+
       </div>
     </div>
+
     <!-- Modal Editar -->
     <div class="modal fade" id="modalEditarDono" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -149,14 +160,12 @@
                   <input type="text" class="form-control" id="complemento" />
                 </div>
               </div>
-
               <div class="row">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Bairro</span>
                   <input type="text" class="form-control" id="bairro" />
                 </div>
               </div>
-
               <div class="row">
                 <div class="col">
                   <div class="input-group mb-3">
@@ -184,18 +193,7 @@
         </div>
       </div>
     </div>
-    <!-- Alerta Success -->
-    <div class="alert alert-success text-center" id="donoAlterado" role="alert">
-      Dono(a) alterado(a) com sucesso!
-    </div>
-    <!-- Alerta Success -->
-    <div class="alert alert-warning text-center" id="donoExcluido" role="alert">
-      Dono(a) excluído com sucesso!
-    </div>
-    <!-- Alerta Erro -->
-    <div class="alert alert-warning text-center" id="donoErro" role="alert">
-      Não foi possível alterar o(a) dono(a)!
-    </div>
+
     <!-- Modal Excluir -->
     <div class="modal fade" id="modalExcluirDono" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
@@ -249,6 +247,20 @@
         </div>
       </div>
     </div>
+
+    <!-- Alerta Success -->
+    <div class="alert alert-success text-center" id="donoAlterado" role="alert">
+      Dono(a) alterado(a) com sucesso!
+    </div>
+    <!-- Alerta Success -->
+    <div class="alert alert-warning text-center" id="donoExcluido" role="alert">
+      Dono(a) excluído com sucesso!
+    </div>
+    <!-- Alerta Erro -->
+    <div class="alert alert-warning text-center" id="donoErro" role="alert">
+      Não foi possível alterar o(a) dono(a)!
+    </div>
+
     <!-- Footer -->
     <!-- <div>
       <?php include 'componentes/footer.html'; ?>
