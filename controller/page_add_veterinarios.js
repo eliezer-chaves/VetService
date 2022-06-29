@@ -1,23 +1,36 @@
+var inputNome = $("#nome");
+var inputCRMV = $("#crmv");
+var dropdownEstado = $("#dropdown_estado");
+var dropdownEspecialidade = $("#dropdown_especialidade");
+var inputTelefone = $("#telefone");
+var inputCRMVModal = $("#CRMVExists");
+var buttonCadastrar = $("#cadastrar");
+var urlCRUDVeterinario = "../../model/crud_veterinario.php";
+var inputModalNomeVeterinario = $("#veterinarioNome");
+var modalVeterinarioCadastrado = $("#modalVeterinarioCadastrado");
+var modalAviso = $("#modalAviso");
+var modalExists = $("#modalExists");
+
 function clearFilds() {
-  $("#nome").val("");
-  $("#crmv").val("");
-  $("#dropdown_estado").val("");
-  $("#dropdown_especialidade").val("");
-  $("#telefone").val("");
-  $("#CRMVExists").val("");
+  inputNome.val("");
+  inputCRMV.val("");
+  dropdownEstado.val("");
+  dropdownEspecialidade.val("");
+  inputTelefone.val("");
+  inputCRMVModal.val("");
 }
 
-$("#cadastrar").click(function () {
-  var nome = $("#nome").val();
-  var crmv = $("#crmv").val();
+buttonCadastrar.click(function () {
+  var nome = inputNome.val();
+  var crmv = inputCRMV.val();
   var uf = $("#dropdown_estado :selected").val();
   var especialidade = $("#dropdown_especialidade :selected").text();
-  var telefone = $("#telefone").val();
+  var telefone = inputTelefone.val();
   var crmv_uf = crmv + "-" + uf;
 
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       nome: nome,
       crmv: crmv,
@@ -29,16 +42,16 @@ $("#cadastrar").click(function () {
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "cadastrado") {
-      $("#modalVeterinarioCadastrado").modal("show");
-      $("#veterinarioNome").html(obj.veterinario);
+      modalVeterinarioCadastrado.modal("show");
+      inputModalNomeVeterinario.html(obj.veterinario);
       clearFilds();
     }
     if (obj.status == "incomplete") {
-      $("#modalAviso").modal("show");
+      modalAviso.modal("show");
     }
     if (obj.status == "exists") {
-      $("#modalExists").modal("show");
-      $("#CRMVExists").html(obj.crmv);
+      modalExists.modal("show");
+      inputCRMVModal.html(obj.crmv);
     }
   });
 });
@@ -46,19 +59,17 @@ $("#cadastrar").click(function () {
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
   if (id == "btn-veterinario-cadastrado-modal") {
-    $("#modalVeterinarioCadastrado").modal("hide");
+    modalVeterinarioCadastrado.modal("hide");
     clearFilds();
   }
   if (id == "btn-ok-modal") {
-    $("#modalAviso").modal("hide");
+    modalAviso.modal("hide");
   }
   if (id == "btn-ok-modal-exists") {
-    $("#modalExists").modal("hide");
-    //clearFilds();
+    modalExists.modal("hide");
   }
 });
 
-//Mask Telefone
 var behavior = function (val) {
     return val.replace(/\D/g, "").length === 11
       ? "(00) 00000-0000"
@@ -70,9 +81,8 @@ var behavior = function (val) {
     },
   };
 
-$("#telefone").mask(behavior, options);
+inputTelefone.mask(behavior, options);
 
-//Mask do CRMV
 $(document).ready(function () {
-  $("#crmv").mask("99999");
+  inputCRMV.mask("99999");
 });

@@ -114,53 +114,6 @@ $(document).ready(function () {
   inputCEP.mask("99.999-999");
 });
 
-$(buttonBuscarCEP).click(function () {
-  var cep = inputCEP.val().replace(/\D/g, "");
-
-  if (cep != "") {
-    var validacep = /^[0-9]{8}$/;
-
-    if (validacep.test(cep)) {
-      inputRua.val("Buscando...");
-      inputBairro.val("Buscando...");
-      inputCidade.val("Buscando...");
-      inputUF.val("Buscando...");
-
-      $.getJSON(
-        "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
-        function (dados) {
-          if (!("erro" in dados)) {
-            inputRua.val(dados.logradouro);
-            inputBairro.val(dados.bairro);
-            inputCidade.val(dados.localidade);
-            inputUF.val(dados.uf);
-          } else {
-            inputCEP.val("");
-            inputRua.val("");
-            inputBairro.val("");
-            inputCidade.val("");
-            inputUF.val("");
-            alert("CEP não encontrado.");
-          }
-        }
-      );
-    } else {
-      inputCEP.val("");
-      inputRua.val("");
-      inputBairro.val("");
-      inputCidade.val("");
-      inputUF.val("");
-      alert("Formato de CEP inválido.");
-    }
-  } else {
-    inputCEP.val("");
-    inputRua.val("");
-    inputBairro.val("");
-    inputCidade.val("");
-    inputUF.val("");
-  }
-})
-
 inputCEP.blur(function () {
   var cep = inputCEP.val().replace(/\D/g, "");
 
