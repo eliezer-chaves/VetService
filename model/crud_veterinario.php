@@ -2,6 +2,7 @@
 include 'db/connect.php';
 
 $table = "tbl_veterinario";
+$table_reference = "tbl_especialidade";
 
 try {
     $conexao = criarConexao();
@@ -22,7 +23,7 @@ if ($_POST["operation"] == "create") {
         $crmv_uf = $_POST["crmv_uf"];
         $especialidade = $_POST["especialidade"];
 
-        $sql = 'select VET_CRMV from ' . $table . ' where VET_CRMV = "' . $crmv . '" ;';
+        $sql = 'SELECT VET_CRMV FROM ' . $table . ' WHERE VET_CRMV = "' . $crmv . '" ;';
         $resultado = executarQuery($conexao, $sql);
         $veterinario = $resultado->fetch();
 
@@ -30,17 +31,17 @@ if ($_POST["operation"] == "create") {
             echo '{"status":"exists", "crmv": "' . $crmv . '"}';
             return;
         } else {
-            $sql = "insert into " . $table .
-                "(VET_NOME, VET_CRMV, VET_TELEFONE, VET_CRMV_UF, VET_ESPECIALIDADE)" .
-                " values " .
-                "(:VET_NOME, :VET_CRMV, :VET_TELEFONE, :VET_CRMV_UF, :VET_ESPECIALIDADE);";
+            $sql = "INSERT INTO " . $table .
+                "(VET_NOME, VET_CRMV, VET_TELEFONE, VET_CRMV_UF, ESP_CODIGO)" .
+                " VALUES " .
+                "(:VET_NOME, :VET_CRMV, :VET_TELEFONE, :VET_CRMV_UF, :ESP_CODIGO);";
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':VET_NOME', $nome);
             $stmt->bindParam(':VET_CRMV', $crmv);
             $stmt->bindParam(':VET_TELEFONE', $telefone);
             $stmt->bindParam(':VET_CRMV_UF', $crmv_uf);
-            $stmt->bindParam(':VET_ESPECIALIDADE', $especialidade);
+            $stmt->bindParam(':ESP_CODIGO', $especialidade);
             $stmt->execute();
 
             echo '{ "resultado": "Veterinário cadastrado", "status": "cadastrado", "veterinario": "' . $nome . '" }';
@@ -52,9 +53,11 @@ if ($_POST["operation"] == "create") {
     try {
         $total = $_POST["quantidade"];
         if ($total == "") {
-            $sql = "SELECT * FROM $table ORDER BY VET_NOME";
+            $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME;";
+            //$sql = "SELECT * FROM $table ORDER BY VET_NOME";
         } else {
-            $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total";
+            $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME LIMIT $total;";
+            //$sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total";
         }
 
         $resultado = executarQuery($conexao, $sql);
@@ -67,7 +70,8 @@ if ($_POST["operation"] == "create") {
                 'veterinarioNome' => $row['VET_NOME'],
                 'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
                 'veterinarioTelefone' => $row['VET_TELEFONE'],
-                'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+                'veterinarioEspecialidade' => $row['ESP_NOME'],
+                'veterinarioEspecialidadeCodigo' => $row['ESP_CODIGO']
             ];
         }
         if (empty($veterinarios)) {
@@ -85,7 +89,9 @@ if ($_POST["operation"] == "create") {
         if (isset($_POST["codigo"])) {
             $codigo = $_POST["codigo"];
 
-            $sql = "SELECT * FROM $table WHERE VET_CODIGO = $codigo;";
+            $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO WHERE VET_CODIGO = $codigo;";
+
+            //$sql = "SELECT * FROM $table WHERE VET_CODIGO = $codigo;";
             $resultado = executarQuery($conexao, $sql);
             $veterinario = $resultado->fetch();
 
@@ -100,17 +106,17 @@ if ($_POST["operation"] == "create") {
         $VET_NOME = $_POST["veterinarioNome"];
         $VET_CRMV = $_POST["veterinarioCRMV"];
         $VET_CRMV_UF = $_POST["veterinarioCRMV_UF"];
-        $VET_ESPECIALIDADE = $_POST["veterinarioEspecialidade"];
+        $ESP_CODIGO = $_POST["veterinarioEspecialidadeCodigo"];
         $VET_TELEFONE = $_POST["veterinarioTelefone"];
 
-        $sql = "UPDATE " . $table . " SET VET_NOME = :VET_NOME, VET_CRMV = :VET_CRMV, VET_CRMV_UF = :VET_CRMV_UF, VET_ESPECIALIDADE = :VET_ESPECIALIDADE, VET_TELEFONE = :VET_TELEFONE WHERE VET_CODIGO = :VET_CODIGO;";
+        $sql = "UPDATE " . $table . " SET VET_NOME = :VET_NOME, VET_CRMV = :VET_CRMV, VET_CRMV_UF = :VET_CRMV_UF, ESP_CODIGO = :ESP_CODIGO, VET_TELEFONE = :VET_TELEFONE WHERE VET_CODIGO = :VET_CODIGO;";
 
         $stmt = $conexao->prepare($sql);
         $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
         $stmt->bindParam(':VET_TELEFONE', $VET_TELEFONE);
         $stmt->bindParam(':VET_NOME', $VET_NOME);
         $stmt->bindParam(':VET_CRMV', $VET_CRMV);
-        $stmt->bindParam(':VET_ESPECIALIDADE', $VET_ESPECIALIDADE);
+        $stmt->bindParam(':ESP_CODIGO', $ESP_CODIGO);
         $stmt->bindParam(':VET_CRMV_UF', $VET_CRMV_UF);
         $stmt->execute();
 
@@ -138,7 +144,8 @@ if ($_POST["operation"] == "create") {
     echo $totalROWS;
 } else if ($_POST["operation"] == "load_page") {
 
-    $sql = "SELECT * FROM $table ORDER BY VET_NOME";
+    $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME;";
+
     $resultado = executarQuery($conexao, $sql);
 
     $veterinarios = [];
@@ -149,7 +156,8 @@ if ($_POST["operation"] == "create") {
             'veterinarioNome' => $row['VET_NOME'],
             'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
             'veterinarioTelefone' => $row['VET_TELEFONE'],
-            'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+            'veterinarioEspecialidade' => $row['ESP_NOME'],
+            'veterinarioEspecialidadeCodigo' => $row['ESP_CODIGO']
         ];
     }
     if (empty($veterinarios)) {

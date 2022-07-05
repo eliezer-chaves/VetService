@@ -38,7 +38,7 @@
       </div>
       <!--Content -->
       <div class="container-fluid w-75">
-        <div class="p-3 bg-light mt-5 shadow p-3 mb-5 bg-body rounded ">
+        <div class="p-3 bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="content">
           <div class="mb-4">
             <h2 class="text-center title">Adicionar animal</h2>
           </div>
@@ -160,6 +160,12 @@
             </div>
           </div>
         </div>
+
+        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="semDono">
+            <div class="mt-1">
+              <h5 class="text-center">Primeiro cadastre algum dono, para poder adicionar um animal.</h5>
+            </div>
+          </div>
       </div>
     </div>
     <!-- <div>

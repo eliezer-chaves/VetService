@@ -5,7 +5,8 @@ var dropdownEspecialidade = $("#dropdown_especialidade");
 var inputTelefone = $("#telefone");
 var inputCRMVModal = $("#CRMVExists");
 var buttonCadastrar = $("#cadastrar");
-var urlCRUDVeterinario = "../../model/crud_veterinario.php";
+const urlCRUDVeterinario = "../../model/crud_veterinario.php";
+const urlCRUDEspecialidade = "../../model/crud_especialidade.php";
 var inputModalNomeVeterinario = $("#veterinarioNome");
 var modalVeterinarioCadastrado = $("#modalVeterinarioCadastrado");
 var modalAviso = $("#modalAviso");
@@ -20,11 +21,40 @@ function clearFilds() {
   inputCRMVModal.val("");
 }
 
+$(document).ready(function () {
+  $.ajax({
+    method: "POST",
+    url: urlCRUDEspecialidade,
+    data: {
+      operation: "load_dropdown",
+    },
+  }).done(function (resposta) {
+    var obj = $.parseJSON(resposta);
+    if (obj.status == "vazio") {
+      $("#content").hide()
+    } else {
+      $("#semEspecialidade").hide()
+      novo_item = "";
+      Object.keys(obj).forEach((item) => {
+        novo_item +=
+          '<option value="' +
+          obj[item].especialidadeCodigo +
+          '" id="' +
+          obj[item].especialidadeCodigo +
+          '"><button>' +
+          obj[item].especialidadeNome +
+          "</button></option>";
+      });
+      $("#dropdown_especialidade").append(novo_item);
+    }
+  });
+});
+
 buttonCadastrar.click(function () {
   var nome = inputNome.val();
   var crmv = inputCRMV.val();
   var uf = $("#dropdown_estado :selected").val();
-  var especialidade = $("#dropdown_especialidade :selected").text();
+  var especialidade = $("#dropdown_especialidade :selected").val();
   var telefone = inputTelefone.val();
   var crmv_uf = crmv + "-" + uf;
 

@@ -1,21 +1,21 @@
 datanasc.max = new Date().toISOString().split("T")[0];
 
-var inputNome = $("#nome")
-var inputNomeDono = $("#input_dono")
-var inputCodigoDono = $("#dono_codigo")
-var inputCPFDono = $("#dono_cpf")
-var inputTelefoneDono = $("#dono_telefone")
-var inputDataNascimento =  $("#datanasc")
-var radioSexoMacho = $("#flexRadio_macho")
-var radioSexoFemea = $("#flexRadio_femea")
-var dropdownEspecie = $("#dropdown_especie")
-var spanNomeDono = $("#donoNome")
-var spanAnimalNome = $("#animalNome")
-var modalAnimalCadastrado = $("#modalAnimalCadastrado")
-var modalAviso = $("#modalAviso")
-var buttonCadastrar = $("#cadastrar")
-var urlCRUDAnimal = "../../model/crud_animal.php"
-var urlCRUDDono = "../../model/crud_dono.php"
+var inputNome = $("#nome");
+var inputNomeDono = $("#input_dono");
+var inputCodigoDono = $("#dono_codigo");
+var inputCPFDono = $("#dono_cpf");
+var inputTelefoneDono = $("#dono_telefone");
+var inputDataNascimento = $("#datanasc");
+var radioSexoMacho = $("#flexRadio_macho");
+var radioSexoFemea = $("#flexRadio_femea");
+var dropdownEspecie = $("#dropdown_especie");
+var spanNomeDono = $("#donoNome");
+var spanAnimalNome = $("#animalNome");
+var modalAnimalCadastrado = $("#modalAnimalCadastrado");
+var modalAviso = $("#modalAviso");
+var buttonCadastrar = $("#cadastrar");
+var urlCRUDAnimal = "../../model/crud_animal.php";
+var urlCRUDDono = "../../model/crud_dono.php";
 
 function clearFilds() {
   inputNome.val("");
@@ -30,6 +30,26 @@ function clearFilds() {
   spanNomeDono.val("");
   spanAnimalNome.val("");
 }
+
+$(document).ready(function () {
+  $.ajax({
+    method: "POST",
+    url: urlCRUDDono,
+    data: {
+      operation: "load_page",
+    },
+  }).done(function (resposta) {
+    var obj = $.parseJSON(resposta);
+    if (obj.status == "vazio") {
+      $("#content").hide()
+    } else {
+      $("#content").show()
+
+      $("#semEspecialidade").hide()
+    }
+    
+  });
+});
 
 buttonCadastrar.click(function () {
   var nome = inputNome.val();

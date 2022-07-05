@@ -1,4 +1,5 @@
 const urlCRUDVeterinario = "../../model/crud_veterinario.php";
+const urlCRUDEspecialidade = "../../model/crud_especialidade.php";
 
 $("#veterinarioAlterado").hide();
 $("#veterinarioErro").hide();
@@ -217,7 +218,7 @@ function pesquisarVeterinario() {
 
 function loadData() {
   var quantidade = $("#table_count").val();
-  
+
   $.ajax({
     method: "POST",
     url: urlCRUDVeterinario,
@@ -320,7 +321,7 @@ function updateVeterinario() {
   var veterinarioNome = $("#veterinarioNome").val();
   var veterinarioCRMV = $("#veterinarioCRMV").val();
   var veterinarioUF = $("#dropdown_estado :selected").val();
-  var veterinarioEspecialidade = $("#dropdown_especialidade :selected").text();
+  var veterinarioEspecialidadeCodigo = $("#especialidadeCodigo").val()
   var veterinarioTelefone = $("#veterinarioTelefone").val();
   var veterinarioCRMV_UF = veterinarioCRMV + "-" + veterinarioUF;
 
@@ -333,7 +334,7 @@ function updateVeterinario() {
       veterinarioCRMV: veterinarioCRMV,
       veterinarioUF: veterinarioUF,
       veterinarioCRMV_UF: veterinarioCRMV_UF,
-      veterinarioEspecialidade: veterinarioEspecialidade,
+      veterinarioEspecialidadeCodigo: veterinarioEspecialidadeCodigo,
       veterinarioTelefone: veterinarioTelefone,
       operation: "update",
     },
@@ -387,31 +388,50 @@ function fillFilds(codigo) {
     var veterinarioCRMV = obj.VET_CRMV;
     var veterinarioTelefone = obj.VET_TELEFONE;
     var veterinarioCRMV_UF = obj.VET_CRMV_UF;
-    var veterinarioEspecialidade = obj.VET_ESPECIALIDADE;
+    var veterinarioEspecialidadeCodigo = obj.ESP_CODIGO;
     var uf = veterinarioCRMV_UF.split("-");
     var uf = uf[1];
-
-    if (veterinarioEspecialidade == "Clínica e Cirurgia de Pequenos Animais") {
-      $("#dropdown_especialidade").val(1);
-    } else if (veterinarioEspecialidade == "Dermatologia") {
-      $("#dropdown_especialidade").val(2);
-    } else if (veterinarioEspecialidade == "Ortopedia") {
-      $("#dropdown_especialidade").val(3);
-    } else if (veterinarioEspecialidade == "Clínico Geral") {
-      $("#dropdown_especialidade").val(4);
-    }
 
     $("#veterinarioCodigo").val(veterinarioCodigo);
     $("#veterinarioNome").val(veterinarioNome);
     $("#veterinarioCRMV").val(veterinarioCRMV);
     $("#dropdown_estado").val(uf);
+    $("#dropdown_especialidade").val(veterinarioEspecialidadeCodigo);
+    $("#especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
+    $("#dropdown_especialidade").change(function () {
+      var value = $("#dropdown_especialidade :selected").attr("id");
+      $("#especialidadeCodigo").val(value);
+    });
     $("#veterinarioTelefone").val(veterinarioTelefone);
-
     $("#modalExcluirVeterinarioCodigo").val(veterinarioCodigo);
     $("#modalExcluirVeterinarioNome").val(veterinarioNome);
     $("#modalExcluirVeterinarioCRMV").val(veterinarioCRMV);
   });
 }
+
+$(document).ready(function () {
+  $.ajax({
+    method: "POST",
+    url: urlCRUDEspecialidade,
+    data: {
+      operation: "load_dropdown",
+    },
+  }).done(function (resposta) {
+    var obj = $.parseJSON(resposta);
+    novo_item = "";
+    Object.keys(obj).forEach((item) => {
+      novo_item +=
+        '<option value="' +
+        obj[item].especialidadeCodigo +
+        '" id="' +
+        obj[item].especialidadeCodigo +
+        '"><button>' +
+        obj[item].especialidadeNome +
+        "</button></option>";
+    });
+    $("#dropdown_especialidade").append(novo_item);
+  });
+});
 
 function clearFillds() {
   $("#veterinarioCodigo").val("");
@@ -419,8 +439,8 @@ function clearFillds() {
   $("#veterinarioCRMV").val("");
   $("#dropdown_estado").val("");
   $("#dropdown_especialidade").val("");
+  $("#especialidadeCodigo").val("")
   $("#veterinarioTelefone").val("");
-
   $("#modalExcluirVeterinarioCodigo").val("");
   $("#modalExcluirVeterinarioNome").val("");
   $("#modalExcluirVeterinarioCRMV").val("");

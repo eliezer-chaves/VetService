@@ -38,7 +38,7 @@
       <!-- Content -->
       <div class="container-fluid w-75">
         <div class="">
-          <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded">
+          <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="content">
             <div class="mt-1">
               
               <h2 class="text-center title">Adicionar veterinário</h1>
@@ -102,10 +102,7 @@
                     <label class="input-group-text" for="dropdown_especie">Especialidade</label>
                     <select name="select" class="form-select" id="dropdown_especialidade">
                       <option selected style="display: none;" value="0">Escolha</option>
-                      <option value="1">Clínica e Cirurgia de Pequenos Animais</option>
-                      <option value="2">Dermatologia</option>
-                      <option value="3">Ortopedia</option>
-                      <option value="4">Clínico Geral</option>
+                      
                     </select>
                   </div>
                 </div>
@@ -169,6 +166,11 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="semEspecialidade">
+            <div class="mt-1">
+              <h5 class="text-center">Primeiro cadastre alguma especialidade, para poder cadastrar um veterinário.</h5>
             </div>
           </div>
         </div>

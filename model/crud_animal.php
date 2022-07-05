@@ -44,7 +44,6 @@ if ($_POST["operation"] == "create") {
 } else if ($_POST["operation"] == "read_all") {
     $total = $_POST["quantidade"];
     $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME LIMIT $total;";
-    //$sql = "SELECT * FROM $table ORDER BY ANI_NOME LIMIT $total";
     $resultado = executarQuery($conexao, $sql);
 
     $animais = [];
