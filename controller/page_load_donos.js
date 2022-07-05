@@ -49,11 +49,32 @@ function readAll() {
   }).done(function (resposta) {
     $("#donos").empty();
     var obj = $.parseJSON(resposta);
-    if (obj.status != "vazio") {
+    if (obj.total == undefined) {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
+    } else if (obj.status != "vazio") {
+      var total = obj.total;
+
+      $("#total_donos").html(total);
+
+      if (total <= 5) {
+        $("#total_donos_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_donos_busca").hide();
+        $("#total_donos_quantidade").show();
+      } else {
+        $("#total_resultados").show();
+        $("#total_donos_quantidade").hide();
+        $("#total_donos_busca").hide();
+      }
+
       if (quantidade == "") {
         quantidade = obj.total;
       }
       for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
         var donoCodigo = obj.dados[i].donoCodigo;
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
@@ -83,8 +104,12 @@ $("#table_count").on("change", function () {
   }).done(function (resposta) {
     $("#donos").empty();
     var obj = $.parseJSON(resposta);
+
     if (obj.status != "vazio") {
       for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
         var donoCodigo = obj.dados[i].donoCodigo;
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
@@ -152,14 +177,17 @@ function loadData() {
       if (total <= 5) {
         $("#total_donos_value").html(total);
         $("#total_resultados").hide();
+        $("#total_donos_busca").hide();
         $("#total_donos_quantidade").show();
       } else {
         $("#total_resultados").show();
         $("#total_donos_quantidade").hide();
         $("#total_donos_busca").hide();
       }
-
       for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
         var donoCodigo = obj.dados[i].donoCodigo;
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
@@ -385,10 +413,11 @@ function clearFillds() {
 }
 
 $(document).ready(function () {
-  var $cpf = $("#cpf");
-  $cpf.mask("000.000.000-00", {
+  $("#cpf").mask("000.000.000-00", {
     reverse: false,
   });
+  inputCEP.mask("99.999-999");
+
 });
 
 var behavior = function (val) {
@@ -403,10 +432,6 @@ var behavior = function (val) {
   };
 
 inputTelefone.mask(behavior, options);
-
-$(document).ready(function () {
-  inputCEP.mask("99.999-999");
-});
 
 inputCEP.blur(function () {
   var cep = inputCEP.val().replace(/\D/g, "");
