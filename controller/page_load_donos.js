@@ -1,3 +1,12 @@
+const urlCRUDDono = "../../model/crud_dono.php";
+
+var inputCEP = $("#cep");
+var inputRua = $("#rua");
+var inputBairro = $("#bairro");
+var inputCidade = $("#cidade");
+var inputUF = $("#uf");
+var inputTelefone = $("#telefone");
+
 $("#donoAlterado").hide();
 $("#donoErro").hide();
 $("#donoExcluido").hide();
@@ -28,12 +37,45 @@ function showAlertWarning() {
     });
 }
 
-var total;
-$("#table_count").on("change", function () {
-  var total = this.value;
+function readAll() {
+  var quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_dono.php",
+    url: urlCRUDDono,
+    data: {
+      operation: "read_all",
+      quantidade: quantidade,
+    },
+  }).done(function (resposta) {
+    $("#donos").empty();
+    var obj = $.parseJSON(resposta);
+    if (obj.status != "vazio") {
+      if (quantidade == "") {
+        quantidade = obj.total;
+      }
+      for (var i = 0; i < quantidade; i++) {
+        var donoCodigo = obj.dados[i].donoCodigo;
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var donoTelefone = obj.dados[i].donoTelefone;
+
+        if (donoTelefone == "") {
+          donoTelefone = "Não informado";
+        }
+
+        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+      }
+      var total = obj.total;
+      $("#total_donos").html(total);
+    }
+  });
+}
+
+$("#table_count").on("change", function () {
+  var total = $("#table_count").val();
+  $.ajax({
+    method: "POST",
+    url: urlCRUDDono,
     data: {
       operation: "read_all",
       quantidade: total,
@@ -41,145 +83,18 @@ $("#table_count").on("change", function () {
   }).done(function (resposta) {
     $("#donos").empty();
     var obj = $.parseJSON(resposta);
-    var donos = [];
-    var quantidade = 0;
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var dono = obj[item];
-
-        donos.push(dono);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var donoTelefone = obj[item].donoTelefone;
+      for (var i = 0; i < obj.total; i++) {
+        var donoCodigo = obj.dados[i].donoCodigo;
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var donoTelefone = obj.dados[i].donoTelefone;
 
         if (donoTelefone == "") {
           donoTelefone = "Não informado";
         }
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="donoCodigo' +
-          donoCodigo +
-          '">' +
-          donoCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#donos").append(nova_linha);
-      });
-    }
-  });
-});
-
-function countTable() {
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_dono.php",
-    data: {
-      operation: "count",
-    },
-  }).done(function (resposta) {
-    if (resposta == 0) {
-      $("#content").hide();
-    }
-    $("#total").html(resposta);
-  });
-}
-
-$(document).ready(function () {
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_dono.php",
-    data: {
-      operation: "load_page",
-    },
-  }).done(function (resposta) {
-    $("#donos").empty();
-    var obj = $.parseJSON(resposta);
-    var donos = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      $("#conteudo").show();
-      $("#semCadastro").hide();
-      countTable();
-      Object.keys(obj).forEach((item) => {
-        var dono = obj[item];
-        donos.push(dono);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var donoTelefone = obj[item].donoTelefone;
-
-        if (donoTelefone == "") {
-          donoTelefone = "Não informado";
-        }
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="donoCodigo' +
-          donoCodigo +
-          '">' +
-          donoCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-        $("#donos").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
-        $("#total_resultados").hide();
-      } else {
-        $("#total_resultados").show();
+        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
       }
-    } else if (obj.status == "vazio") {
-      $("#conteudo").hide();
-      $("#semCadastro").show();
     }
   });
 });
@@ -203,37 +118,92 @@ $(document).on("click", "button", function (element) {
 
 $("#nome_search").on("keydown", function (e) {
   if (e.keyCode === 13) {
-    var nome = $("#nome_search").val();
-    $("#aviso").hide();
-    $("#table").show();
-    $("#table_count").val("5");
-    var quantidade;
-    if (nome == "") {
-      $("#total_resultados").show();
-      quantidade = 5;
-    } else {
-      $("#total_resultados").hide();
-      quantidade = 0;
-    }
+    pesquisarDono();
+  }
+});
 
+$("#search").on("click", function () {
+  pesquisarDono();
+});
+
+loadData();
+
+function loadData() {
+  var quantidade = $("#table_count").val();
+
+  $.ajax({
+    method: "POST",
+    url: urlCRUDDono,
+    data: {
+      operation: "load_page",
+      quantidade: quantidade,
+    },
+  }).done(function (resposta) {
+    $("#donos").empty();
+    var obj = $.parseJSON(resposta);
+
+    if (obj.status != "vazio") {
+      $("#conteudo").show();
+      $("#semCadastro").hide();
+
+      var total = obj.total;
+      $("#total_donos").html(total);
+
+      if (total <= 5) {
+        $("#total_donos_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_donos_quantidade").show();
+      } else {
+        $("#total_resultados").show();
+        $("#total_donos_quantidade").hide();
+        $("#total_donos_busca").hide();
+      }
+
+      for (var i = 0; i < quantidade; i++) {
+        var donoCodigo = obj.dados[i].donoCodigo;
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var donoTelefone = obj.dados[i].donoTelefone;
+
+        if (donoTelefone == "") {
+          donoTelefone = "Não informado";
+        }
+
+        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+      }
+    } else {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
+    }
+  });
+}
+
+function pesquisarDono() {
+  var nome = $("#nome_search").val();
+  $("#aviso").hide();
+  $("#table").show();
+  if (nome != "") {
     $.ajax({
       method: "POST",
-      url: "../../model/crud_dono.php",
+      url: urlCRUDDono,
       data: {
         operation: "search",
         nome: nome,
-        quantidade: quantidade,
       },
     }).done(function (resposta) {
       $("#donos").empty();
       var obj = $.parseJSON(resposta);
-
-      var quantidade = 0;
-
       if (obj.status != "vazio") {
-        var total = obj.total
-        $("#total").html(obj.total)
-        console.log(obj.total)
+        $("#conteudo").show();
+        $("#semCadastro").hide();
+
+        var total = obj.total;
+
+        $("#total_donos_busca_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_donos_busca").show();
+        $("#total_donos_quantidade").hide();
+
         for (var i = 0; i < obj.dados.length; i++) {
           var donoCodigo = obj.dados[i].donoCodigo;
           var donoNome = obj.dados[i].donoNome;
@@ -244,204 +214,52 @@ $("#nome_search").on("keydown", function (e) {
             donoTelefone = "Não informado";
           }
 
-          var nova_linha = "";
-          var nova_linha =
-            '<tr class="item"> ' +
-            '<th scope="row" class="text-center align-middle" id="donoCodigo' +
-            donoCodigo +
-            '">' +
-            donoCodigo +
-            "</th>" +
-            '<td class="align-middle text-center">' +
-            donoNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            donoCPF +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            donoTelefone +
-            "</td>" +
-            '<td class="text-center text-center">' +
-            '<button class="btn btn-warning me-2" id="editar' +
-            donoCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-            '<i class="fa-solid fa-pen-to-square"></i>' +
-            "</button>" +
-            '<button class="btn btn-danger" id="excluir' +
-            donoCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-            '<i class="fa-solid fa-trash-can"></i>' +
-            "</button>" +
-            "</td>" +
-            "</tr>";
-
-          $("#donos").append(nova_linha);
+          fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
         }
-
-        
       } else {
         $("#table").hide();
         $("#aviso").show();
+        $("#total_resultados").hide();
       }
     });
-  }
-});
-
-$("#search").click(function () {
-  var nome = $("#nome_search").val();
-  $("#aviso").hide();
-  $("#table").show();
-  $("#table_count").val("5");
-  var quantidade;
-  if (nome == "") {
-    $("#total_resultados").show();
-    quantidade = 5;
   } else {
-    $("#total_resultados").hide();
-    quantidade = 0;
+    loadData();
   }
+}
 
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_dono.php",
-    data: {
-      operation: "search",
-      nome: nome,
-      quantidade: quantidade,
-    },
-  }).done(function (resposta) {
-    var obj = $.parseJSON(resposta);
+function fillTable(donoCodigo, donoNome, donoCPF, donoTelefone) {
+  var nova_linha = "";
+  var nova_linha =
+    '<tr class="item"> ' +
+    '<th scope="row" class="text-center align-middle" id="donoCodigo' +
+    donoCodigo +
+    '">' +
+    donoCodigo +
+    "</th>" +
+    '<td class="align-middle text-center">' +
+    donoNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    donoCPF +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    donoTelefone +
+    "</td>" +
+    '<td class="text-center text-center">' +
+    '<button class="btn btn-warning me-2" id="editar' +
+    donoCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
+    '<i class="fa-solid fa-pen-to-square"></i>' +
+    "</button>" +
+    '<button class="btn btn-danger" id="excluir' +
+    donoCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
+    '<i class="fa-solid fa-trash-can"></i>' +
+    "</button>" +
+    "</td>" +
+    "</tr>";
 
-    $("#donos").empty();
-    var obj = $.parseJSON(resposta);
-    var donos = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var dono = obj[item];
-        donos.push(dono);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var donoTelefone = obj[item].donoTelefone;
-
-        if (donoTelefone == "") {
-          donoTelefone = "Não informado";
-        }
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="donoCodigo' +
-          donoCodigo +
-          '">' +
-          donoCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#donos").append(nova_linha);
-      });
-    } else {
-      $("#table").hide();
-      $("#aviso").show();
-    }
-  });
-});
-
-function loadData() {
-  quantidade = $("#table_count").val();
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_dono.php",
-    data: {
-      operation: "load_page",
-      quantidade: quantidade,
-    },
-  }).done(function (resposta) {
-    countTable();
-    $("#donos").empty();
-
-    var obj = $.parseJSON(resposta);
-
-    var donos = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var dono = obj[item];
-        donos.push(dono);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var donoTelefone = obj[item].donoTelefone;
-
-        if (donoTelefone == "") {
-          donoTelefone = "Não informado";
-        }
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="donoCodigo' +
-          donoCodigo +
-          '">' +
-          donoCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar dono">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          donoCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirDono" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir dono">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#donos").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
-        $("#total_resultados").hide();
-      } else {
-        $("#total_resultados").show();
-      }
-    }
-  });
+  $("#donos").append(nova_linha);
 }
 
 function updateDono() {
@@ -458,7 +276,7 @@ function updateDono() {
   var donoTelefone = $("#telefone").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_dono.php",
+    url: urlCRUDDono,
     data: {
       codigo: donoCodigo,
       donoNome: donoNome,
@@ -478,7 +296,7 @@ function updateDono() {
     if (obj.status == "alterado") {
       clearFillds();
       $("#modalEditarDono").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccess();
     } else {
       showAlertWarning();
@@ -489,7 +307,7 @@ function updateDono() {
 function deleteDono(codigo) {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_dono.php",
+    url: urlCRUDDono,
     data: {
       codigo: codigo,
       operation: "delete",
@@ -500,7 +318,7 @@ function deleteDono(codigo) {
     if (obj.status == "deletado") {
       clearFillds();
       $("#modalExcluirDono").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccessDeletado();
     } else {
       showAlertWarning();
@@ -512,13 +330,14 @@ function fillFilds(codigo) {
   clearFillds();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_dono.php",
+    url: urlCRUDDono,
     data: {
       codigo: codigo,
       operation: "read_one",
     },
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
+
     var donoCodigo = obj.DON_CODIGO;
     var donoNome = obj.DON_NOME;
     var donoCPF = obj.DON_CPF;
@@ -564,13 +383,14 @@ function clearFillds() {
   $("#uf").val("");
   $("#telefone").val("");
 }
+
 $(document).ready(function () {
-  var $seuCampoCpf = $("#cpf");
-  $seuCampoCpf.mask("000.000.000-00", {
+  var $cpf = $("#cpf");
+  $cpf.mask("000.000.000-00", {
     reverse: false,
   });
 });
-//Mask Telefone
+
 var behavior = function (val) {
     return val.replace(/\D/g, "").length === 11
       ? "(00) 00000-0000"
@@ -582,59 +402,55 @@ var behavior = function (val) {
     },
   };
 
-$("#telefone").mask(behavior, options);
-//Mask do CEP
+inputTelefone.mask(behavior, options);
+
 $(document).ready(function () {
-  $("#cep").mask("99.999-999");
+  inputCEP.mask("99.999-999");
 });
 
-//Função para o CEP
-$("#cep").blur(function () {
-  //Nova variável "cep" somente com dígitos.
-  var cep = $(this).val().replace(/\D/g, "");
+inputCEP.blur(function () {
+  var cep = inputCEP.val().replace(/\D/g, "");
 
-  //Verifica se campo cep possui valor informado.
   if (cep != "") {
-    //Expressão regular para validar o CEP.
     var validacep = /^[0-9]{8}$/;
 
-    //Valida o formato do CEP.
     if (validacep.test(cep)) {
-      //Preenche os campos com "..." enquanto consulta webservice.
-      $("#rua").val("...");
-      $("#bairro").val("...");
-      $("#cidade").val("...");
-      $("#uf").val("...");
-      $("#ibge").val("...");
+      inputRua.val("Buscando...");
+      inputBairro.val("Buscando...");
+      inputCidade.val("Buscando...");
+      inputUF.val("Buscando...");
 
-      //Consulta o webservice viacep.com.br/
       $.getJSON(
         "https://viacep.com.br/ws/" + cep + "/json/?callback=?",
         function (dados) {
           if (!("erro" in dados)) {
-            //Atualiza os campos com os valores da consulta.
-            $("#rua").val(dados.logradouro);
-            $("#bairro").val(dados.bairro);
-            $("#cidade").val(dados.localidade);
-            $("#uf").val(dados.uf);
-            $("#ibge").val(dados.ibge);
-          } //end if.
-          else {
-            //CEP pesquisado não foi encontrado.
-            limpa_formulário_cep();
+            inputRua.val(dados.logradouro);
+            inputBairro.val(dados.bairro);
+            inputCidade.val(dados.localidade);
+            inputUF.val(dados.uf);
+          } else {
+            inputCEP.val("");
+            inputRua.val("");
+            inputBairro.val("");
+            inputCidade.val("");
+            inputUF.val("");
             alert("CEP não encontrado.");
           }
         }
       );
-    } //end if.
-    else {
-      //cep é inválido.
-      limpa_formulário_cep();
+    } else {
+      inputCEP.val("");
+      inputRua.val("");
+      inputBairro.val("");
+      inputCidade.val("");
+      inputUF.val("");
       alert("Formato de CEP inválido.");
     }
-  } //end if.
-  else {
-    //cep sem valor, limpa formulário.
-    limpa_formulário_cep();
+  } else {
+    inputCEP.val("");
+    inputRua.val("");
+    inputBairro.val("");
+    inputCidade.val("");
+    inputUF.val("");
   }
 });

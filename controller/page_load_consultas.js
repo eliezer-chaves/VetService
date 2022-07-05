@@ -84,6 +84,7 @@ $(document).ready(function () {
       operation: "load_page",
     },
   }).done(function (resposta) {
+    console.log(resposta)
     $("#consultas").empty();
     var obj = $.parseJSON(resposta);
 

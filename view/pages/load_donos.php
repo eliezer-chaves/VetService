@@ -48,32 +48,50 @@
               </a>
             </div>
             <div class="d-flex w-50">
-              <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
+              <input class="form-control me-2" type="search" placeholder="Buscar dono" id="nome_search" />
               <button class="btn btn-primary" type="submit" id="search">
                 <i class="fa-solid fa-magnifying-glass"></i>
               </button>
             </div>
           </div>
           <div class="mt-2 shadow p-3 bg-body rounded" id="content">
-            <div class="d-flex align-midle" id="total_resultados">
-              <div class="me-1">
-                Mostrando
-              </div>
-              <div style="width: 70px; " class="me-1">
-                <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
-                  <option selected value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                </select>
-              </div>
-              <div class="me-1">
-                de <b> <a id="total"></a></b>
+            <div id="total_resultados" style="display: flex;">
+
+              <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;"> 
+                <div class="me-1">
+                  Mostrando
+                </div>
+                <div class="me-1">
+                  <select class="form-select form-select-sm" name="select" id="table_count" aria-label=".form-select-sm example">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div id="text_total_donos">
+                  de <b><span id="total_donos"></span></b> donos.
+                </div>
               </div>
             </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_donos_quantidade">
+              <div class="me-1" id="text_donos_quantidade">
+                Total de donos <b><span id="total_donos_value"></span></b>.
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_donos_busca">
+              <div class="me-1" id="text_donos_quantidade">
+                Total de donos encontrados: <b><span id="total_donos_busca_value"></span></b>.
+              </div>
+            </div>
+
+
             <table class="table table-hover table-bordered" id="table">
               <thead>
                 <tr class="text-center">
-                  <th scope="col">Id</th>
+                  <th scope="col">Código</th>
                   <th scope="col">Nome</th>
                   <th scope="col">CPF</th>
                   <th scope="col">Telefone</th>
@@ -84,17 +102,17 @@
               </tbody>
             </table>
             <div class="d-flex justify-content-center algin-middle mt-2">
-              <p id="aviso">Nenhum dono encontrado, faça uma nova pesquisa.</p>
+              <p id="aviso">Nenhum(a) dono(a) encontrado(a), faça uma nova pesquisa.</p>
             </div>
           </div>
         </div>
 
         <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
-        
+
           <div>
-            <b class="h3">Nenhum dono cadastrado!</b>
+            <b class="h3">Nenhum dono(a) cadastrado!</b>
           </div>
-          
+
         </div>
 
       </div>
