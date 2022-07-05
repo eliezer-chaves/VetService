@@ -36,9 +36,9 @@
         <?php include 'componentes/sidebar.html'; ?>
       </div>
       <!-- Content -->
-      <div class="container-fluid w-75">
-        <div class="">
-          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between">
+      <div class="container-fluid w-75 mb-3">
+        <div id="conteudo">
+          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between" id="content-header">
             <div>
               <a href="../pages/add_veterinario.php">
                 <button class="btn btn-success" type="submit">
@@ -54,40 +54,68 @@
               </button>
             </div>
           </div>
-          <div class="mt-2 shadow p-3 bg-body rounded">
-            <div class="d-flex align-midle" id="total_resultados">
-              <div class="me-1">
-                Mostrando
-              </div>
-              <div style="width: 70px; " class="me-1">
-                <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
-                  <option selected value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                </select>
-              </div>
-              <div class="me-1">
-                de <b><a id="total"></a></b>
+
+          <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+
+            <div id="total_resultados" style="display: flex;">
+              <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;">
+                <div class="me-1">
+                  Mostrando
+                </div>
+                <div class="me-1">
+                  <select class="form-select form-select-sm" name="select" id="table_count" aria-label=".form-select-sm example">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div id="text_total_veterinarios">
+                  de <b><span id="total_veterinarios"></span></b> veterinários.
+                </div>
               </div>
             </div>
-            <table class="table table-hover table-bordered">
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_veterinarios_quantidade">
+              <div class="me-1" id="text_veterinarios_quantidade">
+                Total de veterinários <b><span id="total_veterinarios_value"></span></b>.
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_veterinarios_busca">
+              <div class="me-1" id="text_veterinarios_quantidade">
+                Total de veterinarios encontrados: <b><span id="total_veterinarios_busca_value"></span></b>.
+              </div>
+            </div>
+
+            <table class="table table-hover table-bordered" id="table">
               <thead>
                 <tr class="text-center">
-                  <th scope="col">Id</th>
+                  <th scope="col">Código</th>
                   <th scope="col">Nome</th>
                   <th scope="col">CRMV</th>
+                  <th scope="col">Especialidade</th>
                   <th scope="col">Telefone</th>
                   <th scope="col">Ações</th>
                 </tr>
               </thead>
               <tbody id="veterinarios">
-
               </tbody>
             </table>
-            <div class="d-flex justify-content-center algin-middle">
-              <p id="aviso">Nenhum veterinário encontrado, faça uma nova pesquisa.</p>
+
+            <div class="d-flex justify-content-center algin-middle mt-2">
+              <p id="aviso">Nenhum(a) dono(a) encontrado(a), faça uma nova pesquisa.</p>
             </div>
           </div>
+
+        </div>
+
+        <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
+
+          <div>
+            <b class="h3">Nenhum veterinário(a) cadastrado!</b>
+          </div>
+
         </div>
       </div>
     </div>

@@ -37,6 +37,8 @@ function showAlertWarning() {
     });
 }
 
+loadData();
+
 function readAll() {
   var quantidade = $("#table_count").val();
   $.ajax({
@@ -151,7 +153,6 @@ $("#search").on("click", function () {
   pesquisarDono();
 });
 
-loadData();
 
 function loadData() {
   var quantidade = $("#table_count").val();
@@ -247,10 +248,14 @@ function pesquisarDono() {
       } else {
         $("#table").hide();
         $("#aviso").show();
+        $("#total_donos_quantidade").hide();
         $("#total_resultados").hide();
+
       }
     });
   } else {
+    $("#table_count").val("5");
+
     loadData();
   }
 }

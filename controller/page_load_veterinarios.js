@@ -1,7 +1,11 @@
+const urlCRUDVeterinario = "../../model/crud_veterinario.php";
+
 $("#veterinarioAlterado").hide();
 $("#veterinarioErro").hide();
 $("#veterinarioExcluido").hide();
+
 $("#aviso").hide();
+$("#semCadastro").hide();
 
 function showAlertSuccess() {
   $("#veterinarioAlterado")
@@ -26,86 +30,100 @@ function showAlertWarning() {
       $("#veterinarioErro").fadeOut(3000);
     });
 }
-countTable();
 
-function countTable() {
+loadData();
+
+function readAll() {
+  var quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
-      operation: "count",
+      operation: "read_all",
+      quantidade: quantidade,
     },
   }).done(function (resposta) {
-    if (resposta == 0) {
-      $("#content").hide();
+    $("#veterinarios").empty();
+
+    var obj = $.parseJSON(resposta);
+
+    if (obj.total == undefined) {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
+    } else if (obj.status != "vazio") {
+      var total = obj.total;
+
+      $("#total_veterinarios").html(total);
+
+      if (total <= 5) {
+        $("#total_veterinarios_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_veterinarios_busca").hide();
+        $("#total_veterinarios_quantidade").show();
+      } else {
+        $("#total_resultados").show();
+        $("#total_veterinarios_quantidade").hide();
+        $("#total_veterinarios_busca").hide();
+      }
+
+      if (quantidade == "") {
+        quantidade = obj.total;
+      }
+      for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var veterinarioCodigo = obj.dados[i].veterinarioCodigo;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioCRMVUF = obj.dados[i].veterinarioCRMVUF;
+        var veterinarioTelefone = obj.dados[i].veterinarioTelefone;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+
+        fillTable(
+          veterinarioCodigo,
+          veterinarioNome,
+          veterinarioCRMVUF,
+          veterinarioTelefone,
+          veterinarioEspecialidade
+        );
+      }
+      var total = obj.total;
+      $("#total_veterinarios").html(total);
     }
-    $("#total").html(resposta);
   });
 }
 
-$(document).ready(function () {
+$("#table_count").on("change", function () {
+  var total = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
-      operation: "load_page",
+      operation: "read_all",
+      quantidade: total,
     },
   }).done(function (resposta) {
     $("#veterinarios").empty();
     var obj = $.parseJSON(resposta);
-    var veterinarios = [];
-    var quantidade = 0;
+
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var veterinario = obj[item];
-        veterinarios.push(veterinario);
-        quantidade++;
+      for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var veterinarioCodigo = obj.dados[i].veterinarioCodigo;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioCRMVUF = obj.dados[i].veterinarioCRMVUF;
+        var veterinarioTelefone = obj.dados[i].veterinarioTelefone;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
 
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var veterinarioCRMV = obj[item].veterinarioCRMV;
-        var veterinarioCRMVUF = obj[item].veterinarioCRMVUF;
-        var veterinarioTelefone = obj[item].veterinarioTelefone;
-        var veterinarioEspecialidade = obj[item].veterinarioEspecialidade;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
-          veterinarioCodigo +
-          '">' +
-          veterinarioCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioCRMVUF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#veterinarios").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
-        $("#total_resultados").hide();
-      } else {
-        $("#total_resultados").show();
+        fillTable(
+          veterinarioCodigo,
+          veterinarioNome,
+          veterinarioCRMVUF,
+          veterinarioTelefone,
+          veterinarioEspecialidade
+        );
       }
     }
   });
@@ -130,300 +148,171 @@ $(document).on("click", "button", function (element) {
 
 $("#nome_search").on("keydown", function (e) {
   if (e.keyCode === 13) {
-    var nome = $("#nome_search").val();
-    $("#aviso").hide();
-    $("#table").show();
-    $("#table_count").val("5");
-    var quantidade;
-    if (nome == "") {
-      $("#total_resultados").show();
-      quantidade = 5;
-    } else {
-      $("#total_resultados").hide();
-      quantidade = 0;
-    }
-    $.ajax({
-      method: "POST",
-      url: "../../model/crud_veterinario.php",
-      data: {
-        operation: "search",
-        nome: nome,
-        quantidade: quantidade,
-      },
-    }).done(function (resposta) {
-      var obj = $.parseJSON(resposta);
-      $("#veterinarios").empty();
-      var obj = $.parseJSON(resposta);
-      var veterinarios = [];
-      var quantidade = 0;
-      if (obj.status != "vazio") {
-        Object.keys(obj).forEach((item) => {
-          var veterinario = obj[item];
-          veterinarios.push(veterinario);
-          quantidade++;
-
-          var veterinarioCodigo = obj[item].veterinarioCodigo;
-          var veterinarioNome = obj[item].veterinarioNome;
-          var veterinarioCRMV = obj[item].veterinarioCRMV;
-          var veterinarioCRMVUF = obj[item].veterinarioCRMVUF;
-          var veterinarioTelefone = obj[item].veterinarioTelefone;
-          var veterinarioEspecialidade = obj[item].veterinarioEspecialidade;
-
-          var nova_linha = "";
-          var nova_linha =
-            '<tr class="item"> ' +
-            '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
-            veterinarioCodigo +
-            '">' +
-            veterinarioCodigo +
-            "</th>" +
-            '<td class="align-middle text-center">' +
-            veterinarioNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            veterinarioCRMVUF +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            veterinarioTelefone +
-            "</td>" +
-            '<td class="text-center text-center">' +
-            '<button class="btn btn-warning me-2" id="editar' +
-            veterinarioCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
-            '<i class="fa-solid fa-pen-to-square"></i>' +
-            "</button>" +
-            '<button class="btn btn-danger" id="excluir' +
-            veterinarioCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
-            '<i class="fa-solid fa-trash-can"></i>' +
-            "</button>" +
-            "</td>" +
-            "</tr>";
-
-          $("#veterinarios").append(nova_linha);
-        });
-      } else {
-        $("#table").hide();
-        $("#aviso").show();
-      }
-    });
+    pesquisarVeterinario();
   }
 });
 
 $("#search").click(function () {
+  pesquisarVeterinario();
+});
+
+function pesquisarVeterinario() {
   var nome = $("#nome_search").val();
   $("#aviso").hide();
   $("#table").show();
-  $("#table_count").val("5");
-  var quantidade;
-  if (nome == "") {
-    $("#total_resultados").show();
-    quantidade = 5;
+
+  if (nome != "") {
+    $.ajax({
+      method: "POST",
+      url: urlCRUDVeterinario,
+      data: {
+        operation: "search",
+        nome: nome,
+      },
+    }).done(function (resposta) {
+      $("#veterinarios").empty();
+      var obj = $.parseJSON(resposta);
+
+      if (obj.status != "vazio") {
+        $("#conteudo").show();
+        $("#semCadastro").hide();
+
+        var total = obj.total;
+
+        $("#total_veterinarios_busca_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_veterinarios_busca").show();
+        $("#total_veterinarios_quantidade").hide();
+
+        for (var i = 0; i < obj.dados.length; i++) {
+          if (obj.dados[i] == undefined) {
+            break;
+          }
+          var veterinarioCodigo = obj.dados[i].veterinarioCodigo;
+          var veterinarioNome = obj.dados[i].veterinarioNome;
+          var veterinarioCRMVUF = obj.dados[i].veterinarioCRMVUF;
+          var veterinarioTelefone = obj.dados[i].veterinarioTelefone;
+          var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+
+          fillTable(
+            veterinarioCodigo,
+            veterinarioNome,
+            veterinarioCRMVUF,
+            veterinarioTelefone,
+            veterinarioEspecialidade
+          );
+        }
+      } else {
+        $("#table").hide();
+        $("#aviso").show();
+        $("#total_veterinarios_quantidade").hide();
+        $("#total_resultados").hide();
+      }
+    });
   } else {
-    $("#total_resultados").hide();
-    quantidade = 0;
+    $("#table_count").val("5");
+    loadData();
   }
-
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_veterinario.php",
-    data: {
-      operation: "search",
-      nome: nome,
-      quantidade: quantidade,
-    },
-  }).done(function (resposta) {
-    var obj = $.parseJSON(resposta);
-    $("#veterinarios").empty();
-    var veterinarios = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var veterinario = obj[item];
-        veterinarios.push(veterinario);
-        quantidade++;
-
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var veterinarioCRMV = obj[item].veterinarioCRMV;
-        var veterinarioCRMVUF = obj[item].veterinarioCRMVUF;
-        var veterinarioTelefone = obj[item].veterinarioTelefone;
-        var veterinarioEspecialidade = obj[item].veterinarioEspecialidade;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
-          veterinarioCodigo +
-          '">' +
-          veterinarioCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioCRMVUF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#veterinarios").append(nova_linha);
-      });
-    } else {
-      $("#table").hide();
-      $("#aviso").show();
-    }
-  });
-});
-
-var total;
-$("#table_count").on("change", function () {
-  var total = this.value;
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_veterinario.php",
-    data: {
-      operation: "read_all",
-      quantidade: total,
-    },
-  }).done(function (resposta) {
-    $("#veterinarios").empty();
-    var obj = $.parseJSON(resposta);
-    var veterinarios = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var veterinario = obj[item];
-        veterinarios.push(veterinario);
-        quantidade++;
-
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var veterinarioCRMV = obj[item].veterinarioCRMV;
-        var veterinarioCRMVUF = obj[item].veterinarioCRMVUF;
-        var veterinarioTelefone = obj[item].veterinarioTelefone;
-        var veterinarioEspecialidade = obj[item].veterinarioEspecialidade;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
-          veterinarioCodigo +
-          '">' +
-          veterinarioCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioCRMVUF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#veterinarios").append(nova_linha);
-      });
-    }
-  });
-});
+}
 
 function loadData() {
-  quantidade = $("#table_count").val();
+  var quantidade = $("#table_count").val();
+  
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       operation: "load_page",
       quantidade: quantidade,
     },
   }).done(function (resposta) {
-    countTable();
     $("#veterinarios").empty();
     var obj = $.parseJSON(resposta);
-    var veterinarios = [];
-    var quantidade = 0;
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var veterinario = obj[item];
-        veterinarios.push(veterinario);
-        quantidade++;
+      $("#conteudo").show();
+      $("#semCadastro").hide();
 
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var veterinarioCRMV = obj[item].veterinarioCRMV;
-        var veterinarioCRMVUF = obj[item].veterinarioCRMVUF;
-        var veterinarioTelefone = obj[item].veterinarioTelefone;
-        var veterinarioEspecialidade = obj[item].veterinarioEspecialidade;
+      var total = obj.total;
+      $("#total_veterinarios").html(total);
 
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
-          veterinarioCodigo +
-          '">' +
-          veterinarioCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioCRMVUF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioTelefone +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          veterinarioCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#veterinarios").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
+      if (total <= 5) {
+        $("#total_veterinarios_value").html(total);
         $("#total_resultados").hide();
+        $("#total_veterinarios_busca").hide();
+        $("#total_veterinarios_quantidade").show();
       } else {
         $("#total_resultados").show();
+        $("#total_veterinarios_quantidade").hide();
+        $("#total_veterinarios_busca").hide();
       }
+
+      for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var veterinarioCodigo = obj.dados[i].veterinarioCodigo;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioCRMVUF = obj.dados[i].veterinarioCRMVUF;
+        var veterinarioTelefone = obj.dados[i].veterinarioTelefone;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+
+        fillTable(
+          veterinarioCodigo,
+          veterinarioNome,
+          veterinarioCRMVUF,
+          veterinarioTelefone,
+          veterinarioEspecialidade
+        );
+      }
+    } else {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
     }
   });
+}
+
+function fillTable(
+  veterinarioCodigo,
+  veterinarioNome,
+  veterinarioCRMVUF,
+  veterinarioTelefone,
+  veterinarioEspecialidade
+) {
+  var nova_linha = "";
+  var nova_linha =
+    '<tr class="item"> ' +
+    '<th scope="row" class="text-center align-middle" id="veterinarioCodigo' +
+    veterinarioCodigo +
+    '">' +
+    veterinarioCodigo +
+    "</th>" +
+    '<td class="align-middle text-center">' +
+    veterinarioNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    veterinarioCRMVUF +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    veterinarioEspecialidade +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    veterinarioTelefone +
+    "</td>" +
+    '<td class="text-center text-center">' +
+    '<button class="btn btn-warning me-2" id="editar' +
+    veterinarioCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalEditarVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar veterinário">' +
+    '<i class="fa-solid fa-pen-to-square"></i>' +
+    "</button>" +
+    '<button class="btn btn-danger" id="excluir' +
+    veterinarioCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalExcluirVeterinario" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir veterinário">' +
+    '<i class="fa-solid fa-trash-can"></i>' +
+    "</button>" +
+    "</td>" +
+    "</tr>";
+
+  $("#veterinarios").append(nova_linha);
 }
 
 function updateVeterinario() {
@@ -437,7 +326,7 @@ function updateVeterinario() {
 
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       veterinarioCodigo: veterinarioCodigo,
       veterinarioNome: veterinarioNome,
@@ -453,7 +342,7 @@ function updateVeterinario() {
     if (obj.status == "alterado") {
       clearFillds();
       $("#modalEditarVeterinario").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccess();
     } else {
       showAlertWarning();
@@ -464,7 +353,7 @@ function updateVeterinario() {
 function deleteVeterinario(codigo) {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       codigo: codigo,
       operation: "delete",
@@ -474,7 +363,7 @@ function deleteVeterinario(codigo) {
     if (obj.status == "deletado") {
       clearFillds();
       $("#modalExcluirVeterinario").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccessDeletado();
     } else {
       showAlertWarning();
@@ -486,7 +375,7 @@ function fillFilds(codigo) {
   clearFillds();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       codigo: codigo,
       operation: "read_one",

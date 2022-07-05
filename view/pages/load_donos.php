@@ -54,9 +54,9 @@
               </button>
             </div>
           </div>
+
           <div class="mt-2 shadow p-3 bg-body rounded" id="content">
             <div id="total_resultados" style="display: flex;">
-
               <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;"> 
                 <div class="me-1">
                   Mostrando
@@ -87,7 +87,6 @@
               </div>
             </div>
 
-
             <table class="table table-hover table-bordered" id="table">
               <thead>
                 <tr class="text-center">
@@ -101,6 +100,7 @@
               <tbody id="donos">
               </tbody>
             </table>
+            
             <div class="d-flex justify-content-center algin-middle mt-2">
               <p id="aviso">Nenhum(a) dono(a) encontrado(a), faça uma nova pesquisa.</p>
             </div>

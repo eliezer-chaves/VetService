@@ -51,7 +51,12 @@ if ($_POST["operation"] == "create") {
 } else if ($_POST["operation"] == "read_all") {
     try {
         $total = $_POST["quantidade"];
-        $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total;";
+        if ($total == "") {
+            $sql = "SELECT * FROM $table ORDER BY VET_NOME";
+        } else {
+            $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total";
+        }
+
         $resultado = executarQuery($conexao, $sql);
 
         $veterinarios = [];
@@ -68,7 +73,9 @@ if ($_POST["operation"] == "create") {
         if (empty($veterinarios)) {
             echo '{"status":"vazio"}';
         } else {
-            echo json_encode($veterinarios);
+            $totalROWS = countTable();
+            $veterinarios = json_encode($veterinarios);
+            echo '{"total" : "' . $totalROWS . '", "dados" : ' . $veterinarios . '}';
         }
     } catch (Exception $e) {
         echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
@@ -109,7 +116,7 @@ if ($_POST["operation"] == "create") {
 
         echo '{"status" : "alterado"}';
     } catch (Exception $e) {
-        echo '{"status":"erro", "erro" : "'.$e.'"}';
+        echo '{"status":"erro", "erro" : "' . $e . '"}';
     }
 } else if ($_POST["operation"] == "delete") {
     try {
@@ -130,7 +137,8 @@ if ($_POST["operation"] == "create") {
 
     echo $totalROWS;
 } else if ($_POST["operation"] == "load_page") {
-    $sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT 5";
+
+    $sql = "SELECT * FROM $table ORDER BY VET_NOME";
     $resultado = executarQuery($conexao, $sql);
 
     $veterinarios = [];
@@ -147,17 +155,17 @@ if ($_POST["operation"] == "create") {
     if (empty($veterinarios)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($veterinarios);
+        $total = count($veterinarios);
+        $veterinarios = json_encode($veterinarios);
+        echo '{"total" : "' . $total . '", "dados" : ' . $veterinarios . '}';
     }
 } else if ($_POST["operation"] == "search") {
     try {
         if (isset($_POST["nome"])) {
             $nome = $_POST["nome"];
-            if ($_POST["quantidade"] == 5) {
-                $sql = "SELECT * FROM $table WHERE VET_NOME LIKE :VET_NOME ORDER BY VET_NOME LIMIT 5;";
-            } else {
-                $sql = "SELECT * FROM $table WHERE VET_NOME LIKE :VET_NOME ORDER BY VET_NOME;";
-            }
+
+            $sql = "SELECT * FROM $table WHERE VET_NOME LIKE :VET_NOME ORDER BY VET_NOME;";
+
 
             $stmt = $conexao->prepare($sql);
             $stmt->execute(['VET_NOME' => '%' . $nome . '%']);
@@ -176,7 +184,9 @@ if ($_POST["operation"] == "create") {
             if (empty($veterinarios)) {
                 echo '{"status":"vazio"}';
             } else {
-                echo json_encode($veterinarios);
+                $total = count($veterinarios);
+                $veterinarios = json_encode($veterinarios);
+                echo '{"total" : "' . $total . '", "dados" : ' . $veterinarios . '}';
             }
         }
     } catch (Exception $e) {
@@ -206,4 +216,13 @@ if ($_POST["operation"] == "create") {
     } catch (Exception $e) {
         echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
     }
+}
+
+function countTable()
+{
+    global $conexao, $table;
+    $sql = "SELECT COUNT(*) FROM " . $table . ";";
+    $stmt = executarQuery($conexao, $sql);
+    $totalROWS = $stmt->fetchColumn();
+    return $totalROWS;
 }
