@@ -1,8 +1,12 @@
+const urlCRUDAnimal = "../../model/crud_animal.php";
+
 modalNascimentoAnimal.max = new Date().toISOString().split("T")[0];
 $("#animalAlterado").hide();
 $("#animalErro").hide();
 $("#animalExcluido").hide();
 $("#aviso").hide();
+
+$("#semCadastro").hide();
 
 function showAlertSuccess() {
   $("#animalAlterado")
@@ -28,94 +32,62 @@ function showAlertWarning() {
     });
 }
 
-function countTable() {
+loadData();
+
+function readAll() {
+  var quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
-      operation: "count",
-    },
-  }).done(function (resposta) {
-    if (resposta == 0) {
-      $("#content").hide();
-    }
-    $("#total").html(resposta);
-  });
-}
-
-countTable();
-
-$(document).ready(function () {
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_animal.php",
-    data: {
-      operation: "load_page",
+      operation: "read_all",
+      quantidade: quantidade,
     },
   }).done(function (resposta) {
     $("#animais").empty();
+
     var obj = $.parseJSON(resposta);
-    var animais = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var animal = obj[item];
-        animais.push(animal);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var animalNascimento = obj[item].animalNascimento;
-        var animalEspecie = obj[item].animalEspecie;
-        var animalSexo = obj[item].animalSexo;
 
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          animalCodigo +
-          '">' +
-          animalCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          animalSexo +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
+    if (obj.total == undefined) {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
+    } else if (obj.status != "vazio") {
+      var total = obj.total;
 
-        $("#animais").append(nova_linha);
-      });
+      $("#total_animais").html(total);
 
-      if (quantidade < 5) {
+      if (total <= 5) {
+        $("#total_animais_value").html(total);
         $("#total_resultados").hide();
+        $("#total_animais_busca").hide();
+        $("#total_animais_quantidade").show();
       } else {
         $("#total_resultados").show();
+        $("#total_animais_quantidade").hide();
+        $("#total_animais_busca").hide();
       }
+
+      if (quantidade == "") {
+        quantidade = obj.total;
+      }
+
+      for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var animalCodigo = obj.dados[i].animalCodigo;
+        var animalNome = obj.dados[i].animalNome;
+        var animalSexo = obj.dados[i].animalSexo;
+
+        fillTable(donoNome, donoCPF, animalCodigo, animalNome, animalSexo);
+      }
+      var total = obj.total;
+      $("#total_animais").html(total);
     }
   });
-});
+}
 
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
@@ -136,21 +108,23 @@ $(document).on("click", "button", function (element) {
 
 $("#nome_search").on("keydown", function (e) {
   if (e.keyCode === 13) {
-    var nome = $("#nome_search").val();
-    $("#aviso").hide();
-    $("#table").show();
-    $("#table_count").val("5");
-    var quantidade;
-    if (nome == "") {
-      $("#total_resultados").show();
-      quantidade = 5;
-    } else {
-      $("#total_resultados").hide();
-      quantidade = 0;
-    }
+    pesquisarAnimal();
+  }
+});
+
+$("#search").click(function () {
+  pesquisarAnimal();
+});
+
+function pesquisarAnimal() {
+  var nome = $("#nome_search").val();
+  $("#aviso").hide();
+  $("#table").show();
+
+  if (nome != "") {
     $.ajax({
       method: "POST",
-      url: "../../model/crud_animal.php",
+      url: urlCRUDAnimal,
       data: {
         operation: "search",
         nome: nome,
@@ -160,156 +134,49 @@ $("#nome_search").on("keydown", function (e) {
       var obj = $.parseJSON(resposta);
       $("#animais").empty();
       var obj = $.parseJSON(resposta);
-      var animais = [];
-      var quantidade = 0;
+
       if (obj.status != "vazio") {
-        Object.keys(obj).forEach((item) => {
-          var animal = obj[item];
-          animais.push(animal);
-          quantidade++;
-          var donoCodigo = obj[item].donoCodigo;
-          var donoNome = obj[item].donoNome;
-          var donoCPF = obj[item].donoCPF;
-          var animalCodigo = obj[item].animalCodigo;
-          var animalNome = obj[item].animalNome;
-          var animalNascimento = obj[item].animalNascimento;
-          var animalEspecie = obj[item].animalEspecie;
-          var animalSexo = obj[item].animalSexo;
+        $("#conteudo").show();
+        $("#semCadastro").hide();
 
-          var nova_linha = "";
-          var nova_linha =
-            '<tr class="item"> ' +
-            '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-            animalCodigo +
-            '">' +
-            animalCodigo +
-            "</th>" +
-            '<td class="align-middle text-center">' +
-            animalNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            donoNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            donoCPF +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            animalSexo +
-            "</td>" +
-            '<td class="text-center text-center">' +
-            '<button class="btn btn-warning me-2" id="editar' +
-            animalCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
-            '<i class="fa-solid fa-pen-to-square"></i>' +
-            "</button>" +
-            '<button class="btn btn-danger" id="excluir' +
-            animalCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
-            '<i class="fa-solid fa-trash-can"></i>' +
-            "</button>" +
-            "</td>" +
-            "</tr>";
+        var total = obj.total;
 
-          $("#animais").append(nova_linha);
-        });
+        $("#total_animais_busca_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_animais_busca").show();
+        $("#total_animais_quantidade").hide();
+
+        for (var i = 0; i < obj.dados.length; i++) {
+          if (obj.dados[i] == undefined) {
+            break;
+          }
+
+          var donoNome = obj.dados[i].donoNome;
+          var donoCPF = obj.dados[i].donoCPF;
+          var animalCodigo = obj.dados[i].animalCodigo;
+          var animalNome = obj.dados[i].animalNome;
+          var animalSexo = obj.dados[i].animalSexo;
+
+          fillTable(donoNome, donoCPF, animalCodigo, animalNome, animalSexo);
+        }
       } else {
         $("#table").hide();
         $("#aviso").show();
+        $("#total_animais_quantidade").hide();
+        $("#total_resultados").hide();
       }
     });
-  }
-});
-
-$("#search").click(function () {
-  var nome = $("#nome_search").val();
-  $("#aviso").hide();
-  $("#table").show();
-  $("#table_count").val("5");
-  var quantidade;
-  if (nome == "") {
-    $("#total_resultados").show();
-    quantidade = 5;
   } else {
-    $("#total_resultados").hide();
-    quantidade = 0;
+    $("#table_count").val("5");
+    loadData();
   }
-
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_animal.php",
-    data: {
-      operation: "search",
-      nome: nome,
-      quantidade: quantidade,
-    },
-  }).done(function (resposta) {
-    var obj = $.parseJSON(resposta);
-    $("#animais").empty();
-    var animais = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var animal = obj[item];
-        animais.push(animal);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var animalNascimento = obj[item].animalNascimento;
-        var animalEspecie = obj[item].animalEspecie;
-        var animalSexo = obj[item].animalSexo;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          animalCodigo +
-          '">' +
-          animalCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          animalSexo +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#animais").append(nova_linha);
-      });
-    } else {
-      $("#table").hide();
-      $("#aviso").show();
-    }
-  });
-});
+}
 
 $("#modalNomeDono").keyup(function () {
   let searchText = $("#modalNomeDono").val();
   if (searchText != "") {
     $.ajax({
-      url: "../../model/crud_animal.php",
+      url: urlCRUDAnimal,
       method: "post",
       data: {
         query: searchText,
@@ -341,7 +208,6 @@ $("#modalNomeDono").keyup(function () {
 
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
-  var array = id.split("_");
   if (id.includes("donoCodigo")) {
     $("#resultado").html("");
     var nome = element.currentTarget.textContent;
@@ -352,13 +218,12 @@ $(document).on("click", "button", function (element) {
   }
 });
 
-var total;
 $("#table_count").on("change", function () {
-  var total = this.value;
-  //$("#nome_search").val("")
+  var total = $("#table_count").val();
+
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
       operation: "read_all",
       quantidade: total,
@@ -366,58 +231,20 @@ $("#table_count").on("change", function () {
   }).done(function (resposta) {
     $("#animais").empty();
     var obj = $.parseJSON(resposta);
-    var animais = [];
-    var quantidade = 0;
+
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var animal = obj[item];
-        animais.push(animal);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var animalNascimento = obj[item].animalNascimento;
-        var animalEspecie = obj[item].animalEspecie;
-        var animalSexo = obj[item].animalSexo;
+      for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var animalCodigo = obj.dados[i].animalCodigo;
+        var animalNome = obj.dados[i].animalNome;
+        var animalSexo = obj.dados[i].animalSexo;
 
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          animalCodigo +
-          '">' +
-          animalCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          animalSexo +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#animais").append(nova_linha);
-      });
+        fillTable(donoNome, donoCPF, animalCodigo, animalNome, animalSexo);
+      }
     }
   });
 });
@@ -426,76 +253,93 @@ function loadData() {
   quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
       operation: "load_page",
       quantidade: quantidade,
     },
   }).done(function (resposta) {
-    countTable();
     $("#animais").empty();
     var obj = $.parseJSON(resposta);
-    var animais = [];
-    var quantidade = 0;
+
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var animal = obj[item];
-        animais.push(animal);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var donoCPF = obj[item].donoCPF;
+      $("#conteudo").show();
+      $("#semCadastro").hide();
 
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var animalNascimento = obj[item].animalNascimento;
-        var animalEspecie = obj[item].animalEspecie;
-        var animalSexo = obj[item].animalSexo;
+      var total = obj.total;
+      $("#total_animais").html(total);
 
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          animalCodigo +
-          '">' +
-          animalCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoCPF +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          animalSexo +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-warning me-2" id="editar' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          animalCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#animais").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
+      if (total <= 5) {
+        $("#total_animais_value").html(total);
         $("#total_resultados").hide();
+        $("#total_animais_busca").hide();
+        $("#total_animais_quantidade").show();
       } else {
         $("#total_resultados").show();
+        $("#total_animais_quantidade").hide();
+        $("#total_animais_busca").hide();
       }
+
+      for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var donoCPF = obj.dados[i].donoCPF;
+        var animalCodigo = obj.dados[i].animalCodigo;
+        var animalNome = obj.dados[i].animalNome;
+        var animalSexo = obj.dados[i].animalSexo;
+
+        fillTable(donoNome, donoCPF, animalCodigo, animalNome, animalSexo);
+      }
+    } else {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
     }
   });
+}
+
+function fillTable(donoNome, donoCPF, animalCodigo, animalNome, animalSexo) {
+  if (animalSexo == "M") {
+    animalSexo = "Macho";
+  } else {
+    animalSexo = "Fêmea";
+  }
+  var nova_linha = "";
+  var nova_linha =
+    '<tr class="item"> ' +
+    '<th scope="row" class="text-center align-middle" id="animalCodigo' +
+    animalCodigo +
+    '">' +
+    animalCodigo +
+    "</th>" +
+    '<td class="align-middle text-center">' +
+    animalNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    animalSexo +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    donoNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    donoCPF +
+    "</td>" +
+    '<td class="text-center text-center">' +
+    '<button class="btn btn-warning me-2" id="editar' +
+    animalCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalEditarAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar animal">' +
+    '<i class="fa-solid fa-pen-to-square"></i>' +
+    "</button>" +
+    '<button class="btn btn-danger" id="excluir' +
+    animalCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir animal">' +
+    '<i class="fa-solid fa-trash-can"></i>' +
+    "</button>" +
+    "</td>" +
+    "</tr>";
+
+  $("#animais").append(nova_linha);
 }
 
 function updateAnimal() {
@@ -510,10 +354,12 @@ function updateAnimal() {
   } else {
     var especie = "";
   }
+
   var sexo = $("input[name='radioSexo']:checked").val();
+
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
       animalCodigo: animalCodigo,
       animalNome: animalNome,
@@ -539,7 +385,7 @@ function updateAnimal() {
 function deleteAnimal(codigo) {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
       codigo: codigo,
       operation: "delete",
@@ -561,7 +407,7 @@ function fillFilds(codigo) {
   clearFillds();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_animal.php",
+    url: urlCRUDAnimal,
     data: {
       codigo: codigo,
       operation: "read_one",
@@ -595,8 +441,6 @@ function fillFilds(codigo) {
     $("#modalNomeAnimal").val(animalNome);
     $("#modalNomeDono").val(donoNome);
     $("#modalNascimentoAnimal").val(animalNascimento);
-
-    //Modal Excluir
     $("#modalExcluirAnimalCodigo").val(donoCodigo);
     $("#modalExcluirAnimalNome").val(animalNome);
     $("#modalExcluirAnimalDonoNome").val(donoNome);
@@ -612,7 +456,6 @@ function clearFillds() {
   $("#sexoM").prop("checked", false);
   $("#sexoF").prop("checked", false);
   $("#dropdown_especie").val("");
-
   $("#modalCodigoDono").val("");
   $("#modalExcluirAnimalCodigo").val("");
   $("#modalExcluirAnimalNome").val("");

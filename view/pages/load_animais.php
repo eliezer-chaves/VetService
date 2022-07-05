@@ -35,59 +35,84 @@
         <?php include 'componentes/sidebar.html'; ?>
       </div>
       <!-- Content -->
-      <div class="container-fluid w-75">
-        <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between">
-          <div>
-            <a href="../pages/add_animais.php">
-              <button class="btn btn-success" type="submit">
-                <i class="me-2 fa-solid fa-dog"></i>
-                Adicionar animal
+      <div class="container-fluid w-75 mb-3">
+        <div id="conteudo">
+          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between" id="content-header">
+            <div>
+              <a href="../pages/add_animais.php">
+                <button class="btn btn-success" type="submit">
+                  <i class="me-2 fa-solid fa-dog"></i>
+                  Adicionar animal
+                </button>
+              </a>
+            </div>
+            <div class="d-flex w-50">
+              <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
+              <button class="btn btn-primary" type="submit" id="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
               </button>
-            </a>
-          </div>
-          <div class="d-flex w-50">
-            <input class="form-control me-2" type="search" placeholder="Buscar" id="nome_search" />
-            <button class="btn btn-primary" type="submit" id="search">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </div>
-        </div>
-        <!-- Table -->
-        <div class="mt-2 shadow p-3 bg-body rounded">
-          <div class="d-flex align-midle" id="total_resultados">
-            <div class="me-1">
-              Mostrando
-            </div>
-            <div style="width: 70px; " class="me-1">
-              <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
-                <option selected value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <div class="me-1">
-              de <b><a id="total"></a></b>
             </div>
           </div>
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr class="text-center">
-                <th scope="col">Id</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Dono</th>
-                <th scope="col">CPF</th>
-                <th scope="col">Sexo</th>
-                <th scope="col">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="animais">
 
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-center algin-middle">
-            <p id="aviso">Nenhum animal encontrado, faça uma nova pesquisa.</p>
+          <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+            <div id="total_resultados" style="display: flex;">
+              <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;">
+                <div class="me-1">
+                  Mostrando
+                </div>
+                <div class="me-1">
+                  <select class="form-select form-select-sm" name="select" id="table_count" aria-label=".form-select-sm example">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="">Todos</option>
+                  </select>
+                </div>
+                <div id="text_total_animais">
+                  de <b><span id="total_animais"></span></b> animais.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_animais_quantidade">
+              <div class="me-1" id="text_animais_quantidade">
+                Total de animais <b><span id="total_animais_value"></span></b>.
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_animais_busca">
+              <div class="me-1" id="text_animais_quantidade">
+                Total de animais encontrados: <b><span id="total_animais_busca_value"></span></b>.
+              </div>
+            </div>
+
+            <table class="table table-hover table-bordered" id="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">Código</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Sexo</th>
+                  <th scope="col">Dono</th>
+                  <th scope="col">CPF</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="animais">
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center algin-middle mt-2">
+              <p id="aviso">Nenhum animal encontrado, faça uma nova pesquisa.</p>
+            </div>
           </div>
         </div>
+
+        <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
+          <div>
+            <b class="h3">Nenhum animal(a) cadastrado!</b>
+          </div>
+        </div>
+        
       </div>
     </div>
 
@@ -243,5 +268,5 @@
     </div>
     <script src="../../controller/page_load_animais.js"></script>
 </body>
-  
+
 </html>

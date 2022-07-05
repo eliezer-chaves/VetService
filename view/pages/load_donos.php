@@ -104,15 +104,14 @@
             <div class="d-flex justify-content-center algin-middle mt-2">
               <p id="aviso">Nenhum(a) dono(a) encontrado(a), faça uma nova pesquisa.</p>
             </div>
+            
           </div>
         </div>
 
         <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
-
           <div>
             <b class="h3">Nenhum dono(a) cadastrado!</b>
           </div>
-
         </div>
 
       </div>

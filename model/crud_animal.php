@@ -43,7 +43,12 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "read_all") {
     $total = $_POST["quantidade"];
-    $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME LIMIT $total;";
+    if ($total == "") {
+        $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME";
+    } else {
+        $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME LIMIT $total;";
+    }
+
     $resultado = executarQuery($conexao, $sql);
 
     $animais = [];
@@ -61,7 +66,9 @@ if ($_POST["operation"] == "create") {
     if (empty($animais)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($animais);
+        $totalROWS = countTable();
+        $animais = json_encode($animais);
+        echo '{"total" : "' . $totalROWS . '", "dados" : ' . $animais . '}';
     }
 } else if ($_POST["operation"] == "read_one") {
     try {
@@ -120,7 +127,7 @@ if ($_POST["operation"] == "create") {
 
         echo '{"status" : "alterado"}';
     } catch (Exception $e) {
-        echo '{"status":"erro", "erro" : "'.$e.'"}';
+        echo '{"status":"erro", "erro" : "' . $e . '"}';
     }
 } else if ($_POST["operation"] == "delete") {
     try {
@@ -142,7 +149,8 @@ if ($_POST["operation"] == "create") {
 
     echo $totalROWS;
 } else if ($_POST["operation"] == "load_page") {
-    $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME LIMIT 5";
+
+    $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.DON_CODIGO = $table_reference.DON_CODIGO ORDER BY ANI_NOME;";
     $resultado = executarQuery($conexao, $sql);
 
     $animais = [];
@@ -162,7 +170,9 @@ if ($_POST["operation"] == "create") {
     if (empty($animais)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($animais);
+        $total = count($animais);
+        $animais = json_encode($animais);
+        echo '{"total" : "' . $total . '", "dados" : ' . $animais . '}';
     }
 } else if ($_POST["operation"] == "search") {
     try {
@@ -201,4 +211,12 @@ if ($_POST["operation"] == "create") {
     } catch (Exception $e) {
         echo '{"status" : "erro-select", "erro":"' . $e . '"}';
     }
+}
+
+function countTable(){
+    global $conexao, $table;
+    $sql = "SELECT COUNT(*) FROM " . $table . ";";
+    $stmt = executarQuery($conexao, $sql);
+    $totalROWS = $stmt->fetchColumn();
+    return $totalROWS;
 }

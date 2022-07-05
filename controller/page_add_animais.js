@@ -44,8 +44,7 @@ $(document).ready(function () {
       $("#content").hide()
     } else {
       $("#content").show()
-
-      $("#semEspecialidade").hide()
+      $("#semDono").hide()
     }
     
   });
