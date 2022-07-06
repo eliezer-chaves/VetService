@@ -132,7 +132,7 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="veterinarioCodigo" disabled />
                 </div>
@@ -200,14 +200,14 @@
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Codigo Especialidade</span>
                   <input type="text" class="form-control" id="especialidadeCodigo" disabled />
                 </div>
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group">
                   <span class="input-group-text">Telefone</span>
                   <input type="text" class="form-control" id="veterinarioTelefone" />
                 </div>
@@ -239,7 +239,7 @@
             <form class="">
               <div class="row">
                 <div class="col">
-                  <div class="input-group mb-3">
+                  <div class="input-group d-none">
                     <span class="input-group-text">Código</span>
                     <input type="text" class="form-control" id="modalExcluirVeterinarioCodigo" disabled />
                   </div>

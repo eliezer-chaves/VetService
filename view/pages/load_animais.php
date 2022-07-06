@@ -129,11 +129,11 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="modalCodigoAnimal" disabled />
                 </div>
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Dono código</span>
                   <input type="text" class="form-control" id="modalCodigoDono" disabled />
                 </div>
@@ -217,7 +217,7 @@
           <div class="modal-body">
             <form class="p-3">
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="modalExcluirAnimalCodigo" disabled />
                 </div>
@@ -233,7 +233,7 @@
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group">
                   <span class="input-group-text">Nome</span>
                   <input type="text" class="form-control" id="modalExcluirAnimalNome" disabled />
                 </div>

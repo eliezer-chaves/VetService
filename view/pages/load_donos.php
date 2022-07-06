@@ -128,7 +128,7 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="codigo" disabled />
                 </div>
@@ -224,7 +224,7 @@
           <div class="modal-body">
             <form class="p-3">
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="modalExcluirDonoCodigo" disabled />
                 </div>
@@ -245,7 +245,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group">
                   <span class="input-group-text">CPF</span>
                   <input type="text" class="form-control" id="modalExcluirDonoCPF" disabled />
                 </div>

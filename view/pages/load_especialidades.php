@@ -127,13 +127,13 @@
                     <div class="modal-body">
                         <form class="">
                             <div class="row">
-                                <div class="input-group mb-3">
+                                <div class="input-group d-none">
                                     <span class="input-group-text">Código</span>
                                     <input type="text" class="form-control" id="codigo" disabled />
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="input-group mb-3">
+                                <div class="input-group">
                                     <span class="input-group-text">Nome</span>
                                     <input type="text" class="form-control" id="modalNome" />
                                 </div>
@@ -163,16 +163,16 @@
                         <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form class="p-3">
+                        <form>
                             <div class="row">
-                                <div class="input-group mb-3">
+                                <div class="input-group d-none">
                                     <span class="input-group-text">Código</span>
                                     <input type="text" class="form-control" id="modalExcluirEspecialidadeCodigo" disabled />
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <span class="input-group-text">Especialidade</span>
                                         <input type="text" class="form-control" id="modalExcluirEspecialidadeNome" disabled />
                                     </div>
