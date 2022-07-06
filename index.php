@@ -46,7 +46,6 @@
       <!-- Sidebar -->
       <div class="bg-white shadow" id="sidebar">
         <div class="accordion accordion-flush" id="accordion">
-
           <!-- Item do accordion -->
           <div class="accordion-item">
             <h2 class="accordion-header" id="accordion-animais-header">
@@ -95,6 +94,24 @@
               </div>
             </div>
           </div>
+
+          <!-- Item do accordion -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="accordion-consultas-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-especialidades">
+                <i class="me-2 fa-solid fa-stethoscope"></i>Especialidades
+              </button>
+            </h2>
+            <div id="accordion-especialidades" class="accordion-collapse collapse">
+              <div class="">
+                <div class="list-group">
+                  <a href="view/pages/add_especialidade.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar especialidade</a>
+                  <a href="view/pages/load_especialidades.php" class="list-group-item list-group-item-action">Listar especialidades</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Item do accordion -->
           <div class="accordion-item">
             <h2 class="accordion-header" id="accordion-consultas-header">
@@ -111,7 +128,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
       <!-- Content -->
@@ -119,10 +135,7 @@
 
       </div>
     </div>
-    <!-- Footer -->
-    <footer class="bg-primary shadow" id="footer">
-
-    </footer>
+   
     <script></script>
 </body>
 
