@@ -14,8 +14,8 @@ var spanAnimalNome = $("#animalNome");
 var modalAnimalCadastrado = $("#modalAnimalCadastrado");
 var modalAviso = $("#modalAviso");
 var buttonCadastrar = $("#cadastrar");
-var urlCRUDAnimal = "../../model/crud_animal.php";
-var urlCRUDDono = "../../model/crud_dono.php";
+const urlCRUDAnimal = "../../model/crud_animal.php";
+const urlCRUDDono = "../../model/crud_dono.php";
 
 function clearFilds() {
   inputNome.val("");
@@ -41,12 +41,12 @@ $(document).ready(function () {
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "vazio") {
-      $("#content").hide()
+      $("#content").hide();
     } else {
-      $("#content").show()
-      $("#semDono").hide()
+      $("#content").show();
+      $("#semDono").hide();
+
     }
-    
   });
 });
 
@@ -87,6 +87,12 @@ buttonCadastrar.click(function () {
   });
 });
 
+
+/* var availableTags = []
+$( "#input_dono" ).autocomplete({
+  source: availableTags
+}); */
+
 $(document).ready(function () {
   inputNomeDono.keyup(function () {
     let searchText = $(this).val();
@@ -104,6 +110,7 @@ $(document).ready(function () {
         $("#resultado").html("");
 
         Object.keys(obj).forEach((item) => {
+          
           nova_linha +=
             '<button  class=" list-group-item list-group-item-action " id="donoTelefone' +
             obj[item].telefone +

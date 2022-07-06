@@ -22,7 +22,6 @@
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
 </head>
 
@@ -50,8 +49,8 @@
                   <input id="nome" type="text" class="form-control" />
                 </div>
               </div>
-
             </div>
+
             <div class="row mb-3">
               <div class="form-group">
                 <label for="dono">Dono:</label>
@@ -61,7 +60,7 @@
             </div>
 
             <div class="row mb-3">
-              <div class="form-group d-none">
+              <div class="form-group">
                 <label for="dono_codigo">Código:</label>
                 <input id="dono_codigo" type="text" class="form-control" disabled />
               </div>
@@ -87,8 +86,8 @@
 
               <div class="col">
                 <div class="form-group mb-3">
-                <label for="dropdown_especie">Espécie:</label>
-                <select name="select" class="form-select" id="dropdown_especie">
+                  <label for="dropdown_especie">Espécie:</label>
+                  <select name="select" class="form-select" id="dropdown_especie">
                     <option selected style="display: none;" value="0">Escolha</option>
                     <option value="1">Canina</option>
                     <option value="2">Felina</option>
@@ -122,8 +121,8 @@
                 Cadastrar animal
               </button>
             </div>
-
           </div>
+
           <!-- Modal Cadastrado -->
           <div id="modalAnimalCadastrado" class="modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
@@ -143,6 +142,7 @@
               </div>
             </div>
           </div>
+          
           <!-- Modal Aviso -->
           <div id="modalAviso" class="modal fade" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
@@ -162,10 +162,10 @@
         </div>
 
         <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="semDono">
-            <div class="mt-1">
-              <h5 class="text-center">Primeiro cadastre algum dono, para poder adicionar um animal.</h5>
-            </div>
+          <div class="mt-1">
+            <h5 class="text-center">Primeiro cadastre algum dono, para poder adicionar um animal.</h5>
           </div>
+        </div>
       </div>
     </div>
     <!-- <div>

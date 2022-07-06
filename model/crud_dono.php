@@ -110,7 +110,7 @@ if ($_POST["operation"] == "create") {
 } else if ($_POST["operation"] == "read_dono_fk") {
     if (isset($_POST['query'])) {
         $inpText = $_POST['query'];
-        $sql = 'SELECT DON_NOME, DON_CODIGO, DON_CPF, DON_TELEFONE FROM ' . $table . ' WHERE DON_NOME LIKE :DON_NOME limit 5';
+        $sql = 'SELECT DON_NOME, DON_CODIGO, DON_CPF, DON_TELEFONE FROM ' . $table . ' WHERE DON_NOME LIKE :DON_NOME LIMIT 5';
 
         $stmt = $conexao->prepare($sql);
         $stmt->execute(['DON_NOME' => '%' . $inpText . '%']);

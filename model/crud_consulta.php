@@ -23,9 +23,9 @@ if ($_POST["operation"] == "create") {
             $data = $_POST["data"];
             $hora = $_POST["hora"];
 
-            $sql = "insert into " . $table .
+            $sql = "INSERT INTO " . $table .
                 "(ANI_CODIGO, VET_CODIGO, CON_DATA, CON_HORA)" .
-                " values " .
+                " VALUES " .
                 "(:ANI_CODIGO, :VET_CODIGO, :CON_DATA, :CON_HORA);";
 
             $stmt = $conexao->prepare($sql);
@@ -35,7 +35,7 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':CON_HORA', $hora);
             $stmt->execute();
 
-            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '" }';
+            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"'.$_POST['especialidade'].'" }';
         } catch (Exception $e) {
             echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
         }

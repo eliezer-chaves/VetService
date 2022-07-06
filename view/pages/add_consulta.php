@@ -37,19 +37,18 @@
       </div>
       <!-- Content -->
       <div class="container-fluid w-75">
-        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded">
+        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="content">
           <div class="mb-3">
             <h2 class="text-center title">Adicionar consulta</h2>
           </div>
           <div class="p-3">
-
             <div class="row mb-3">
               <div class="form-group">
                 <label for="animal">Animal:</label>
                 <input type="text" id="input_animal" class="form-control" autocomplete="off" />
                 <div class="list-group shadow-lg" id="resultado" style="position: absolute;   z-index: 1;"></div>
               </div>
-              <div class="input-group mt-3 d-none">
+              <div class="input-group mt-3">
                 <span class="input-group-text">Animal Código:</span>
                 <input type="text" class="form-control" id="input_animal_codigo" disabled readonly />
               </div>
@@ -63,7 +62,7 @@
             </div>
 
             <div class="row mb-3">
-              <div class="col d-none">
+              <div class="col ">
                 <div class="input-group ">
                   <span class="input-group-text">Código:</span>
                   <input id="dono_codigo" type="text" class="form-control" disabled />
@@ -91,7 +90,12 @@
                   <option id="veterinario_opcao" selected>Escolha...</option>
                 </select>
 
-                <div class="input-group mt-3 d-none">
+                <div class="input-group mt-3 ">
+                  <span class="input-group-text">Especialidade:</span>
+                  <input id="veterinario_especialidade" type="text" class="form-control" disabled/>
+                </div>
+
+                <div class="input-group mt-3 ">
                   <span class="input-group-text">Código Veterinário:</span>
                   <input id="veterinario_codigo" type="text" class="form-control" disabled />
                 </div>
@@ -117,6 +121,7 @@
                 Criar consulta
               </button>
             </div>
+            
             <!-- Modal Cadastrado -->
             <div id="modalConsultaCadastrada" class="modal fade" role="dialog">
               <div class="modal-dialog modal-dialog-centered">
@@ -131,6 +136,7 @@
                     <p>Animal: <b><span id="animalNomeModal"></span></b></p>
                     <p>Dono: <b><span id="donoNomeModal"></span></b></p>
                     <p>Veterinário: <b><span id="veterinarioModal"></span></b></p>
+                    <p>Especialidade: <b><span id="veterinarioEspecialidadeModal"></span></b></p>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-primary " id="btn-consulta-cadastrado-modal" data-dismiss="modal">Ok</button>
@@ -138,6 +144,7 @@
                 </div>
               </div>
             </div>
+
             <!-- Modal Warning Campos Faltando -->
             <div id="modalAviso" class="modal fade" role="dialog">
               <div class="modal-dialog modal-dialog-centered">
@@ -154,6 +161,17 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="semAnimal">
+          <div class="mt-1">
+            <h5 class="text-center">Primeiro cadastre algum animal, para poder adicionar uma consulta.</h5>
+          </div>
+        </div>
+        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="semVeterinario">
+          <div class="mt-1">
+            <h5 class="text-center">Primeiro cadastre algum veterinário, para poder adicionar uma consulta.</h5>
           </div>
         </div>
       </div>

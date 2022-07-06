@@ -91,7 +91,6 @@ if ($_POST["operation"] == "create") {
 
             $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO WHERE VET_CODIGO = $codigo;";
 
-            //$sql = "SELECT * FROM $table WHERE VET_CODIGO = $codigo;";
             $resultado = executarQuery($conexao, $sql);
             $veterinario = $resultado->fetch();
 
@@ -202,7 +201,9 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "load_dropdown") {
     try {
-        $sql = "SELECT * FROM $table ORDER BY VET_NOME;";
+        $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME;";
+
+        //$sql = "SELECT * FROM $table ORDER BY VET_NOME;";
         $resultado = executarQuery($conexao, $sql);
 
         $veterinarios = [];
@@ -213,7 +214,8 @@ if ($_POST["operation"] == "create") {
                 'veterinarioNome' => $row['VET_NOME'],
                 'veterinarioCRMVUF' => $row['VET_CRMV_UF'],
                 'veterinarioTelefone' => $row['VET_TELEFONE'],
-                'veterinarioEspecialidade' => $row['VET_ESPECIALIDADE']
+                'veterinarioEspecialidadeCodigo' => $row['ESP_CODIGO'],
+                'veterinarioEspecialidade' => $row['ESP_NOME']
             ];
         }
         if (empty($veterinarios)) {
