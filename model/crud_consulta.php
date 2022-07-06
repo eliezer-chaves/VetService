@@ -5,6 +5,7 @@ $table = "tbl_consulta";
 $table_reference_animal = "tbl_animal";
 $table_reference_veterinario = "tbl_veterinario";
 $table_reference_dono = "tbl_dono";
+$table_reference_especialidade = "tbl_especialidade";
 try {
     $conexao = criarConexao();
 } catch (Exception $e) {
@@ -35,19 +36,29 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':CON_HORA', $hora);
             $stmt->execute();
 
-            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"'.$_POST['especialidade'].'" }';
+            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';
         } catch (Exception $e) {
             echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
         }
     }
 } else if ($_POST["operation"] == "read_all") {
     $total = $_POST["quantidade"];
+    if ($total == "") {
 
-    $sql = "SELECT * FROM $table 
-    INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-    INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-    INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-    ORDER BY CON_DATA, CON_HORA LIMIT $total";
+        $sql = "SELECT * FROM $table 
+                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+                ORDER BY CON_DATA, CON_HORA;";
+    } else {
+        $sql = "SELECT * FROM $table 
+                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+                ORDER BY CON_DATA, CON_HORA LIMIT $total;";
+    }
 
     $resultado = executarQuery($conexao, $sql);
 
@@ -61,6 +72,7 @@ if ($_POST["operation"] == "create") {
             'animalNome' => $row['ANI_NOME'],
             'veterinarioCodigo' => $row['VET_CODIGO'],
             'veterinarioNome' => $row['VET_NOME'],
+            'veterinarioEspecialidade' => $row['ESP_NOME'],
             'consultaCodigo' => $row['CON_CODIGO'],
             'consultaData' => $row['CON_DATA'],
             'consultaHora' => $row['CON_HORA'],
@@ -69,17 +81,27 @@ if ($_POST["operation"] == "create") {
     if (empty($animais)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($animais);
+        $totalROWS = countTable();
+        $animais = json_encode($animais);
+        echo '{"total" : "' . $totalROWS . '", "dados" : ' . $animais . '}';
     }
 } else if ($_POST["operation"] == "read_one") {
     try {
         if (isset($_POST["codigo"])) {
             $codigo = $_POST["codigo"];
+
             $sql = "SELECT * FROM $table 
             INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
             INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
             INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
             WHERE CON_CODIGO = $codigo";
+
+            /* $sql = "SELECT * FROM $table 
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            WHERE CON_CODIGO = $codigo"; */
 
             $resultado = executarQuery($conexao, $sql);
             $consulta = $resultado->fetch();
@@ -109,7 +131,7 @@ if ($_POST["operation"] == "create") {
 
         echo '{"status" : "alterado"}';
     } catch (Exception $e) {
-        echo '{"status":"erro", "erro" : "'.$e.'"}';
+        echo '{"status":"erro", "erro" : "' . $e . '"}';
     }
 } else if ($_POST["operation"] == "delete") {
     try {
@@ -154,11 +176,14 @@ if ($_POST["operation"] == "create") {
 
     echo $totalROWS;
 } else if ($_POST["operation"] == "load_page") {
+
     $sql = "SELECT * FROM $table 
     INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
     INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
     INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-    ORDER BY CON_DATA, CON_HORA LIMIT 5";
+    INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+    ORDER BY CON_DATA, CON_HORA";
+
     $resultado = executarQuery($conexao, $sql);
 
     $consultas = [];
@@ -171,6 +196,7 @@ if ($_POST["operation"] == "create") {
             'animalNome' => $row['ANI_NOME'],
             'veterinarioCodigo' => $row['VET_CODIGO'],
             'veterinarioNome' => $row['VET_NOME'],
+            'veterinarioEspecialidade' => $row['ESP_NOME'],
             'consultaCodigo' => $row['CON_CODIGO'],
             'consultaData' => $row['CON_DATA'],
             'consultaHora' => $row['CON_HORA'],
@@ -179,24 +205,21 @@ if ($_POST["operation"] == "create") {
     if (empty($consultas)) {
         echo '{"status":"vazio"}';
     } else {
-        echo json_encode($consultas);
+        $total = count($consultas);
+        $consultas = json_encode($consultas);
+        echo '{"total" : "' . $total . '", "dados" : ' . $consultas . '}';
     }
 } else if ($_POST["operation"] == "search") {
     try {
         if (isset($_POST["nome"])) {
             $nome = $_POST["nome"];
 
-            if ($_POST["quantidade"] == 5) {
-                $sql = "SELECT * FROM $table 
+            $sql = "SELECT * FROM $table 
                 INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
                 INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO WHERE ANI_NOME LIKE :ANI_NOME ORDER BY ANI_NOME LIMIT 5;";
-            } else {
-                $sql = "SELECT * FROM $table 
-                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO WHERE ANI_NOME LIKE :ANI_NOME ORDER BY ANI_NOME";
-            }
+                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+                WHERE ANI_NOME LIKE :ANI_NOME ORDER BY ANI_NOME, CON_DATA, CON_HORA;";
 
             $stmt = $conexao->prepare($sql);
             $stmt->execute(['ANI_NOME' => '%' . $nome . '%']);
@@ -211,6 +234,7 @@ if ($_POST["operation"] == "create") {
                     'animalNome' => $row['ANI_NOME'],
                     'veterinarioCodigo' => $row['VET_CODIGO'],
                     'veterinarioNome' => $row['VET_NOME'],
+                    'veterinarioEspecialidade' => $row['ESP_NOME'],
                     'consultaCodigo' => $row['CON_CODIGO'],
                     'consultaData' => $row['CON_DATA'],
                     'consultaHora' => $row['CON_HORA'],
@@ -219,10 +243,21 @@ if ($_POST["operation"] == "create") {
             if (empty($animais)) {
                 echo '{"status":"vazio"}';
             } else {
-                echo json_encode($animais);
+                $total = count($animais);
+                $animais = json_encode($animais);
+                echo '{"total" : "' . $total . '", "dados" : ' . $animais . '}';
             }
         }
     } catch (Exception $e) {
         echo '{"status" : "erro-select", "erro":"' . $e . '"}';
     }
+}
+
+function countTable()
+{
+    global $conexao, $table;
+    $sql = "SELECT COUNT(*) FROM " . $table . ";";
+    $stmt = executarQuery($conexao, $sql);
+    $totalROWS = $stmt->fetchColumn();
+    return $totalROWS;
 }

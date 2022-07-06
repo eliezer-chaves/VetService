@@ -200,9 +200,9 @@
               </div>
 
               <div class="row">
-              <div class="input-group mb-3">
+                <div class="input-group mb-3">
                   <span class="input-group-text">Codigo Especialidade</span>
-                  <input type="text" class="form-control" id="especialidadeCodigo" disabled/>
+                  <input type="text" class="form-control" id="especialidadeCodigo" disabled />
                 </div>
               </div>
 

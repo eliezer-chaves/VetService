@@ -54,10 +54,8 @@ if ($_POST["operation"] == "create") {
         $total = $_POST["quantidade"];
         if ($total == "") {
             $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME;";
-            //$sql = "SELECT * FROM $table ORDER BY VET_NOME";
         } else {
             $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME LIMIT $total;";
-            //$sql = "SELECT * FROM $table ORDER BY VET_NOME LIMIT $total";
         }
 
         $resultado = executarQuery($conexao, $sql);
@@ -203,7 +201,6 @@ if ($_POST["operation"] == "create") {
     try {
         $sql = "SELECT * FROM $table INNER JOIN $table_reference ON $table.ESP_CODIGO = $table_reference.ESP_CODIGO ORDER BY VET_NOME;";
 
-        //$sql = "SELECT * FROM $table ORDER BY VET_NOME;";
         $resultado = executarQuery($conexao, $sql);
 
         $veterinarios = [];

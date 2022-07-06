@@ -398,6 +398,7 @@ function fillFilds(codigo) {
     $("#dropdown_estado").val(uf);
     $("#dropdown_especialidade").val(veterinarioEspecialidadeCodigo);
     $("#especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
+    
     $("#dropdown_especialidade").change(function () {
       var value = $("#dropdown_especialidade :selected").attr("id");
       $("#especialidadeCodigo").val(value);

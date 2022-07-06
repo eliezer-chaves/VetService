@@ -36,61 +36,91 @@
         <?php include 'componentes/sidebar.html'; ?>
       </div>
       <!--Content -->
-      <div class="container-fluid w-75  mb-5">
-        <div class="bg-body shadow mt-5 p-3 bg-body rounded">
-          <div class="d-flex justify-content-between">
-            <div>
-              <a href="../pages/add_consulta.php">
-                <button class="btn btn-success" type="submit">
-                  <i class="me-2 fa-solid fa-calendar-days"></i>
-                  Adicionar consulta
+      <div class="container-fluid mb-3">
+        <div id="conteudo">
+          <div class="bg-body shadow mt-5 p-3 bg-body rounded" id="content-header">
+            <div class="d-flex justify-content-between" id="">
+              <div>
+                <a href="../pages/add_consulta.php">
+                  <button class="btn btn-success" type="submit">
+                    <i class="me-2 fa-solid fa-calendar-days"></i>
+                    Adicionar consulta
+                  </button>
+                </a>
+              </div>
+              <div class="d-flex w-50">
+                <input class="form-control me-2" type="search" placeholder="Buscar consulta por animal" id="nome_search" />
+                <button class="btn btn-primary" type="submit" id="search">
+                  <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-              </a>
-            </div>
-            <div class="d-flex w-50">
-              <input class="form-control me-2" type="search" placeholder="Buscar consulta por animal" id="nome_search" />
-              <button class="btn btn-primary" type="submit" id="search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-              </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="mt-2 shadow p-3 bg-body rounded">
-          <div class="d-flex align-midle" id="total_resultados">
-            <div class="me-1">
-              Mostrando
-            </div>
-            <div style="width: 70px; " class="me-1">
-              <select class="form-select form-select-sm mb-2" name="select" id="table_count" aria-label=".form-select-sm example">
-                <option selected value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-            <div class="me-1">
-              de <b><a id="total"></a></b>
-            </div>
-          </div>
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr class="text-center">
-                <th scope="col">Id</th>
-                <th scope="col">Animal</th>
-                <th scope="col">Dono</th>
-                <th scope="col">Horário</th>
-                <th scope="col">Dia</th>
-                <th scope="col">Veterinário</th>
-                <th scope="col">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="consultas">
 
-            </tbody>
-          </table>
-          <div class="d-flex justify-content-center algin-middle">
-            <p id="aviso">Nenhuma consulta encontrada, faça uma nova pesquisa.</p>
+          <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+
+            <div id="total_resultados" style="display: flex;">
+              <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;">
+                <div class="me-1">
+                  Mostrando
+                </div>
+                <div class="me-1">
+                  <select class="form-select form-select-sm" name="select" id="table_count" aria-label=".form-select-sm example">
+                    <option selected value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="">Todas</option>
+                  </select>
+                </div>
+                <div id="text_total_consultas">
+                  as <b><span id="total_consultas"></span></b> consultas.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_consultas_quantidade">
+              <div class="me-1" id="text_consultas_quantidade">
+                Total de consultas <b><span id="total_consultas_value"></span></b>.
+              </div>
+            </div>
+
+            <div class="mb-2 align-middle" style="display: flex;" id="total_consultas_busca">
+              <div class="me-1" id="text_consultas_quantidade">
+                Total de consultas encontradas: <b><span id="total_consultas_busca_value"></span></b>.
+              </div>
+            </div>
+
+            <table class="table table-sm table-hover table-bordered" id="table">
+              <thead>
+                <tr class="text-center">
+                  <th scope="col">Código</th>
+                  <th scope="col">Animal</th>
+                  <th scope="col">Dono</th>
+                  <th scope="col">Dia</th>
+                  <th scope="col">Horário</th>
+                  <th scope="col">Veterinário</th>
+                  <th scope="col">Especialidade</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="consultas">
+
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-center algin-middle mt-2">
+              <p id="aviso">Nenhuma consulta encontrada, faça uma nova pesquisa.</p>
+            </div>
           </div>
         </div>
+
+        <div id="semConsulta" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
+          <div>
+            <b class="h3">Nenhuma consulta cadastrada!</b>
+          </div>
+
+        </div>
+
       </div>
     </div>
     <!-- Modal Editar -->
@@ -107,14 +137,14 @@
             <form class="">
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Codigo consulta</span>
                   <input type="text" class="form-control" id="editarConsultaCodigo" disabled />
                 </div>
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Codigo animal</span>
                   <input type="text" class="form-control" id="editarAnimalCodigo" disabled />
                 </div>
@@ -129,7 +159,7 @@
               </div>
 
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Codigo dono</span>
                   <input type="text" class="form-control" id="editarCodigoDono" disabled readonly />
                 </div>
@@ -150,9 +180,19 @@
 
                   </select>
 
-                  <div class="input-group mt-3">
+                  <div class="input-group mt-3 d-none">
                     <span class="input-group-text">Código Veterinário:</span>
                     <input id="veterinario_codigo" type="text" class="form-control" disabled />
+                  </div>
+
+                  <div class="input-group mt-3">
+                    <span class="input-group-text">Especialidade:</span>
+                    <input id="veterinario_especialidade" type="text" class="form-control" disabled />
+                  </div>
+
+                  <div class="input-group mt-3 d-none">
+                    <span class="input-group-text">Codigo Especialidade</span>
+                    <input type="text" class="form-control" id="especialidadeCodigo" disabled />
                   </div>
                 </div>
               </div>
@@ -199,7 +239,7 @@
             <form class="">
               <div class="row">
                 <div class="col">
-                  <div class="input-group mb-3">
+                  <div class="input-group mb-3 d-none">
                     <span class="input-group-text">Código Consulta</span>
                     <input type="text" class="form-control" disabled id="excluirConsultaCodigo" />
                   </div>
@@ -207,7 +247,7 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <div class="input-group mb-3">
+                  <div class="input-group mb-3 d-none">
                     <span class="input-group-text">Código Dono</span>
                     <input type="text" class="form-control" disabled id="excluirDonoCodigo" />
                   </div>
@@ -222,7 +262,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código animal</span>
                   <input type="text" class="form-control" disabled id="excluirAnimalCodigo" />
                 </div>
@@ -240,15 +280,21 @@
                 </div>
               </div>
               <div class="row">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text ">Código veterinário</span>
                   <input type="text" class="form-control" disabled id="excluirVeterinarioCodigo" />
                 </div>
               </div>
-              <div class="row">
+              <div class="row mb-3">
                 <div class="input-group">
                   <span class="input-group-text">Veterinário</span>
                   <input type="text" class="form-control" disabled id="excluirVeterinarioNome" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-group">
+                  <span class="input-group-text">Especialidade</span>
+                  <input type="text" class="form-control" disabled id="excluirVeterinarioEspecialidadeNome" />
                 </div>
               </div>
             </form>

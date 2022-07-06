@@ -1,7 +1,12 @@
+const urlCRUDVeterinario = "../../model/crud_veterinario.php";
+const urlCRUDConsulta = "../../model/crud_consulta.php";
+
 $("#consultaAlterado").hide();
 $("#consultaExcluido").hide();
 $("#consultaErro").hide();
 $("#aviso").hide();
+
+$("#semConsulta").hide();
 
 function showAlertSuccess() {
   $("#consultaAlterado")
@@ -26,11 +31,12 @@ function showAlertWarning() {
       $("#consultaErro").fadeOut(3000);
     });
 }
+
 //Load DropDown
 $(document).ready(function () {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_veterinario.php",
+    url: urlCRUDVeterinario,
     data: {
       operation: "load_dropdown",
     },
@@ -45,6 +51,10 @@ $(document).ready(function () {
         obj[item].veterinarioNome +
         '" id="' +
         obj[item].veterinarioCodigo +
+        '" name="' +
+        obj[item].veterinarioEspecialidade +
+        "-" +
+        obj[item].veterinarioEspecialidadeCodigo +
         '"><button>' +
         obj[item].veterinarioNome +
         "</button></option>";
@@ -53,120 +63,84 @@ $(document).ready(function () {
 
     $("#veterinario_opcao").change(function () {
       var value = $("#veterinario_opcao :selected").attr("id");
+      var especialidade = $("#veterinario_opcao :selected").attr("name");
+      var especialidadeNome = especialidade.split("-")[0];
+      var codigo = especialidade.split("-")[1];
 
       $("#veterinario_codigo").val(value);
+      $("#veterinario_especialidade").val(especialidadeNome);
+      $("#especialidadeCodigo").val(codigo);
     });
   });
 });
 
-function countTable() {
+loadData();
+
+function readAll() {
+  var quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
-      operation: "count",
+      operation: "read_all",
+      quantidade: quantidade,
     },
   }).done(function (resposta) {
-    if (resposta == 0) {
-      $("#content").hide();
+    $("#consultas").empty();
+
+    var obj = $.parseJSON(resposta);
+
+    if (obj.total == undefined) {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
+    } else if (obj.status != "vazio") {
+      var total = obj.total;
+
+      $("#total_consultas").html(total);
+
+      if (total <= 5) {
+        $("#total_consultas_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_consultas_busca").hide();
+        $("#total_consultas_quantidade").show();
+      } else {
+        $("#total_resultados").show();
+        $("#total_consultas_quantidade").hide();
+        $("#total_consultas_busca").hide();
+      }
+
+      if (quantidade == "") {
+        quantidade = obj.total;
+      }
+      for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var animalNome = obj.dados[i].animalNome;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+        var consultaCodigo = obj.dados[i].consultaCodigo;
+        var consultaData = obj.dados[i].consultaData;
+        var consultaHora = obj.dados[i].consultaHora;
+        var consultaData = obj.dados[i].consultaData;
+
+        fillTable(
+          donoNome,
+          animalNome,
+          veterinarioNome,
+          consultaCodigo,
+          consultaData,
+          consultaHora,
+          veterinarioEspecialidade
+        );
+      }
+      var total = obj.total;
+      $("#total_consultas").html(total);
     }
-    $("#total").html(resposta);
   });
 }
 
-countTable();
-
-$(document).ready(function () {
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_consulta.php",
-    data: {
-      operation: "load_page",
-    },
-  }).done(function (resposta) {
-    console.log(resposta)
-    $("#consultas").empty();
-    var obj = $.parseJSON(resposta);
-
-    var consultas = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var consulta = obj[item];
-        consultas.push(consulta);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var consultaCodigo = obj[item].consultaCodigo;
-        var consultaData = obj[item].consultaData;
-        var consultaHora = obj[item].consultaHora;
-
-        var consultaData = obj[item].consultaData;
-
-        var dia = consultaData.split("-")[0];
-        var mes = consultaData.split("-")[1];
-        var ano = consultaData.split("-")[2];
-
-        consultaData =
-          ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          consultaCodigo +
-          '">' +
-          consultaCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaHora +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaData +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-success me-2" id="diagnostico' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
-          ' <i class="fa-solid fa-file-lines"></i>' +
-          "</button>" +
-          '<button class="btn btn-warning me-2" id="editar' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#consultas").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
-        $("#total_resultados").hide();
-      } else {
-        $("#total_resultados").show();
-      }
-    }
-  });
-});
 
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
@@ -185,220 +159,86 @@ $(document).on("click", "button", function (element) {
   }
 });
 
-$("#nome_search").on("keydown", function (e) {
-  if (e.keyCode === 13) {
-    var nome = $("#nome_search").val();
-    $("#aviso").hide();
-    $("#table").show();
-    $("#table_count").val("5");
-    var quantidade;
-    if (nome == "") {
-      $("#total_resultados").show();
-      quantidade = 5;
-    } else {
-      $("#total_resultados").hide();
-      quantidade = 0;
-    }
+function pesquisarConsulta() {
+  var nome = $("#nome_search").val();
+  $("#aviso").hide();
+  $("#table").show();
+
+  if (nome != "") {
     $.ajax({
       method: "POST",
-      url: "../../model/crud_consulta.php",
+      url: urlCRUDConsulta,
       data: {
         operation: "search",
         nome: nome,
-        quantidade: quantidade,
       },
     }).done(function (resposta) {
       var obj = $.parseJSON(resposta);
       $("#consultas").empty();
-      var obj = $.parseJSON(resposta);
-      var consultas = [];
-      var quantidade = 0;
+
       if (obj.status != "vazio") {
-        Object.keys(obj).forEach((item) => {
-          var consulta = obj[item];
-          consultas.push(consulta);
-          quantidade++;
-          var donoCodigo = obj[item].donoCodigo;
-          var donoNome = obj[item].donoNome;
-          var animalCodigo = obj[item].animalCodigo;
-          var animalNome = obj[item].animalNome;
-          var veterinarioCodigo = obj[item].veterinarioCodigo;
-          var veterinarioNome = obj[item].veterinarioNome;
-          var consultaCodigo = obj[item].consultaCodigo;
-          var consultaData = obj[item].consultaData;
-          var consultaHora = obj[item].consultaHora;
+        $("#conteudo").show();
+        $("#semCadastro").hide();
 
-          var consultaData = obj[item].consultaData;
+        var total = obj.total;
 
-          var dia = consultaData.split("-")[0];
-          var mes = consultaData.split("-")[1];
-          var ano = consultaData.split("-")[2];
+        $("#total_consultas_busca_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_consultas_busca").show();
+        $("#total_consultas_quantidade").hide();
 
-          consultaData =
-            ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
+        for (var i = 0; i < obj.dados.length; i++) {
+          if (obj.dados[i] == undefined) {
+            break;
+          }
+          var donoNome = obj.dados[i].donoNome;
+          var animalNome = obj.dados[i].animalNome;
+          var veterinarioNome = obj.dados[i].veterinarioNome;
+          var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+          var consultaCodigo = obj.dados[i].consultaCodigo;
+          var consultaData = obj.dados[i].consultaData;
+          var consultaHora = obj.dados[i].consultaHora;
+          var consultaData = obj.dados[i].consultaData;
 
-          var nova_linha = "";
-          var nova_linha =
-            '<tr class="item"> ' +
-            '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-            consultaCodigo +
-            '">' +
-            consultaCodigo +
-            "</th>" +
-            '<td class="align-middle text-center">' +
-            animalNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            donoNome +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            consultaHora +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            consultaData +
-            "</td>" +
-            '<td class="align-middle text-center">' +
-            veterinarioNome +
-            "</td>" +
-            '<td class="text-center text-center">' +
-            '<button class="btn btn-success me-2" id="diagnostico' +
-            consultaCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
-            ' <i class="fa-solid fa-file-lines"></i>' +
-            "</button>" +
-            '<button class="btn btn-warning me-2" id="editar' +
-            consultaCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-            '<i class="fa-solid fa-pen-to-square"></i>' +
-            "</button>" +
-            '<button class="btn btn-danger" id="excluir' +
-            consultaCodigo +
-            '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
-            '<i class="fa-solid fa-trash-can"></i>' +
-            "</button>" +
-            "</td>" +
-            "</tr>";
-
-          $("#consultas").append(nova_linha);
-        });
+          fillTable(
+            donoNome,
+            animalNome,
+            veterinarioNome,
+            consultaCodigo,
+            consultaData,
+            consultaHora,
+            veterinarioEspecialidade
+          );
+        }
       } else {
         $("#table").hide();
         $("#aviso").show();
+        $("#total_consultas_quantidade").hide();
+        $("#total_resultados").hide();
       }
     });
+  } else {
+    $("#table_count").val("5");
+    loadData();
+  }
+}
+
+$("#nome_search").on("keydown", function (e) {
+  if (e.keyCode === 13) {
+    pesquisarConsulta();
   }
 });
 
 $("#search").click(function () {
-  var nome = $("#nome_search").val();
-  $("#aviso").hide();
-  $("#table").show();
-  $("#table_count").val("5");
-  var quantidade;
-  if (nome == "") {
-    $("#total_resultados").show();
-    quantidade = 5;
-  } else {
-    $("#total_resultados").hide();
-    quantidade = 0;
-  }
-
-  $.ajax({
-    method: "POST",
-    url: "../../model/crud_consulta.php",
-    data: {
-      operation: "search",
-      nome: nome,
-      quantidade: quantidade,
-    },
-  }).done(function (resposta) {
-    var obj = $.parseJSON(resposta);
-    $("#consultas").empty();
-    var consultas = [];
-    var quantidade = 0;
-    if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var consulta = obj[item];
-        consultas.push(consulta);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var consultaCodigo = obj[item].consultaCodigo;
-        var consultaData = obj[item].consultaData;
-        var consultaHora = obj[item].consultaHora;
-
-        var consultaData = obj[item].consultaData;
-
-        var dia = consultaData.split("-")[0];
-        var mes = consultaData.split("-")[1];
-        var ano = consultaData.split("-")[2];
-
-        consultaData =
-          ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          consultaCodigo +
-          '">' +
-          consultaCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaHora +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaData +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-success me-2" id="diagnostico' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
-          ' <i class="fa-solid fa-file-lines"></i>' +
-          "</button>" +
-          '<button class="btn btn-warning me-2" id="editar' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#consultas").append(nova_linha);
-      });
-    } else {
-      $("#table").hide();
-      $("#aviso").show();
-    }
-  });
+  pesquisarConsulta();
 });
-
-//Completar campo de animal
 
 $(document).ready(function () {
   $("#editarAnimalNome").keyup(function () {
     let searchText = $(this).val();
     if (searchText != "") {
       $.ajax({
-        url: "../../model/crud_consulta.php",
+        url: urlCRUDConsulta,
         method: "POST",
         data: {
           query: searchText,
@@ -462,186 +302,178 @@ $(document).ready(function () {
   });
 });
 
-//Auto complete
-
-var total;
 $("#table_count").on("change", function () {
-  var total = this.value;
+  var total = $("#table_count").val();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       operation: "read_all",
       quantidade: total,
     },
   }).done(function (resposta) {
+    console.log(resposta);
     $("#consultas").empty();
     var obj = $.parseJSON(resposta);
-    var consultas = [];
-    var quantidade = 0;
+
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var consulta = obj[item];
-        consultas.push(consulta);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var consultaCodigo = obj[item].consultaCodigo;
-        var consultaData = obj[item].consultaData;
-        var consultaHora = obj[item].consultaHora;
+      for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var animalNome = obj.dados[i].animalNome;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+        var consultaCodigo = obj.dados[i].consultaCodigo;
+        var consultaData = obj.dados[i].consultaData;
+        var consultaHora = obj.dados[i].consultaHora;
+        var consultaData = obj.dados[i].consultaData;
 
-        var consultaData = obj[item].consultaData;
-
-        var dia = consultaData.split("-")[0];
-        var mes = consultaData.split("-")[1];
-        var ano = consultaData.split("-")[2];
-
-        consultaData =
-          ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          consultaCodigo +
-          '">' +
-          consultaCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaHora +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaData +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-success me-2" id="diagnostico' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
-          ' <i class="fa-solid fa-file-lines"></i>' +
-          "</button>" +
-          '<button class="btn btn-warning me-2" id="editar' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#consultas").append(nova_linha);
-      });
+        fillTable(
+          donoNome,
+          animalNome,
+          veterinarioNome,
+          consultaCodigo,
+          consultaData,
+          consultaHora,
+          veterinarioEspecialidade
+        );
+      }
     }
   });
 });
 
 function loadData() {
-  quantidade = $("#table_count").val();
+  var quantidade = $("#table_count").val();
+
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       operation: "load_page",
       quantidade: quantidade,
     },
   }).done(function (resposta) {
-    countTable();
     $("#consultas").empty();
+
     var obj = $.parseJSON(resposta);
-    var consultas = [];
-    var quantidade = 0;
+
     if (obj.status != "vazio") {
-      Object.keys(obj).forEach((item) => {
-        var consulta = obj[item];
-        consultas.push(consulta);
-        quantidade++;
-        var donoCodigo = obj[item].donoCodigo;
-        var donoNome = obj[item].donoNome;
-        var animalCodigo = obj[item].animalCodigo;
-        var animalNome = obj[item].animalNome;
-        var veterinarioCodigo = obj[item].veterinarioCodigo;
-        var veterinarioNome = obj[item].veterinarioNome;
-        var consultaCodigo = obj[item].consultaCodigo;
-        var consultaData = obj[item].consultaData;
-        var consultaHora = obj[item].consultaHora;
+      $("#conteudo").show();
+      $("#semCadastro").hide();
 
-        var consultaData = obj[item].consultaData;
+      var total = obj.total;
+      $("#total_consultas").html(total);
 
-        var dia = consultaData.split("-")[0];
-        var mes = consultaData.split("-")[1];
-        var ano = consultaData.split("-")[2];
-
-        consultaData =
-          ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
-
-        var nova_linha = "";
-        var nova_linha =
-          '<tr class="item"> ' +
-          '<th scope="row" class="text-center align-middle" id="animalCodigo' +
-          consultaCodigo +
-          '">' +
-          consultaCodigo +
-          "</th>" +
-          '<td class="align-middle text-center">' +
-          animalNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          donoNome +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaHora +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          consultaData +
-          "</td>" +
-          '<td class="align-middle text-center">' +
-          veterinarioNome +
-          "</td>" +
-          '<td class="text-center text-center">' +
-          '<button class="btn btn-success me-2" id="diagnostico' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
-          ' <i class="fa-solid fa-file-lines"></i>' +
-          "</button>" +
-          '<button class="btn btn-warning me-2" id="editar' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-          '<i class="fa-solid fa-pen-to-square"></i>' +
-          "</button>" +
-          '<button class="btn btn-danger" id="excluir' +
-          consultaCodigo +
-          '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
-          '<i class="fa-solid fa-trash-can"></i>' +
-          "</button>" +
-          "</td>" +
-          "</tr>";
-
-        $("#consultas").append(nova_linha);
-      });
-
-      if (quantidade < 5) {
+      if (total <= 5) {
+        $("#total_consultas_value").html(total);
         $("#total_resultados").hide();
+        $("#total_consultas_busca").hide();
+        $("#total_consultas_quantidade").show();
       } else {
         $("#total_resultados").show();
+        $("#total_consultas_quantidade").hide();
+        $("#total_consultas_busca").hide();
       }
+
+      for (var i = 0; i < quantidade; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var animalNome = obj.dados[i].animalNome;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+        var consultaCodigo = obj.dados[i].consultaCodigo;
+        var consultaData = obj.dados[i].consultaData;
+        var consultaHora = obj.dados[i].consultaHora;
+        var consultaData = obj.dados[i].consultaData;
+
+        fillTable(
+          donoNome,
+          animalNome,
+          veterinarioNome,
+          consultaCodigo,
+          consultaData,
+          consultaHora,
+          veterinarioEspecialidade
+        );
+      }
+    } else {
+      $("#conteudo").hide();
+      $("#semCadastro").show();
     }
   });
+}
+
+function fillTable(
+  donoNome,
+  animalNome,
+  veterinarioNome,
+  consultaCodigo,
+  consultaData,
+  consultaHora,
+  veterinarioEspecialidade
+) {
+  var array = veterinarioNome.split(" ");
+  var veterinarioFirstNome = array[0];
+  var veterinarioLastName = array.at(-1);
+
+  veterinarioNome = veterinarioFirstNome + " " + veterinarioLastName;
+
+  var hora = consultaHora.split(":")[0];
+  var minuto = consultaHora.split(":")[1];
+
+  consultaHora = hora + ":" + minuto;
+
+  var dia = consultaData.split("-")[0];
+  var mes = consultaData.split("-")[1];
+  var ano = consultaData.split("-")[2];
+  consultaData =
+    ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
+
+  var nova_linha = "";
+  var nova_linha =
+    '<tr class="item"> ' +
+    '<th scope="row" class="text-center align-middle" id="animalCodigo' +
+    consultaCodigo +
+    '">' +
+    consultaCodigo +
+    "</th>" +
+    '<td class="align-middle text-center">' +
+    animalNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    donoNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    consultaData +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    consultaHora +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    veterinarioNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    veterinarioEspecialidade +
+    "</td>" +
+    '<td class="text-center text-center">' +
+    '<button class="btn btn-warning me-2" id="editar' +
+    consultaCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
+    '<i class="fa-solid fa-pen-to-square"></i>' +
+    "</button>" +
+    '<button class="btn btn-danger" id="excluir' +
+    consultaCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#modalExcluirConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
+    '<i class="fa-solid fa-trash-can"></i>' +
+    "</button>" +
+    "</td>" +
+    "</tr>";
+
+  $("#consultas").append(nova_linha);
 }
 
 function updateConsulta() {
@@ -653,7 +485,7 @@ function updateConsulta() {
 
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       animalCodigo: animalCodigo,
       consultaCodigo: consultaCodigo,
@@ -667,7 +499,7 @@ function updateConsulta() {
     if (obj.status == "alterado") {
       clearFillds();
       $("#modalEditarConsulta").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccess();
     } else {
       showAlertWarning();
@@ -678,7 +510,7 @@ function updateConsulta() {
 function deleteConsulta(codigo) {
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       codigo: codigo,
       operation: "delete",
@@ -688,7 +520,7 @@ function deleteConsulta(codigo) {
     if (obj.status == "deletado") {
       clearFillds();
       $("#modalExcluirConsulta").modal("hide");
-      loadData();
+      readAll();
       showAlertSuccessDeletado();
     } else {
       showAlertWarning();
@@ -700,7 +532,7 @@ function fillFilds(codigo) {
   clearFillds();
   $.ajax({
     method: "POST",
-    url: "../../model/crud_consulta.php",
+    url: urlCRUDConsulta,
     data: {
       codigo: codigo,
       operation: "read_one",
@@ -714,6 +546,8 @@ function fillFilds(codigo) {
 
     var veterinarioCodigo = obj.VET_CODIGO;
     var veterinarioNome = obj.VET_NOME;
+    var veterinarioEspecialidade = obj.ESP_NOME;
+    var veterinarioEspecialidadeCodigo = obj.ESP_CODIGO;
 
     var consultaCodigo = obj.CON_CODIGO;
     var consultaData = obj.CON_DATA;
@@ -729,6 +563,8 @@ function fillFilds(codigo) {
     $("#editarHoraConsulta").val(consultaHora);
     $("#veterinario_opcao").val(veterinarioNome);
     $("#veterinario_codigo").val(veterinarioCodigo);
+    $("#veterinario_especialidade").val(veterinarioEspecialidade);
+    $("#especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
 
     var dia = consultaData.split("-")[0];
     var mes = consultaData.split("-")[1];
@@ -747,6 +583,7 @@ function fillFilds(codigo) {
     $("#editarHoraConsulta").val(consultaHora);
     $("#excluirVeterinarioNome").val(veterinarioNome);
     $("#excluirVeterinarioCodigo").val(veterinarioCodigo);
+    $("#excluirVeterinarioEspecialidadeNome").val(veterinarioEspecialidade);
   });
 }
 
@@ -761,6 +598,8 @@ function clearFillds() {
   $("#editarHoraConsulta").val("");
   $("#veterinario_opcao").val("");
   $("#veterinario_codigo").val("");
+  $("#veterinario_especialidade").val("");
+  $("#especialidadeCodigo").val("");
 
   //Modal Excluir
   $("#excluirConsultaCodigo").val("");
@@ -772,4 +611,5 @@ function clearFillds() {
   $("#editarHoraConsulta").val("");
   $("#excluirVeterinarioNome").val("");
   $("#excluirVeterinarioCodigo").val("");
+  $("#excluirVeterinarioEspecialidadeNome").val("");
 }

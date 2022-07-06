@@ -40,7 +40,7 @@
         <div class="">
           <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded" id="content">
             <div class="mt-1">
-              
+
               <h2 class="text-center title">Adicionar veterinário</h1>
             </div>
             <div class="p-3">
@@ -102,7 +102,7 @@
                     <label class="input-group-text" for="dropdown_especie">Especialidade</label>
                     <select name="select" class="form-select" id="dropdown_especialidade">
                       <option selected style="display: none;" value="0">Escolha</option>
-                      
+
                     </select>
                   </div>
                 </div>
@@ -178,10 +178,8 @@
     </div>
   </div>
   <div>
-    <!-- Footer -->
-    <?php include 'componentes/footer.html'; ?>
-  </div>
-  <script src="../../controller/page_add_veterinarios.js"></script>
+
+    <script src="../../controller/page_add_veterinarios.js"></script>
 </body>
 
 </html>
