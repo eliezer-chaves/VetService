@@ -1,26 +1,12 @@
 header{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    
     flex-grow: 0;
     flex-basis: auto;
     padding: 10px;
 }
-.brand{
-    width: 30%;
-    padding-left: 10px;
-}
-.list-nav{
-    width: 60%;
+#header{
     display: flex;
-    justify-content: space-around;
+    align-items: center; 
+    justify-content: space-between; 
 }
-.header-profile{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.header-profile img{
-    height: 30px;
-    width: 30px;
-}
+
