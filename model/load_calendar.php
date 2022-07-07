@@ -22,11 +22,25 @@ $consultas = [];
 
 while ($row = $resultado->fetch()) {
     $consultas[] = [
-        'id' => $row['CON_CODIGO'], 
-        'title' => $row['ANI_NOME'], 
-        'color' => $row['VET_COLOR'], 
-        'start' =>  $row['CON_DATA'] . " " . $row['CON_HORA'], 
-        'end' => $row['CON_DATA'] . " " . $row['CON_HORA_FIM'], 
+        'id' => $row['CON_CODIGO'],
+        'title' => $row['ANI_NOME'] ." - ". $row['VET_NOME'],
+        'color' => $row['VET_COLOR'],
+        'extendedProps' => [
+            $row['ANI_CODIGO'],
+            $row['ANI_NOME'],
+            $row['DON_CODIGO'], 
+            $row['DON_NOME'],
+            $row['VET_CODIGO'],
+            $row['VET_NOME'],
+            $row['ESP_CODIGO'],
+            $row['ESP_NOME'],
+            $row['CON_DATA'],
+            $row['CON_HORA'],
+            $row['CON_HORA_FIM'],
+        ],
+        
+        'start' =>  $row['CON_DATA'] . " " . $row['CON_HORA'],
+        'end' => $row['CON_DATA'] . " " . $row['CON_HORA_FIM'],
     ];
 }
 if (empty($consultas)) {

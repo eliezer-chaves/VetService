@@ -140,7 +140,6 @@ function readAll() {
   });
 }
 
-
 $(document).on("click", "button", function (element) {
   var id = element.currentTarget.id;
   if (id.includes("editar")) {
@@ -481,6 +480,7 @@ function updateConsulta() {
   var veterinarioCodigo = $("#veterinario_codigo").val();
   var consultaData = $("#editarDataConsulta").val();
   var consultaHora = $("#editarHoraConsulta").val();
+  var consultaHoraFim = $("#hora_consulta_fim").val();
 
   $.ajax({
     method: "POST",
@@ -491,6 +491,7 @@ function updateConsulta() {
       veterinarioCodigo: veterinarioCodigo,
       consultaData: consultaData,
       consultaHora: consultaHora,
+      consultaHoraFim: consultaHoraFim,
       operation: "update",
     },
   }).done(function (resposta) {
@@ -547,11 +548,11 @@ function fillFilds(codigo) {
     var veterinarioNome = obj.VET_NOME;
     var veterinarioEspecialidade = obj.ESP_NOME;
     var veterinarioEspecialidadeCodigo = obj.ESP_CODIGO;
-    var veterinarioCor = obj.VET_COLOR;
 
     var consultaCodigo = obj.CON_CODIGO;
     var consultaData = obj.CON_DATA;
     var consultaHora = obj.CON_HORA;
+    var hora_consulta_fim = obj.CON_HORA_FIM;
 
     //Modal Editar
     $("#editarConsultaCodigo").val(consultaCodigo);
@@ -561,6 +562,9 @@ function fillFilds(codigo) {
     $("#editarNomeDono").val(donoNome);
     $("#editarDataConsulta").val(consultaData);
     $("#editarHoraConsulta").val(consultaHora);
+
+    $("#hora_consulta_fim").val(hora_consulta_fim);
+
     $("#veterinario_opcao").val(veterinarioNome);
     $("#veterinario_codigo").val(veterinarioCodigo);
     $("#veterinario_especialidade").val(veterinarioEspecialidade);
@@ -596,6 +600,7 @@ function clearFillds() {
   $("#editarNomeDono").val("");
   $("#editarDataConsulta").val("");
   $("#editarHoraConsulta").val("");
+  $("#hora_consulta_fim").val("");
   $("#veterinario_opcao").val("");
   $("#veterinario_codigo").val("");
   $("#veterinario_especialidade").val("");

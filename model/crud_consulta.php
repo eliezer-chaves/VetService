@@ -114,8 +114,9 @@ if ($_POST["operation"] == "create") {
         $VET_CODIGO = $_POST["veterinarioCodigo"];
         $CON_DATA = $_POST["consultaData"];
         $CON_HORA = $_POST["consultaHora"];
+        $CON_HORA_FIM = $_POST["consultaHoraFim"];
 
-        $sql = "UPDATE " . $table . " SET ANI_CODIGO = :ANI_CODIGO, VET_CODIGO = :VET_CODIGO, CON_DATA = :CON_DATA, CON_HORA = :CON_HORA WHERE CON_CODIGO = :CON_CODIGO;";
+        $sql = "UPDATE " . $table . " SET ANI_CODIGO = :ANI_CODIGO, VET_CODIGO = :VET_CODIGO, CON_DATA = :CON_DATA, CON_HORA = :CON_HORA, CON_HORA_FIM = :CON_HORA_FIM WHERE CON_CODIGO = :CON_CODIGO;";
 
         $stmt = $conexao->prepare($sql);
         $stmt->bindParam(':ANI_CODIGO', $ANI_CODIGO);
@@ -123,6 +124,7 @@ if ($_POST["operation"] == "create") {
         $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
         $stmt->bindParam(':CON_DATA', $CON_DATA);
         $stmt->bindParam(':CON_HORA', $CON_HORA);
+        $stmt->bindParam(':CON_HORA_FIM', $CON_HORA_FIM);
         $stmt->execute();
 
         echo '{"status" : "alterado"}';

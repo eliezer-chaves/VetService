@@ -125,7 +125,7 @@
     </div>
     <!-- Modal Editar -->
     <div class="modal fade" id="modalEditarConsulta" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="staticBackdropLabel">
@@ -211,6 +211,13 @@
                     <input type="time" class="form-control" id="editarHoraConsulta" />
                   </div>
                 </div>
+                <div class="col">
+                  <div class="input-group">
+                    <span class="input-group-text" for="hora_consulta">Hora Término</span>
+                    <input type="time" class="form-control" id="hora_consulta_fim" />
+                  </div>
+                </div>
+
               </div>
             </form>
           </div>
@@ -310,9 +317,7 @@
         </div>
       </div>
     </div>
-    <!-- Footer 
-    <?php include 'componentes/footer.html'; ?>
-  </div> -->
+    
     <!-- Alerta Success -->
     <div class="alert alert-success text-center" id="consultaAlterado" role="alert">
       Consulta alterada com sucesso!
