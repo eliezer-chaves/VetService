@@ -24,7 +24,7 @@ while ($row = $resultado->fetch()) {
     $consultas[] = [
         'id' => $row['CON_CODIGO'], 
         'title' => $row['ANI_NOME'], 
-        //'color' => $row['ANI_CODIGO'], 
+        'color' => $row['VET_COLOR'], 
         'start' =>  $row['CON_DATA'] . " " . $row['CON_HORA'], 
         'end' => $row['CON_DATA'] . " " . $row['CON_HORA_FIM'], 
     ];
@@ -32,6 +32,5 @@ while ($row = $resultado->fetch()) {
 if (empty($consultas)) {
     echo '{"status":"vazio"}';
 } else {
-    //
     echo json_encode($consultas);
 }

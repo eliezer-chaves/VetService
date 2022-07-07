@@ -111,11 +111,9 @@
         </div>
 
         <div id="semCadastro" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
-
           <div>
             <b class="h3">Nenhum veterinário(a) cadastrado!</b>
           </div>
-
         </div>
       </div>
     </div>
@@ -247,6 +245,7 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
+                <p><b>Ao excluir este veterinário(a), você irá excluir todas as consultas dele.</b></p>
                 <div class="col">
                   <div class="input-group d-none">
                     <span class="input-group-text">Código</span>

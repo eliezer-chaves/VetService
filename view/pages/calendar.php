@@ -30,7 +30,7 @@
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
-
+ 
 </head>
 
 <body class="">
@@ -44,7 +44,7 @@
         <?php include 'componentes/sidebar.html'; ?>
       </div>
       <!--Content -->
-      <div class="container-fluid w-75">
+      <div class="container-fluid w-75" >
         <div class="bg-white rounded shadow-lg my-5 p-3">
           <div id="calendar"></div>
         </div>
@@ -75,7 +75,7 @@
           nowIndicator: true,
           dayMaxEvents: true, // allow "more" link when too many events
           events: "../../model/load_calendar.php",
-          
+
         });
 
         calendar.render();

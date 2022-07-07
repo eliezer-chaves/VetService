@@ -5,7 +5,6 @@ $("#consultaAlterado").hide();
 $("#consultaExcluido").hide();
 $("#consultaErro").hide();
 $("#aviso").hide();
-
 $("#semConsulta").hide();
 
 function showAlertSuccess() {
@@ -92,7 +91,7 @@ function readAll() {
 
     if (obj.total == undefined) {
       $("#conteudo").hide();
-      $("#semCadastro").show();
+      $("#semConsulta").show();
     } else if (obj.status != "vazio") {
       var total = obj.total;
 
@@ -178,7 +177,7 @@ function pesquisarConsulta() {
 
       if (obj.status != "vazio") {
         $("#conteudo").show();
-        $("#semCadastro").hide();
+        $("#semConsulta").hide();
 
         var total = obj.total;
 
@@ -361,7 +360,7 @@ function loadData() {
 
     if (obj.status != "vazio") {
       $("#conteudo").show();
-      $("#semCadastro").hide();
+      $("#semConsulta").hide();
 
       var total = obj.total;
       $("#total_consultas").html(total);
@@ -402,7 +401,7 @@ function loadData() {
       }
     } else {
       $("#conteudo").hide();
-      $("#semCadastro").show();
+      $("#semConsulta").show();
     }
   });
 }

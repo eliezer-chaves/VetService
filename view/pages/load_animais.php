@@ -112,7 +112,7 @@
             <b class="h3">Nenhum animal(a) cadastrado!</b>
           </div>
         </div>
-        
+
       </div>
     </div>
 
@@ -217,6 +217,7 @@
           <div class="modal-body">
             <form class="p-3">
               <div class="row">
+                <p><b>Ao excluir este animal, você irá excluir todas as consultas dele.</b></p>
                 <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="modalExcluirAnimalCodigo" disabled />

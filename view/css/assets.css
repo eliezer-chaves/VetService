@@ -42,6 +42,11 @@ input[type="color"]:focus, #vet_color:active {
   border: solid 1px var(--color-blue);
 }
 
+input[type="button"]:active {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
 input[name="color"]:focus, input[name="color"]:focus {
   box-shadow: none;
   border: solid 1px var(--color-blue);
@@ -57,11 +62,14 @@ select[name="select"]:focus {
   border: solid 1px var(--color-blue);
 }
 
+
+
 .btn:focus {
   box-shadow: none;
 }
 .btn:active {
   box-shadow: none;
+  
 }
 input[type="time"]:focus {
   box-shadow: none;
