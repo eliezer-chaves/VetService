@@ -1,7 +1,7 @@
 <?php 	
 	function criarConexao() {
 		$host = 'localhost'; // 200.145.23.2
-		$db   = 'vetservice';
+		$db   = 'vetservice2';
 		$user = 'root';
 		$pass = '';
 		$charset = 'utf8mb4';

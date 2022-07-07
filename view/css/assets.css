@@ -37,6 +37,17 @@ input[type="search"]:focus {
   border: solid 1px var(--color-blue);
 }
 
+input[type="color"]:focus, #vet_color:active {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
+input[name="color"]:focus, input[name="color"]:focus {
+  box-shadow: none;
+  border: solid 1px var(--color-blue);
+}
+
+
 select[name="select"]:focus {
   box-shadow: none;
   border: solid 1px var(--color-blue);

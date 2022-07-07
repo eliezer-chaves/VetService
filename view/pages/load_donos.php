@@ -230,6 +230,9 @@
                 </div>
               </div>
               <div class="row">
+                <p><b> Ao excluir esse dono, os animais também serão excluídos.</b></p>
+              </div>
+              <div class="row">
                 <div class="col">
                   <div class="input-group mb-3">
                     <span class="input-group-text">Dono</span>

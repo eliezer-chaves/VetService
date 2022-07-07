@@ -40,6 +40,7 @@ function clearFilds() {
   inputNomeDonoModal.val("");
   inputVeterinarioModal.val("");
   $("#veterinario_especialidade").val("");
+  $("#hora_consulta_fim").val("")
 
 }
 
@@ -107,6 +108,7 @@ buttonCadastrar.click(function () {
   var veterinario_codigo = $("#veterinario_codigo").val();
   var data = inputDataConsulta.val();
   var hora = inputHoraConsulta.val();
+  var horaFim = $("#hora_consulta_fim").val()  
   var animalNome = inputNomeAnimal.val();
   var dono = inputNomeDono.val();
   var veterinario = $("#veterinario_opcao :selected").text();
@@ -121,6 +123,9 @@ buttonCadastrar.click(function () {
       veterinario_codigo: veterinario_codigo,
       data: data,
       hora: hora,
+
+      horaFim: horaFim,
+
       animalNome: animalNome,
       dono: dono,
       veterinario: veterinario,
@@ -128,6 +133,7 @@ buttonCadastrar.click(function () {
       operation: "create",
     },
   }).done(function (resposta) {
+    console.log(resposta)
     var obj = $.parseJSON(resposta);
     if (obj.status == "cadastrado") {
       var dia = obj.data.split("-")[0];

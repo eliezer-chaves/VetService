@@ -51,7 +51,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-6">
                   <div class="input-group mb-3">
                     <span class="input-group-text">CRMV</span>
                     <input type="text" class="form-control" id="crmv" />
@@ -94,6 +94,7 @@
 
                   </div>
                 </div>
+
               </div>
 
               <div class="row">
@@ -102,7 +103,6 @@
                     <label class="input-group-text" for="dropdown_especie">Especialidade</label>
                     <select name="select" class="form-select" id="dropdown_especialidade">
                       <option selected style="display: none;" value="0">Escolha</option>
-
                     </select>
                   </div>
                 </div>
@@ -113,7 +113,17 @@
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="">
+                  <div class="input-group">
+                    <label for="exampleColorInput" class="input-group-text">Cor</label>
+                    <input type="color" class="form-control form-control-color" name="color" id="vet_color" value="#0d6efd" title="Esta cor irá identificar o veterinário" data-bs-toggle="tooltip" data-bs-placement="top">
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div class="row d-flex justify-content-center mt-4">
               <button type="submit" class="btn btn-primary w-50" id="cadastrar">
                 Cadastrar veterinário

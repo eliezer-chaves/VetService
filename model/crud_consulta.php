@@ -23,20 +23,22 @@ if ($_POST["operation"] == "create") {
             $veterinario_codigo = $_POST["veterinario_codigo"];
             $data = $_POST["data"];
             $hora = $_POST["hora"];
+            $horaFim = $_POST["horaFim"];
 
             $sql = "INSERT INTO " . $table .
-                "(ANI_CODIGO, VET_CODIGO, CON_DATA, CON_HORA)" .
+                "(ANI_CODIGO, VET_CODIGO, CON_DATA, CON_HORA, CON_HORA_FIM)" .
                 " VALUES " .
-                "(:ANI_CODIGO, :VET_CODIGO, :CON_DATA, :CON_HORA);";
+                "(:ANI_CODIGO, :VET_CODIGO, :CON_DATA, :CON_HORA, :CON_HORA_FIM);";
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':ANI_CODIGO', $animalCodigo);
             $stmt->bindParam(':VET_CODIGO', $veterinario_codigo);
             $stmt->bindParam(':CON_DATA', $data);
             $stmt->bindParam(':CON_HORA', $hora);
+            $stmt->bindParam(':CON_HORA_FIM', $horaFim);
             $stmt->execute();
 
-            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';
+            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "horaFim":"' . $_POST['horaFim'] . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';
         } catch (Exception $e) {
             echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
         }
@@ -96,12 +98,6 @@ if ($_POST["operation"] == "create") {
             INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
             INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
             WHERE CON_CODIGO = $codigo";
-
-            /* $sql = "SELECT * FROM $table 
-            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-            WHERE CON_CODIGO = $codigo"; */
 
             $resultado = executarQuery($conexao, $sql);
             $consulta = $resultado->fetch();
@@ -251,7 +247,39 @@ if ($_POST["operation"] == "create") {
     } catch (Exception $e) {
         echo '{"status" : "erro-select", "erro":"' . $e . '"}';
     }
-}
+} else if ($_POST["operation"] == "load_calendar") {
+
+    $sql = "SELECT * FROM $table 
+        INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+        INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+        INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+        INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+        ORDER BY CON_DATA, CON_HORA";
+
+    $resultado = executarQuery($conexao, $sql);
+
+    $consultas = [];
+
+    while ($row = $resultado->fetch()) {
+        $consultas[] = [
+            'donoCodigo' => $row['DON_CODIGO'],
+            'donoNome' => $row['DON_NOME'],
+            'animalCodigo' => $row['ANI_CODIGO'],
+            'animalNome' => $row['ANI_NOME'],
+            'veterinarioCodigo' => $row['VET_CODIGO'],
+            'veterinarioNome' => $row['VET_NOME'],
+            'veterinarioEspecialidade' => $row['ESP_NOME'],
+            'consultaCodigo' => $row['CON_CODIGO'],
+            'consultaData' => $row['CON_DATA'],
+            'consultaHora' => $row['CON_HORA'],
+        ];
+    }
+    if (empty($consultas)) {
+        echo '{"status":"vazio"}';
+    } else {
+        echo json_encode($consultas);
+    }
+} 
 
 function countTable()
 {

@@ -19,6 +19,7 @@ function clearFilds() {
   dropdownEspecialidade.val("");
   inputTelefone.val("");
   inputCRMVModal.val("");
+  $("#vet_color").val("#0d6efd")
 }
 
 $(document).ready(function () {
@@ -57,6 +58,8 @@ buttonCadastrar.click(function () {
   var especialidade = $("#dropdown_especialidade :selected").val();
   var telefone = inputTelefone.val();
   var crmv_uf = crmv + "-" + uf;
+  var vetColor = $("#vet_color").val()
+  
 
   $.ajax({
     method: "POST",
@@ -67,6 +70,7 @@ buttonCadastrar.click(function () {
       crmv_uf: crmv_uf,
       especialidade: especialidade,
       telefone: telefone,
+      vetColor: vetColor,
       operation: "create",
     },
   }).done(function (resposta) {

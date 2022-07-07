@@ -60,7 +60,7 @@
             </div>
 
             <div class="row mb-3">
-              <div class="form-group">
+              <div class="form-group d-none">
                 <label for="dono_codigo">Código:</label>
                 <input id="dono_codigo" type="text" class="form-control" disabled />
               </div>
