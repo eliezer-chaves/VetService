@@ -548,6 +548,7 @@ function fillFilds(codigo) {
     var veterinarioNome = obj.VET_NOME;
     var veterinarioEspecialidade = obj.ESP_NOME;
     var veterinarioEspecialidadeCodigo = obj.ESP_CODIGO;
+    var veterinarioCor = obj.VET_COLOR;
 
     var consultaCodigo = obj.CON_CODIGO;
     var consultaData = obj.CON_DATA;

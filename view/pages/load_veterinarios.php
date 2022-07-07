@@ -207,10 +207,19 @@
               </div>
 
               <div class="row">
-                <div class="input-group">
-                  <span class="input-group-text">Telefone</span>
-                  <input type="text" class="form-control" id="veterinarioTelefone" />
+                <div class="col">
+                  <div class="input-group">
+                    <span class="input-group-text">Telefone</span>
+                    <input type="text" class="form-control" id="veterinarioTelefone" />
+                  </div>
                 </div>
+                <div class="col">
+                  <div class="input-group">
+                    <label for="exampleColorInput" class="input-group-text">Cor</label>
+                    <input type="color" class="form-control form-control-color" name="color" id="vet_color" value="#0d6efd" title="Esta cor irá identificar o veterinário" data-bs-toggle="tooltip" data-bs-placement="top">
+                  </div>
+                </div>
+
               </div>
             </form>
           </div>

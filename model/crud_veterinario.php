@@ -22,6 +22,7 @@ if ($_POST["operation"] == "create") {
         $telefone = $_POST["telefone"];
         $crmv_uf = $_POST["crmv_uf"];
         $especialidade = $_POST["especialidade"];
+        $vetColor = $_POST['vetColor'];
 
         $sql = 'SELECT VET_CRMV FROM ' . $table . ' WHERE VET_CRMV = "' . $crmv . '" ;';
         $resultado = executarQuery($conexao, $sql);
@@ -32,9 +33,9 @@ if ($_POST["operation"] == "create") {
             return;
         } else {
             $sql = "INSERT INTO " . $table .
-                "(VET_NOME, VET_CRMV, VET_TELEFONE, VET_CRMV_UF, ESP_CODIGO)" .
+                "(VET_NOME, VET_CRMV, VET_TELEFONE, VET_CRMV_UF, ESP_CODIGO, VET_COLOR)" .
                 " VALUES " .
-                "(:VET_NOME, :VET_CRMV, :VET_TELEFONE, :VET_CRMV_UF, :ESP_CODIGO);";
+                "(:VET_NOME, :VET_CRMV, :VET_TELEFONE, :VET_CRMV_UF, :ESP_CODIGO, :VET_COLOR);";
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':VET_NOME', $nome);
@@ -42,6 +43,7 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':VET_TELEFONE', $telefone);
             $stmt->bindParam(':VET_CRMV_UF', $crmv_uf);
             $stmt->bindParam(':ESP_CODIGO', $especialidade);
+            $stmt->bindParam(':VET_COLOR', $vetColor);
             $stmt->execute();
 
             echo '{ "resultado": "Veterinário cadastrado", "status": "cadastrado", "veterinario": "' . $nome . '" }';
@@ -105,8 +107,10 @@ if ($_POST["operation"] == "create") {
         $VET_CRMV_UF = $_POST["veterinarioCRMV_UF"];
         $ESP_CODIGO = $_POST["veterinarioEspecialidadeCodigo"];
         $VET_TELEFONE = $_POST["veterinarioTelefone"];
+        $VET_COLOR = $_POST["veterinarioCor"];
+        
 
-        $sql = "UPDATE " . $table . " SET VET_NOME = :VET_NOME, VET_CRMV = :VET_CRMV, VET_CRMV_UF = :VET_CRMV_UF, ESP_CODIGO = :ESP_CODIGO, VET_TELEFONE = :VET_TELEFONE WHERE VET_CODIGO = :VET_CODIGO;";
+        $sql = "UPDATE " . $table . " SET VET_NOME = :VET_NOME, VET_CRMV = :VET_CRMV, VET_CRMV_UF = :VET_CRMV_UF, ESP_CODIGO = :ESP_CODIGO, VET_TELEFONE = :VET_TELEFONE, VET_COLOR = :VET_COLOR WHERE VET_CODIGO = :VET_CODIGO;";
 
         $stmt = $conexao->prepare($sql);
         $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
@@ -115,6 +119,7 @@ if ($_POST["operation"] == "create") {
         $stmt->bindParam(':VET_CRMV', $VET_CRMV);
         $stmt->bindParam(':ESP_CODIGO', $ESP_CODIGO);
         $stmt->bindParam(':VET_CRMV_UF', $VET_CRMV_UF);
+        $stmt->bindParam(':VET_COLOR', $VET_COLOR);
         $stmt->execute();
 
         echo '{"status" : "alterado"}';

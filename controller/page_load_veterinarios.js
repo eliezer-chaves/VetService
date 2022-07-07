@@ -325,6 +325,8 @@ function updateVeterinario() {
   var veterinarioTelefone = $("#veterinarioTelefone").val();
   var veterinarioCRMV_UF = veterinarioCRMV + "-" + veterinarioUF;
 
+  var veterinarioCor = $("#vet_color").val();
+
   $.ajax({
     method: "POST",
     url: urlCRUDVeterinario,
@@ -336,9 +338,11 @@ function updateVeterinario() {
       veterinarioCRMV_UF: veterinarioCRMV_UF,
       veterinarioEspecialidadeCodigo: veterinarioEspecialidadeCodigo,
       veterinarioTelefone: veterinarioTelefone,
+      veterinarioCor: veterinarioCor,
       operation: "update",
     },
   }).done(function (resposta) {
+    console.log(resposta)
     var obj = $.parseJSON(resposta);
     if (obj.status == "alterado") {
       clearFillds();
@@ -389,12 +393,16 @@ function fillFilds(codigo) {
     var veterinarioTelefone = obj.VET_TELEFONE;
     var veterinarioCRMV_UF = obj.VET_CRMV_UF;
     var veterinarioEspecialidadeCodigo = obj.ESP_CODIGO;
+    
+    var veterinarioCor = obj.VET_COLOR;
+
     var uf = veterinarioCRMV_UF.split("-");
     var uf = uf[1];
 
     $("#veterinarioCodigo").val(veterinarioCodigo);
     $("#veterinarioNome").val(veterinarioNome);
     $("#veterinarioCRMV").val(veterinarioCRMV);
+    $("#vet_color").val(veterinarioCor);
     $("#dropdown_estado").val(uf);
     $("#dropdown_especialidade").val(veterinarioEspecialidadeCodigo);
     $("#especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
@@ -445,4 +453,6 @@ function clearFillds() {
   $("#modalExcluirVeterinarioCodigo").val("");
   $("#modalExcluirVeterinarioNome").val("");
   $("#modalExcluirVeterinarioCRMV").val("");
+  $("#vet_color").val("#0d6efd");
+
 }
