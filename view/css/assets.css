@@ -96,7 +96,7 @@ input[type="date"]:focus {
   box-shadow: none;
   border: solid 1px var(--color-blue);
 }
-#veterinario_opcao:focus {
+#veterinario_opcao:focus, #modalAdd_veterinario_opcao:focus {
   box-shadow: none;
   border: solid 1px var(--color-blue);
 }

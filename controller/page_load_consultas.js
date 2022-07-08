@@ -310,7 +310,6 @@ $("#table_count").on("change", function () {
       quantidade: total,
     },
   }).done(function (resposta) {
-    console.log(resposta);
     $("#consultas").empty();
     var obj = $.parseJSON(resposta);
 
@@ -553,7 +552,7 @@ function fillFilds(codigo) {
     var consultaData = obj.CON_DATA;
     var consultaHora = obj.CON_HORA;
     var hora_consulta_fim = obj.CON_HORA_FIM;
-
+    
     //Modal Editar
     $("#editarConsultaCodigo").val(consultaCodigo);
     $("#editarAnimalCodigo").val(animalCodigo);

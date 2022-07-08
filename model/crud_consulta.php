@@ -13,16 +13,15 @@ try {
 }
 
 if ($_POST["operation"] == "create") {
-    if (empty($_POST["animalCodigo"]) || empty($_POST["veterinario_codigo"]) || empty($_POST["data"]) || empty($_POST["hora"])) {
+    if (empty($_POST["animalCodigo"]) || empty($_POST["veterinario_codigo"]) || empty($_POST["data"]) || empty($_POST["horaInicio"])|| empty($_POST["horaFim"])) {
         echo '{"resultado": "Preencha todos os campos", "status": "incomplete"}';
         return;
     } else {
         try {
             $animalCodigo = $_POST["animalCodigo"];
-            $donoCodigo = $_POST["donoCodigo"];
             $veterinario_codigo = $_POST["veterinario_codigo"];
             $data = $_POST["data"];
-            $hora = $_POST["hora"];
+            $hora = $_POST["horaInicio"];
             $horaFim = $_POST["horaFim"];
 
             $sql = "INSERT INTO " . $table .
@@ -38,7 +37,7 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':CON_HORA_FIM', $horaFim);
             $stmt->execute();
 
-            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "horaFim":"' . $_POST['horaFim'] . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['dono'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';
+            echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "horaFim":"' . $horaFim . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['donoNome'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';
         } catch (Exception $e) {
             echo '{ "Exceção_capturada": "' . $e->getMessage() . '"}';
         }
