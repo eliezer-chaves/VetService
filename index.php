@@ -74,6 +74,7 @@
                 <div class="list-group">
                   <a href="view/pages/add_consulta.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar consulta</a>
                   <a href="view/pages/load_consultas.php" class="list-group-item list-group-item-action">Listar consultas</a>
+                  <a href="view/pages/calendar.php" class="list-group-item list-group-item-action">Ver calendário</a>
                 </div>
               </div>
             </div>

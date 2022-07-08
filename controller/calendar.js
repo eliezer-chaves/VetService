@@ -1,5 +1,23 @@
 const urlCRUDConsulta = "../../model/crud_consulta.php";
 const urlCRUDVeterinario = "../../model/crud_veterinario.php";
+$("#consultaExcluido").hide();
+$("#consultaErro").hide();
+
+function showAlertSuccessDeletado() {
+  $("#consultaExcluido")
+    .fadeTo(1000, 500)
+    .fadeIn(1000, function () {
+      $("#consultaExcluido").fadeOut(1000);
+    });
+}
+
+function showAlertWarning() {
+  $("#consultaErro")
+    .fadeTo(3000, 500)
+    .fadeIn(3000, function () {
+      $("#consultaErro").fadeOut(3000);
+    });
+}
 
 loadCalendar();
 
@@ -375,11 +393,32 @@ $(document).on("click", "button", function (element) {
     updateConsulta(codigo);
   } else if (id == "createConsulta") {
     createConsulta();
+  } else if (id == "deleteConsulta") {
+    var codigo = $("#editarConsultaCodigo").val();
+    deleteConsulta(codigo);
   } else if (id == "btn-aviso-modal") {
     $("#modalAviso").modal("hide");
     $("#modalAddConsulta").modal("show");
   }
 });
+
+function deleteConsulta(codigo) {
+  $.ajax({
+    method: "POST",
+    url: urlCRUDConsulta,
+    data: {
+      codigo: codigo,
+      operation: "delete",
+    },
+  }).done(function (resposta) {
+    var obj = $.parseJSON(resposta);
+    if (obj.status == "deletado") {
+      showAlertSuccessDeletado();
+      loadCalendar();
+    } else if (obj.status == "nao-deletado") {
+    }
+  });
+}
 
 function updateConsulta() {
   var animalCodigo = $("#editarAnimalCodigo").val();

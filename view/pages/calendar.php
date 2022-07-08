@@ -159,7 +159,7 @@
                 <div class="col">
                   <div class="input-group ">
                     <span class="input-group-text">Hora</span>
-                    <input type="time" class="form-control" id="editarHoraConsulta" />
+                    <input type="time" class="form-control" id="editarHoraConsulta" step="300"/>
                   </div>
                 </div>
                 <div class="col">
@@ -172,9 +172,9 @@
               </div>
             </form>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
-              Fechar
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" id="deleteConsulta">
+              Excluir consulta
             </button>
             <button type="button" class="btn btn-success" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" id="updateConsulta">
               Confirmar alteração
@@ -283,6 +283,16 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Alerta Success -->
+    <div class="alert alert-warning text-center" id="consultaExcluido" role="alert">
+      Consulta excluída com sucesso!
+    </div>
+
+    <!-- Alerta Erro -->
+    <div class="alert alert-warning text-center" id="consultaErro" role="alert">
+      Não foi possível excluir a consulta!
     </div>
 
     <script src="../../controller/calendar.js"></script>
