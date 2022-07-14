@@ -1,11 +1,13 @@
 const urlCRUDVeterinario = "../../model/crud_veterinario.php";
 const urlCRUDConsulta = "../../model/crud_consulta.php";
 
-$("#consultaAlterado").hide();
-$("#consultaExcluido").hide();
-$("#consultaErro").hide();
-$("#aviso").hide();
-$("#semConsulta").hide();
+document.addEventListener("DOMContentLoaded", function () {
+  $("#consultaAlterado").hide();
+  $("#consultaExcluido").hide();
+  $("#consultaErro").hide();
+  $("#aviso").hide();
+  $("#semConsulta").hide();
+});
 
 function showAlertSuccess() {
   $("#consultaAlterado")
@@ -48,35 +50,117 @@ $(document).ready(function () {
       novo_item +=
         '<option value="' +
         obj[item].veterinarioNome +
-        '" id="' +
-        obj[item].veterinarioCodigo +
-        '" name="' +
-        obj[item].veterinarioEspecialidade +
-        "-" +
-        obj[item].veterinarioEspecialidadeCodigo +
-        '"><button>' +
+        '" id="' + obj[item].veterinarioCodigo + "_"+ obj[item].veterinarioEspecialidade+"_"+ obj[item].veterinarioEspecialidadeCodigo + '"><button>' +
         obj[item].veterinarioNome +
         "</button></option>";
     });
     $("#veterinario_opcao").append(novo_item);
+    $("#modal_veterinario_opcao").append(novo_item);
 
     $("#veterinario_opcao").change(function () {
-      var value = $("#veterinario_opcao :selected").attr("id");
-      var especialidade = $("#veterinario_opcao :selected").attr("name");
+      var data = $("#veterinario_opcao :selected").attr("id");
+      var veterinarioCodigo = data.split("_")[0]
+      var especialidade  = data.split("_")[1]
+      var codigo = data.split("_")[2]
+      if (veterinarioCodigo == "veterinario"){
+        veterinarioCodigo = ""
+      }
+
+      $("#filtro_veterinario_codigo").val(veterinarioCodigo);
+      $("#veterinario_especialidade").val(especialidade);
+      $("#especialidadeCodigo").val(codigo);
+      filterTable(veterinarioCodigo)
+    });
+
+    $("#modal_veterinario_opcao").change(function () {
+      var veterinarioCodigo = $("#modal_veterinario_opcao :selected").attr(
+        "id"
+      );
+      var especialidade = $("#modal_veterinario_opcao :selected").attr("name");
       var especialidadeNome = especialidade.split("-")[0];
       var codigo = especialidade.split("-")[1];
 
-      $("#veterinario_codigo").val(value);
-      $("#veterinario_especialidade").val(especialidadeNome);
-      $("#especialidadeCodigo").val(codigo);
+      //$("#modal_veterinario_opcao").val(veterinarioNome);
+      $("#modal_veterinario_codigo").val(veterinarioCodigo);
+      $("#modal_veterinario_especialidade").val(especialidadeNome);
+      $("#modal_especialidadeCodigo").val(codigo);
     });
   });
 });
+
+function filterTable(veterinarioCodigo) {
+  var quantidade = $("#table_count").val();
+  $.ajax({
+    method: "POST",
+    url: urlCRUDConsulta,
+    data: {
+      operation: "filter_table",
+      veterinarioCodigo: veterinarioCodigo,
+      quantidade: quantidade,
+    },
+  }).done(function (resposta) {
+    //console.log(resposta)
+    
+    $("#consultas").empty();
+
+    var obj = $.parseJSON(resposta);
+
+    if (obj.total == undefined) {
+      $("#conteudo").hide();
+      $("#semConsulta").show();
+    } else if (obj.status != "vazio") {
+      var total = obj.total;
+      
+      $("#total_consultas").html(total);
+
+      /* if (total <= 5) {
+        $("#total_consultas_value").html(total);
+        $("#total_resultados").hide();
+        $("#total_consultas_busca").hide();
+        $("#total_consultas_quantidade").show();
+      } else {
+        $("#total_resultados").show();
+        $("#total_consultas_quantidade").hide();
+        $("#total_consultas_busca").hide();
+      } */
+
+      /* if (quantidade == "") {
+        quantidade = obj.total;
+      }  */
+      for (var i = 0; i < obj.total; i++) {
+        if (obj.dados[i] == undefined) {
+          break;
+        }
+        var donoNome = obj.dados[i].donoNome;
+        var animalNome = obj.dados[i].animalNome;
+        var veterinarioNome = obj.dados[i].veterinarioNome;
+        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+        var consultaCodigo = obj.dados[i].consultaCodigo;
+        var consultaData = obj.dados[i].consultaData;
+        var consultaHora = obj.dados[i].consultaHora;
+        var consultaData = obj.dados[i].consultaData;
+
+        fillTable(
+          donoNome,
+          animalNome,
+          veterinarioNome,
+          consultaCodigo,
+          consultaData,
+          consultaHora,
+          veterinarioEspecialidade
+        );
+      }
+      var total = obj.total;
+      $("#total_consultas").html(total);
+    }
+  });
+}
 
 loadData();
 
 function readAll() {
   var quantidade = $("#table_count").val();
+
   $.ajax({
     method: "POST",
     url: urlCRUDConsulta,
@@ -107,7 +191,6 @@ function readAll() {
         $("#total_consultas_quantidade").hide();
         $("#total_consultas_busca").hide();
       }
-
       if (quantidade == "") {
         quantidade = obj.total;
       }
@@ -119,6 +202,7 @@ function readAll() {
         var animalNome = obj.dados[i].animalNome;
         var veterinarioNome = obj.dados[i].veterinarioNome;
         var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
+        var especialidadeCodigo = obj.dados[i].especialidadeCodigo;
         var consultaCodigo = obj.dados[i].consultaCodigo;
         var consultaData = obj.dados[i].consultaData;
         var consultaHora = obj.dados[i].consultaHora;
@@ -184,6 +268,7 @@ function pesquisarConsulta() {
         $("#total_resultados").hide();
         $("#total_consultas_busca").show();
         $("#total_consultas_quantidade").hide();
+        $("#filtro").hide();
 
         for (var i = 0; i < obj.dados.length; i++) {
           if (obj.dados[i] == undefined) {
@@ -213,10 +298,12 @@ function pesquisarConsulta() {
         $("#aviso").show();
         $("#total_consultas_quantidade").hide();
         $("#total_resultados").hide();
+        $("#filtro").hide();
       }
     });
   } else {
     $("#table_count").val("5");
+    $("#filtro").show();
     loadData();
   }
 }
@@ -302,12 +389,17 @@ $(document).ready(function () {
 
 $("#table_count").on("change", function () {
   var total = $("#table_count").val();
+
+  var vet_codigo = $("#filtro_veterinario_codigo").val();
+
   $.ajax({
     method: "POST",
     url: urlCRUDConsulta,
     data: {
       operation: "read_all",
       quantidade: total,
+
+      vet_codigo: vet_codigo,
     },
   }).done(function (resposta) {
     $("#consultas").empty();
@@ -476,7 +568,7 @@ function fillTable(
 function updateConsulta() {
   var animalCodigo = $("#editarAnimalCodigo").val();
   var consultaCodigo = $("#editarConsultaCodigo").val();
-  var veterinarioCodigo = $("#veterinario_codigo").val();
+  var veterinarioCodigo = $("#modal_veterinario_codigo").val();
   var consultaData = $("#editarDataConsulta").val();
   var consultaHora = $("#editarHoraConsulta").val();
   var consultaHoraFim = $("#hora_consulta_fim").val();
@@ -552,7 +644,7 @@ function fillFilds(codigo) {
     var consultaData = obj.CON_DATA;
     var consultaHora = obj.CON_HORA;
     var hora_consulta_fim = obj.CON_HORA_FIM;
-    
+
     //Modal Editar
     $("#editarConsultaCodigo").val(consultaCodigo);
     $("#editarAnimalCodigo").val(animalCodigo);
@@ -561,13 +653,16 @@ function fillFilds(codigo) {
     $("#editarNomeDono").val(donoNome);
     $("#editarDataConsulta").val(consultaData);
     $("#editarHoraConsulta").val(consultaHora);
-
     $("#hora_consulta_fim").val(hora_consulta_fim);
-
     $("#veterinario_opcao").val(veterinarioNome);
     $("#veterinario_codigo").val(veterinarioCodigo);
     $("#veterinario_especialidade").val(veterinarioEspecialidade);
     $("#especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
+
+    $("#modal_veterinario_opcao").val(veterinarioNome);
+    $("#modal_veterinario_codigo").val(veterinarioCodigo);
+    $("#modal_veterinario_especialidade").val(veterinarioEspecialidade);
+    $("#modal_especialidadeCodigo").val(veterinarioEspecialidadeCodigo);
 
     var dia = consultaData.split("-")[0];
     var mes = consultaData.split("-")[1];

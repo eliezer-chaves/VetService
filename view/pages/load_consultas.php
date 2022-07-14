@@ -58,6 +58,24 @@
           </div>
 
           <div class="mt-2 shadow p-3 bg-body rounded" id="content">
+            <div class="input-group input-group-sm mb-2" id="filtro">
+              <label class="input-group-text" for="veterinario_opcao">Filtrar</label>
+              <select class="form-select" id="veterinario_opcao">
+                <option id="veterinario_opcao" selected>Todos</option>
+              </select>
+              <div class="input-group input-group-sm mt-3 d-none">
+                <span class="input-group-text">Código Veterinário:</span>
+                <input id="filtro_veterinario_codigo" type="text" class="form-control" disabled />
+              </div>
+              <div class="input-group input-group-sm mt-2 d-none">
+                <span class="input-group-text">Especialidade:</span>
+                <input id="veterinario_especialidade" type="text" class="form-control input-group-sm" disabled />
+              </div>
+              <div class="input-group input-group-sm mt-3 d-none">
+                <span class="input-group-text">Codigo Especialidade</span>
+                <input type="text" class="form-control" id="especialidadeCodigo" disabled />
+              </div>
+            </div>
 
             <div id="total_resultados" style="display: flex;">
               <div class="d-flex align-midde mb-2" style="display:flex; justify-content: center; align-items: center;">
@@ -73,9 +91,11 @@
                   </select>
                 </div>
                 <div id="text_total_consultas">
-                  as <b><span id="total_consultas"></span></b> consultas.
+                  de <b><span id="total_consultas"></span></b> consultas.
                 </div>
               </div>
+
+
             </div>
 
             <div class="mb-2 align-middle" style="display: flex;" id="total_consultas_quantidade">
@@ -174,30 +194,28 @@
 
               <div class="row">
                 <div class="input-group mb-3">
-                  <label class="input-group-text" for="veterinario_opcao">Veterinário(a)</label>
-                  <select class="form-select" id="veterinario_opcao">
-                    <option id="veterinario_opcao" selected>Escolha...</option>
+                  <label class="input-group-text" for="modal_veterinario_opcao">Veterinário(a)</label>
+                  <select class="form-select" id="modal_veterinario_opcao">
+                    <option id="modal_veterinario_opcao" selected>Escolha...</option>
 
                   </select>
 
                   <div class="input-group mt-3 d-none">
                     <span class="input-group-text">Código Veterinário:</span>
-                    <input id="veterinario_codigo" type="text" class="form-control" disabled />
+                    <input id="modal_veterinario_codigo" type="text" class="form-control" disabled />
                   </div>
 
                   <div class="input-group mt-3">
                     <span class="input-group-text">Especialidade:</span>
-                    <input id="veterinario_especialidade" type="text" class="form-control" disabled />
+                    <input id="modal_veterinario_especialidade" type="text" class="form-control" disabled />
                   </div>
 
                   <div class="input-group mt-3 d-none">
                     <span class="input-group-text">Codigo Especialidade</span>
-                    <input type="text" class="form-control" id="especialidadeCodigo" disabled />
+                    <input type="text" class="form-control" id="modal_especialidadeCodigo" disabled />
                   </div>
                 </div>
               </div>
-
-
               <div class="row">
                 <div class="col">
                   <div class="input-group mb-3">
@@ -317,7 +335,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Alerta Success -->
     <div class="alert alert-success text-center" id="consultaAlterado" role="alert">
       Consulta alterada com sucesso!

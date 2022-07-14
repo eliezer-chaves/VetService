@@ -41,15 +41,9 @@ function loadCalendar() {
         daysOfWeek: [1, 2, 3, 4, 5], // Monday, Tuesday, Wednesday
         startTime: "00:00", // 8am
         endTime: "23:59", // 6pm
-      },
-      /* ,
-            {
-              daysOfWeek: [4, 5], // Thursday, Friday
-              startTime: '10:00', // 10am
-              endTime: '16:00' // 4pm
-            } */
-    ],
-
+      }
+    ], 
+    
     initialView: "dayGridMonth",
     views: {
       listWeek: {
@@ -64,6 +58,7 @@ function loadCalendar() {
     editable: true,
     selectable: true,
     nowIndicator: true,
+    
 
     dayMaxEvents: true, // allow "more" link when too many events
     events: "../../model/load_calendar.php",
@@ -101,6 +96,7 @@ function loadCalendar() {
     },
 
     select: function (info) {
+      clearFillds()
       var hora = info.start.toLocaleString().substr(11);
 
       $("#modalAdd_DataConsulta").val(info.startStr.substr(0, 10));
@@ -140,6 +136,7 @@ function fillModal(
 }
 
 function clearFillds() {
+  console.log("limpar")
   $("#editarConsultaCodigo").val("");
   $("#editarAnimalCodigo").val("");
   $("#editarAnimalNome").val("");
@@ -158,6 +155,14 @@ function clearFillds() {
   $("#modalAdd_DataConsulta").val("");
   $("#modalAdd_hora_consulta_fim").val("");
   $("#modalAdd_HoraConsulta").val("");
+  $("#modalAddAnimalNome").val("");
+  $("#modalAdd_NomeDono").val("");
+  $("#modalAdd_veterinario_opcao").val("");
+  $("#modadlAdd_veterinario_especialidade").val("");
+  
+  
+  
+  
 }
 
 //Autocomplete Adicionar
@@ -341,7 +346,7 @@ $(document).ready(function () {
   });
 });
 
-//LoadDropdown Adcionar
+//LoadDropdown Adicionar
 $(document).ready(function () {
   $.ajax({
     method: "POST",
@@ -479,6 +484,7 @@ function createConsulta() {
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "cadastrado") {
+      clearFillds()
       loadCalendar();
     } else if (obj.status == "incomplete") {
       $("#modalAviso").modal("show");
