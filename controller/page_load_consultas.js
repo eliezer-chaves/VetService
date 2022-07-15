@@ -50,7 +50,13 @@ $(document).ready(function () {
       novo_item +=
         '<option value="' +
         obj[item].veterinarioNome +
-        '" id="' + obj[item].veterinarioCodigo + "_"+ obj[item].veterinarioEspecialidade+"_"+ obj[item].veterinarioEspecialidadeCodigo + '"><button>' +
+        '" id="' +
+        obj[item].veterinarioCodigo +
+        "_" +
+        obj[item].veterinarioEspecialidade +
+        "_" +
+        obj[item].veterinarioEspecialidadeCodigo +
+        '"><button>' +
         obj[item].veterinarioNome +
         "</button></option>";
     });
@@ -59,17 +65,17 @@ $(document).ready(function () {
 
     $("#veterinario_opcao").change(function () {
       var data = $("#veterinario_opcao :selected").attr("id");
-      var veterinarioCodigo = data.split("_")[0]
-      var especialidade  = data.split("_")[1]
-      var codigo = data.split("_")[2]
-      if (veterinarioCodigo == "veterinario"){
-        veterinarioCodigo = ""
+      var veterinarioCodigo = data.split("_")[0];
+      var especialidade = data.split("_")[1];
+      var codigo = data.split("_")[2];
+      if (veterinarioCodigo == "veterinario") {
+        veterinarioCodigo = "";
       }
 
       $("#filtro_veterinario_codigo").val(veterinarioCodigo);
       $("#veterinario_especialidade").val(especialidade);
       $("#especialidadeCodigo").val(codigo);
-      filterTable(veterinarioCodigo)
+      filterTable(veterinarioCodigo);
     });
 
     $("#modal_veterinario_opcao").change(function () {
@@ -99,8 +105,6 @@ function filterTable(veterinarioCodigo) {
       quantidade: quantidade,
     },
   }).done(function (resposta) {
-    //console.log(resposta)
-    
     $("#consultas").empty();
 
     var obj = $.parseJSON(resposta);
@@ -110,7 +114,7 @@ function filterTable(veterinarioCodigo) {
       $("#semConsulta").show();
     } else if (obj.status != "vazio") {
       var total = obj.total;
-      
+
       $("#total_consultas").html(total);
 
       /* if (total <= 5) {
@@ -549,6 +553,11 @@ function fillTable(
     veterinarioEspecialidade +
     "</td>" +
     '<td class="text-center text-center">' +
+    '<button class="btn btn-success me-2" id="diagnostico' +
+    consultaCodigo +
+    '" data-bs-toggle="modal" data-bs-target="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
+    '<i class="fa-solid fa-file-pen"></i>' +
+    "</button>" +
     '<button class="btn btn-warning me-2" id="editar' +
     consultaCodigo +
     '" data-bs-toggle="modal" data-bs-target="#modalEditarConsulta" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +

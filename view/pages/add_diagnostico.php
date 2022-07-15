@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8" />
+<meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VetService</title>
@@ -25,7 +25,7 @@
 
 </head>
 
-<body class="bg-light">
+<body>
   <div id="box">
     <!-- Header -->
     <?php include 'componentes/header.html'; ?>
@@ -37,7 +37,7 @@
       </div>
       <!-- Content -->
       <div class="container-fluid w-75">
-        <div class="bg-light mt-3 shadow p-3 mb-5 bg-body rounded">
+        <div class="bg-light mt-5 shadow p-3 mb-5 bg-body rounded">
           <form class="p-3">
             <div class="mb-3">
               <h2 class="text-center title">Gerar diagnóstico</h2>
@@ -45,14 +45,28 @@
             <div class="row">
               <div class="col">
                 <div class="input-group mb-3">
+                  <span class="input-group-text">Código Animal</span>
+                  <input type="text" class="form-control" id="codigoAnimal" disabled />
+                </div>
+              </div>
+              <div class="col">
+                <div class="input-group mb-3">
+                  <span class="input-group-text">Código Dono</span>
+                  <input type="text" class="form-control"  id="codigoDono" disabled />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="input-group mb-3">
                   <span class="input-group-text">Animal</span>
-                  <input type="text" class="form-control" disabled />
+                  <input type="text" class="form-control"  id="nomeAnimal" disabled />
                 </div>
               </div>
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Dono</span>
-                  <input type="text" class="form-control" disabled />
+                  <input type="text" class="form-control" id="nomeDono" disabled />
                 </div>
               </div>
             </div>
@@ -60,13 +74,13 @@
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Data</span>
-                  <input type="date" class="form-control" disabled readonly />
+                  <input type="date" class="form-control" id="dataConsulta" disabled readonly />
                 </div>
               </div>
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Hora</span>
-                  <input type="time" class="form-control" disabled readonly />
+                  <input type="time" class="form-control" id="horaConsulta" disabled readonly />
                 </div>
               </div>
             </div>
@@ -81,7 +95,7 @@
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Altura</span>
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" id="altura" />
                 </div>
               </div>
             </div>
@@ -90,13 +104,13 @@
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Temperatura</span>
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" id="temperatura"/>
                 </div>
               </div>
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Pressão</span>
-                  <input type="text" class="form-control" />
+                  <input type="text" class="form-control" id="pressao"/>
                 </div>
               </div>
             </div>
@@ -104,14 +118,14 @@
             <div class="row">
               <div class="col">
                 <div class="form-floating">
-                  <textarea class="form-control" id="floatingTextarea" style="height: 200px"></textarea>
-                  <label for="floatingTextarea">Sintomas</label>
+                  <textarea class="form-control" id="sintomas" style="height: 200px" ></textarea>
+                  <label for="sintomas">Sintomas</label>
                 </div>
               </div>
             </div>
 
             <div class="row d-flex justify-content-center mt-4">
-              <button type="submit" class="btn btn-primary w-50">
+              <button type="submit" class="btn btn-primary w-50" id="cadastrar">
                 Gerar
               </button>
             </div>
@@ -119,9 +133,8 @@
         </div>
       </div>
     </div>
-    <!-- Footer -->
-    <?php include 'componentes/footer.html'; ?>
   </div>
+  
   <script>
   </script>
 </body>

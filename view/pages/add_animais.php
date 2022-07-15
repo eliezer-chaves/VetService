@@ -168,9 +168,6 @@
         </div>
       </div>
     </div>
-    <!-- <div>
-      <?php include 'componentes/footer.html'; ?>
-    </div> -->
     <script src="../../controller/page_add_animais.js"></script>
 </body>
 

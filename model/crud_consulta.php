@@ -313,8 +313,6 @@ if ($_POST["operation"] == "create") {
         echo json_encode($consultas);
     }
 } else if ($_POST["operation"] == "filter_table") {
-
-
     $quantidade = $_POST["quantidade"];
     $veterinarioCodigo = $_POST["veterinarioCodigo"];
 
@@ -325,19 +323,38 @@ if ($_POST["operation"] == "create") {
             INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
             INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
             INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-            
             ORDER BY CON_DATA, CON_HORA;";
+
+            $contador = "SELECT COUNT(*) FROM $table
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            ORDER BY CON_DATA, CON_HORA;";
+
+            $stmtContador = executarQuery($conexao, $contador);
+            $totalROWS = $stmtContador->fetchColumn();
         } else {
             $sql = "SELECT * FROM $table 
             INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
             INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
             INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
             INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-            
             ORDER BY CON_DATA, CON_HORA LIMIT $quantidade; ";
+
+
+            $contador = "SELECT COUNT(*) FROM $table
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            ORDER BY CON_DATA, CON_HORA LIMIT $quantidade; ";
+
+            $stmtContador = executarQuery($conexao, $contador);
+            $totalROWS = $stmtContador->fetchColumn();
         }
     } else {
-        if ($quantidade == ""){
+        if ($quantidade == "") {
             $sql = "SELECT * FROM $table 
             INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
             INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
@@ -345,25 +362,42 @@ if ($_POST["operation"] == "create") {
             INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
             WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
             ORDER BY CON_DATA, CON_HORA;";
-        }
-        else{
+
+            $contador = "SELECT COUNT(*) FROM $table
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
+            ORDER BY CON_DATA, CON_HORA;";
+
+            $stmtContador = executarQuery($conexao, $contador);
+            $totalROWS = $stmtContador->fetchColumn();
+        } else {
             $sql = "SELECT * FROM $table 
-        INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-        INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-        INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-        INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-        WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
-        ORDER BY CON_DATA, CON_HORA LIMIT $quantidade;";
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
+            ORDER BY CON_DATA, CON_HORA LIMIT $quantidade;";
+
+            $contador = "SELECT COUNT(*) FROM $table
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
+            ORDER BY CON_DATA, CON_HORA LIMIT $quantidade;";
+
+            $stmtContador = executarQuery($conexao, $contador);
+            $totalROWS = $stmtContador->fetchColumn();
         }
-        
     }
 
-   
     $resultado = executarQuery($conexao, $sql);
 
     $animais = [];
-
-    $contador =  0;
 
     while ($row = $resultado->fetch()) {
         $animais[] = [
@@ -379,12 +413,11 @@ if ($_POST["operation"] == "create") {
             'consultaData' => $row['CON_DATA'],
             'consultaHora' => $row['CON_HORA'],
         ];
-        $contador++;
     }
     if (empty($animais)) {
         echo '{"status":"vazio"}';
     } else {
-        $totalROWS = countTable();
+        //$totalROWS = countTable();
         $animais = json_encode($animais);
         echo '{"total" : "' . $totalROWS . '", "dados" : ' . $animais . '}';
     }

@@ -51,7 +51,7 @@
       </div>
       <!--Content -->
       <div class="container-fluid ">
-        <div class="bg-white rounded shadow-lg mt-3 mb-5 p-3">
+        <div class="bg-white rounded shadow mt-3 mb-5 p-3">
           <div id="calendar"></div>
 
         </div>

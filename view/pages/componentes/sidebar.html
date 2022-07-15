@@ -1,88 +1,173 @@
 <div class="accordion accordion-flush" id="accordion">
-    <!-- Item do accordion -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion-animais-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-animais">
-                <i class="me-2 fa-solid fa-dog"></i>Animais
-            </button>
-        </h2>
-        <div id="accordion-animais" class="accordion-collapse collapse">
-            <div class="">
-                <div class="list-group">
-                    <a href="add_animais.php" class="list-group-item list-group-item-action">Adicionar animais</a>
-                    <a href="load_animais.php" class="list-group-item list-group-item-action">Listar animais</a>
-                </div>
-            </div>
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-animais-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-animais"
+      >
+        <i class="me-2 fa-solid fa-dog"></i>Animais
+      </button>
+    </h2>
+    <div id="accordion-animais" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <a
+            href="add_animais.php"
+            class="list-group-item list-group-item-action"
+            >Adicionar animais</a
+          >
+          <a
+            href="load_animais.php"
+            class="list-group-item list-group-item-action"
+            >Listar animais</a
+          >
         </div>
+      </div>
     </div>
-      <!-- Item do accordion -->
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion-consultas-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-consultas">
-                <i class="me-2 fa-solid fa-calendar-days"></i>Consultas
-            </button>
-        </h2>
-        <div id="accordion-consultas" class="accordion-collapse collapse">
-            <div class="">
-                <div class="list-group">
-                    <a href="add_consulta.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar consulta</a>
-                    <a href="load_consultas.php" class="list-group-item list-group-item-action">Listar consultas</a>
-                    <a href="calendar.php" class="list-group-item list-group-item-action">Ver calendário</a>
-                </div>
-            </div>
+  </div>
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-consultas-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-consultas"
+      >
+        <i class="me-2 fa-solid fa-calendar-days"></i>Consultas
+      </button>
+    </h2>
+    <div id="accordion-consultas" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <!-- <a href="add_consulta.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar consulta</a> -->
+          <a
+            href="load_consultas.php"
+            class="list-group-item list-group-item-action"
+            >Listar consultas</a
+          >
+          <a href="calendar.php" class="list-group-item list-group-item-action"
+            >Ver calendário</a
+          >
         </div>
+      </div>
     </div>
-    <!-- Item do accordion -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion-donos-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-donos">
-            <i class="me-2 fa-solid fa-person"></i>Donos
-            </button>
-        </h2>
-        <div id="accordion-donos" class="accordion-collapse collapse">
-            <div class="">
-                <div class="list-group">
-                    <a href="add_donos.php" class="list-group-item list-group-item-action">Adicionar donos</a>
-                    <a href="load_donos.php" class="list-group-item list-group-item-action">Listar donos</a>
-                </div>
-            </div>
+  </div>
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-diagnostico-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-diagnostico"
+      >
+      <i class="me-2 fa-solid fa-file-pen"></i>Diagnósticos
+      </button>
+    </h2>
+    <div id="accordion-diagnostico" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <a href="add_diagnostico.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar diagnóstico</a>
+          <a
+            href="#"
+            class="list-group-item list-group-item-action"
+            >Consultar diagnósticos</a
+          >
         </div>
+      </div>
     </div>
-    
-    <!-- Item do accordion -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion-consultas-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-especialidades">
-                <i class="me-2 fa-solid fa-stethoscope"></i>Especialidades
-            </button>
-        </h2>
-        <div id="accordion-especialidades" class="accordion-collapse collapse">
-            <div class="">
-                <div class="list-group">
-                    <a href="add_especialidade.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar especialidade</a>
-                    <a href="load_especialidades.php" class="list-group-item list-group-item-action">Listar especialidades</a>
-                </div>
-            </div>
+  </div>
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-donos-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-donos"
+      >
+        <i class="me-2 fa-solid fa-person"></i>Donos
+      </button>
+    </h2>
+    <div id="accordion-donos" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <a href="add_donos.php" class="list-group-item list-group-item-action"
+            >Adicionar donos</a
+          >
+          <a
+            href="load_donos.php"
+            class="list-group-item list-group-item-action"
+            >Listar donos</a
+          >
         </div>
+      </div>
     </div>
-  
-    <!-- Item do accordion -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="accordion-consultas-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-veterinarios">
-                <i class="me-2 fa-solid fa-user-doctor"></i>Veterinários
-            </button>
-        </h2>
-        <div id="accordion-veterinarios" class="accordion-collapse collapse">
-            <div class="">
-                <div class="list-group">
-                    <a href="add_veterinario.php" class="list-group-item list-group-item-action" aria-current="true">Adicionar veterinário</a>
-                    <a href="load_veterinarios.php" class="list-group-item list-group-item-action">Listar veterinários</a>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 
-    
-   
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-consultas-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-especialidades"
+      >
+        <i class="me-2 fa-solid fa-stethoscope"></i>Especialidades
+      </button>
+    </h2>
+    <div id="accordion-especialidades" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <a
+            href="add_especialidade.php"
+            class="list-group-item list-group-item-action"
+            aria-current="true"
+            >Adicionar especialidade</a
+          >
+          <a
+            href="load_especialidades.php"
+            class="list-group-item list-group-item-action"
+            >Listar especialidades</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Item do accordion -->
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="accordion-consultas-header">
+      <button
+        class="accordion-button collapsed"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#accordion-veterinarios"
+      >
+        <i class="me-2 fa-solid fa-user-doctor"></i>Veterinários
+      </button>
+    </h2>
+    <div id="accordion-veterinarios" class="accordion-collapse collapse">
+      <div class="">
+        <div class="list-group">
+          <a
+            href="add_veterinario.php"
+            class="list-group-item list-group-item-action"
+            aria-current="true"
+            >Adicionar veterinário</a
+          >
+          <a
+            href="load_veterinarios.php"
+            class="list-group-item list-group-item-action"
+            >Listar veterinários</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

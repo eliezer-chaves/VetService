@@ -39,12 +39,17 @@ function loadCalendar() {
       // specify an array instead
       {
         daysOfWeek: [1, 2, 3, 4, 5], // Monday, Tuesday, Wednesday
-        startTime: "00:00", // 8am
-        endTime: "23:59", // 6pm
-      }
-    ], 
-    
-    initialView: "dayGridMonth",
+        startTime: "00:00",
+        endTime: "23:59",
+      },
+    ],
+    dayHeaderFormat: {
+      weekday: "long",
+      
+    },
+    //hiddenDays: [0],
+    //weekends: false,
+    initialView: "timeGridWeek",
     views: {
       listWeek: {
         buttonText: "Consultas da semana",
@@ -58,7 +63,6 @@ function loadCalendar() {
     editable: true,
     selectable: true,
     nowIndicator: true,
-    
 
     dayMaxEvents: true, // allow "more" link when too many events
     events: "../../model/load_calendar.php",
@@ -96,8 +100,19 @@ function loadCalendar() {
     },
 
     select: function (info) {
-      clearFillds()
+      clearFillds();
       var hora = info.start.toLocaleString().substr(11);
+
+      var data = new Date(info.start);
+      var time = data.getHours();
+      var time = time + 1;
+      if (time < 10) {
+        time = "0" + time;
+      }
+      time.toString();
+      time = time + ":00:00";
+
+      $("#modalAdd_hora_consulta_fim").val(time);
 
       $("#modalAdd_DataConsulta").val(info.startStr.substr(0, 10));
       $("#modalAdd_HoraConsulta").val(hora);
@@ -136,7 +151,6 @@ function fillModal(
 }
 
 function clearFillds() {
-  console.log("limpar")
   $("#editarConsultaCodigo").val("");
   $("#editarAnimalCodigo").val("");
   $("#editarAnimalNome").val("");
@@ -159,10 +173,6 @@ function clearFillds() {
   $("#modalAdd_NomeDono").val("");
   $("#modalAdd_veterinario_opcao").val("");
   $("#modadlAdd_veterinario_especialidade").val("");
-  
-  
-  
-  
 }
 
 //Autocomplete Adicionar
@@ -484,7 +494,7 @@ function createConsulta() {
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "cadastrado") {
-      clearFillds()
+      clearFillds();
       loadCalendar();
     } else if (obj.status == "incomplete") {
       $("#modalAviso").modal("show");
