@@ -242,8 +242,23 @@ $(document).on("click", "button", function (element) {
   } else if (id == "deleteConsulta") {
     var codigo = $("#excluirConsultaCodigo").val();
     deleteConsulta(codigo);
+  } else if (id.includes("diagnostico")) {
+    var codigo = id.replace("diagnostico", "");
+    setCookie("codigoConsulta", codigo);
+    window.location.href = "../../view/pages/add_diagnostico.php";
   }
 });
+
+function setCookie(name, value) {
+  var now = new Date();
+  var minutes = 30;
+  now.setTime(now.getTime() + minutes * 60 * 1000);
+  
+  var meuCookie = name + "=" + value+";";
+  
+  document.cookie = meuCookie;
+  
+}
 
 function pesquisarConsulta() {
   var nome = $("#nome_search").val();
@@ -555,7 +570,7 @@ function fillTable(
     '<td class="text-center text-center">' +
     '<button class="btn btn-success me-2" id="diagnostico' +
     consultaCodigo +
-    '" data-bs-toggle="modal" data-bs-target="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar diagnóstico">' +
+    '" title="Gerar diagnóstico">' +
     '<i class="fa-solid fa-file-pen"></i>' +
     "</button>" +
     '<button class="btn btn-warning me-2" id="editar' +
