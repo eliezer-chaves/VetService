@@ -136,7 +136,7 @@
 
         <div id="semConsulta" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
           <div>
-            <b class="h3">Nenhuma consulta cadastrada!</b>
+            <b class="h3">Nenhuma consulta a ser realizada!</b>
           </div>
 
         </div>

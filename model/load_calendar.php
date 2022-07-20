@@ -16,6 +16,18 @@ $sql = "SELECT * FROM $table
         INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
         ORDER BY CON_DATA, CON_HORA";
 
+/* $sql = "SELECT * FROM $table 
+INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+
+WHERE CON_REALIZADA = false
+
+ORDER BY CON_DATA, CON_HORA"; */
+
+
+
 $resultado = executarQuery($conexao, $sql);
 
 $consultas = [];

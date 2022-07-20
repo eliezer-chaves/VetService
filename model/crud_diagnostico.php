@@ -2,6 +2,7 @@
 include 'db/connect.php';
 
 $table = "tbl_diagnostico";
+$table_consulta = "tbl_consulta";
 
 try {
     $conexao = criarConexao();
@@ -423,6 +424,24 @@ if ($_POST["operation"] == "create") {
         //$totalROWS = countTable();
         $animais = json_encode($animais);
         echo '{"total" : "' . $totalROWS . '", "dados" : ' . $animais . '}';
+    }
+} else if ($_POST["operation"] == "update_consulta") {
+    try {
+        if (isset($_POST["codigoConsulta"])) {
+            $codigo = $_POST["codigoConsulta"];
+
+            $sql = "UPDATE $table_consulta SET CON_REALIZADA = true WHERE CON_CODIGO = :CON_CODIGO;";
+
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindParam(':CON_CODIGO', $codigo);
+            $stmt->execute();
+
+            echo '{"status" : "alterado"}';
+        } else {
+            echo '{"status" : "nao-alterado"}';
+        }
+    } catch (Exception $e) {
+        echo '{"status" : "erro-select", "erro" : "' . $e . '" }';
     }
 }
 

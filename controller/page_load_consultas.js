@@ -56,6 +56,10 @@ $(document).ready(function () {
         obj[item].veterinarioEspecialidade +
         "_" +
         obj[item].veterinarioEspecialidadeCodigo +
+        '" name="' +
+        obj[item].veterinarioEspecialidade +
+        "-" +
+        obj[item].veterinarioEspecialidadeCodigo +
         '"><button>' +
         obj[item].veterinarioNome +
         "</button></option>";
@@ -83,6 +87,7 @@ $(document).ready(function () {
         "id"
       );
       var especialidade = $("#modal_veterinario_opcao :selected").attr("name");
+
       var especialidadeNome = especialidade.split("-")[0];
       var codigo = especialidade.split("-")[1];
 
@@ -117,7 +122,7 @@ function filterTable(veterinarioCodigo) {
 
       $("#total_consultas").html(total);
 
-      /* if (total <= 5) {
+      if (total <= 5) {
         $("#total_consultas_value").html(total);
         $("#total_resultados").hide();
         $("#total_consultas_busca").hide();
@@ -126,11 +131,8 @@ function filterTable(veterinarioCodigo) {
         $("#total_resultados").show();
         $("#total_consultas_quantidade").hide();
         $("#total_consultas_busca").hide();
-      } */
-
-      /* if (quantidade == "") {
-        quantidade = obj.total;
-      }  */
+      }
+      
       for (var i = 0; i < obj.total; i++) {
         if (obj.dados[i] == undefined) {
           break;
@@ -164,12 +166,15 @@ loadData();
 
 function readAll() {
   var quantidade = $("#table_count").val();
-
+  var veterinarioCodigo = $("#modal_veterinario_codigo").val()
+  veterinarioCodigo = veterinarioCodigo.split("_")[0]
+  veterinarioCodigo = ""
   $.ajax({
     method: "POST",
     url: urlCRUDConsulta,
     data: {
       operation: "read_all",
+      veterinarioCodigo: veterinarioCodigo,
       quantidade: quantidade,
     },
   }).done(function (resposta) {
@@ -253,11 +258,10 @@ function setCookie(name, value) {
   var now = new Date();
   var minutes = 30;
   now.setTime(now.getTime() + minutes * 60 * 1000);
-  
-  var meuCookie = name + "=" + value+";";
-  
+
+  var meuCookie = name + "=" + value + ";";
+
   document.cookie = meuCookie;
-  
 }
 
 function pesquisarConsulta() {
@@ -409,7 +413,7 @@ $(document).ready(function () {
 $("#table_count").on("change", function () {
   var total = $("#table_count").val();
 
-  var vet_codigo = $("#filtro_veterinario_codigo").val();
+  var veterinarioCodigo = $("#filtro_veterinario_codigo").val();
 
   $.ajax({
     method: "POST",
@@ -418,7 +422,7 @@ $("#table_count").on("change", function () {
       operation: "read_all",
       quantidade: total,
 
-      vet_codigo: vet_codigo,
+      veterinarioCodigo: veterinarioCodigo,
     },
   }).done(function (resposta) {
     $("#consultas").empty();
@@ -593,6 +597,7 @@ function updateConsulta() {
   var animalCodigo = $("#editarAnimalCodigo").val();
   var consultaCodigo = $("#editarConsultaCodigo").val();
   var veterinarioCodigo = $("#modal_veterinario_codigo").val();
+  var veterinarioNome = $("#modal_veterinario_opcao").val();
   var consultaData = $("#editarDataConsulta").val();
   var consultaHora = $("#editarHoraConsulta").val();
   var consultaHoraFim = $("#hora_consulta_fim").val();
@@ -612,6 +617,7 @@ function updateConsulta() {
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "alterado") {
+      $("#veterinario_opcao").val(veterinarioNome);
       clearFillds();
       $("#modalEditarConsulta").modal("hide");
       readAll();

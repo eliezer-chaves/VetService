@@ -116,7 +116,7 @@
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">Peso (Kg)</span>
-                  <input type="number" min="0" step=".1"  class="form-control" id="peso" />
+                  <input type="number" min="0" step=".1" class="form-control" id="peso" />
                 </div>
               </div>
               <div class="col">
@@ -128,7 +128,7 @@
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">BPM</span>
-                  <input type="number" min="0" step="1"  class="form-control" id="bpm" />
+                  <input type="number" min="0" step="1" class="form-control" id="bpm" />
                 </div>
               </div>
             </div>
@@ -169,6 +169,22 @@
       </div>
     </div>
   </div>
+  <!-- Modal Cadastrado -->
+  <div id="modalDiagnosticoRealizado" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-header-cadastrado">Diagnóstico Cadastrado!</h4>
+        </div>
+        <div class="modal-body">
+          <p>Diagnóstico cadastrado com sucesso</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="changeConsultaStatus" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const urlCRUDConsulta = "../../model/crud_consulta.php";
@@ -185,8 +201,6 @@
     if (codigoConsulta == "" || codigoConsulta == null) {
       window.location.href = "../../view/pages/load_consultas.php";
     } else {
-      //codigoConsulta = codigoConsulta.split(",")[0]
-
       fillFilds(codigoConsulta)
     }
 
@@ -199,6 +213,7 @@
           operation: "read_one",
         },
       }).done(function(resposta) {
+        console.log(resposta)
         var obj = $.parseJSON(resposta);
 
         var donoCodigo = obj.DON_CODIGO;
@@ -261,8 +276,8 @@
         console.log(resposta)
         var obj = $.parseJSON(resposta);
         if (obj.status == "cadastrado") {
+          $("#modalDiagnosticoRealizado").modal('show')
 
-          setCookie("codigoConsulta", "")
         }
         if (obj.status == "incomplete") {
           console.log("incomplete")
@@ -271,11 +286,40 @@
 
 
     })
+    $("#changeConsultaStatus").click(function() {
+      $("#modalDiagnosticoRealizado").modal('hide')
+      var codigoConsulta = $("#codigoConsulta").val()
+      $.ajax({
+        method: "POST",
+        url: urlCRUDDiagnostico,
+        data: {
+          codigoConsulta: codigoConsulta,
+          operation: "update_consulta",
+        },
+      }).done(function(resposta) {
+        clearFillds()
+        setCookie("codigoConsulta", "")
+        location.reload()
+      });
+    })
 
     $("#limpar").click(function() {
       setCookie("codigoConsulta", "")
       location.reload()
     })
+
+    function clearFillds() {
+      $("#codigoAnimal").val("")
+      $("#codigoDono").val("")
+      $("#nomeAnimal").val("")
+      $("#nomeDono").val("")
+      $("#nomeVeterinario").val("")
+      $("#codigoVeterinario").val("")
+      $("#codigoEspecialidade").val("")
+      $("#dataConsulta").val("")
+      $("#horaConsulta").val("")
+      $("#codigoConsulta").val("")
+    }
 
     function setCookie(name, value, duration) {
       var now = new Date();
