@@ -169,6 +169,7 @@
       </div>
     </div>
     <script src="../../controller/page_add_animais.js"></script>
+
 </body>
 
 </html>

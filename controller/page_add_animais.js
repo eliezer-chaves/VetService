@@ -61,6 +61,7 @@ buttonCadastrar.click(function () {
   } else {
     var especie = "";
   }
+  
   $.ajax({
     method: "POST",
     url: urlCRUDAnimal,
@@ -74,6 +75,7 @@ buttonCadastrar.click(function () {
       operation: "create",
     },
   }).done(function (resposta) {
+    
     var obj = $.parseJSON(resposta);
     if (obj.status == "cadastrado") {
       modalAnimalCadastrado.modal("show");

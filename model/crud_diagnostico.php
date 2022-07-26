@@ -3,7 +3,11 @@ include 'db/connect.php';
 
 $table = "tbl_diagnostico";
 $table_consulta = "tbl_consulta";
-
+$table_reference_dono = "tbl_dono";
+$table_reference_consulta = "tbl_consulta";
+$table_reference_animal = "tbl_animal";
+$table_reference_especialidade = "tbl_especialidade";
+$table_reference_veterinario = "tbl_veterinario";
 try {
     $conexao = criarConexao();
 } catch (Exception $e) {
@@ -50,47 +54,22 @@ if ($_POST["operation"] == "create") {
     try {
         $total = $_POST["quantidade"];
 
-        $veterinarioCodigo = $_POST["vet_codigo"];
-
         if ($total == "") {
-
-            if ($veterinarioCodigo == "") {
-                $sql = "SELECT * FROM $table 
-                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-                ORDER BY CON_DATA, CON_HORA;";
-            } else {
-                $sql = "SELECT * FROM $table 
-                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-                
-                WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
-                
-                ORDER BY CON_DATA, CON_HORA;";
-            }
+            $sql = "SELECT * FROM $table 
+            INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_consulta.CON_CODIGO
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table_reference_consulta.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            ORDER BY ANI_NOME, CON_DATA, CON_HORA;";
         } else {
-            if ($veterinarioCodigo == "") {
-                $sql = "SELECT * FROM $table 
-                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-                ORDER BY CON_DATA, CON_HORA LIMIT $total;";
-            } else {
-                $sql = "SELECT * FROM $table 
-                INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-                INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-                INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-                INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-                
-                WHERE $table_reference_veterinario.VET_CODIGO = $veterinarioCodigo
-                
-                ORDER BY CON_DATA, CON_HORA LIMIT $total;;";
-            }
+            $sql = "SELECT * FROM $table
+            INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_consulta.CON_CODIGO 
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table_reference_consulta.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            ORDER BY ANI_NOME, CON_DATA, CON_HORA LIMIT $total;";
         }
 
         $resultado = executarQuery($conexao, $sql);
@@ -110,6 +89,7 @@ if ($_POST["operation"] == "create") {
                 'consultaCodigo' => $row['CON_CODIGO'],
                 'consultaData' => $row['CON_DATA'],
                 'consultaHora' => $row['CON_HORA'],
+                'diagnosticoCodigo' => $row['DIG_CODIGO'],
             ];
         }
         if (empty($animais)) {
@@ -128,16 +108,17 @@ if ($_POST["operation"] == "create") {
             $codigo = $_POST["codigo"];
 
             $sql = "SELECT * FROM $table 
+            INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_consulta.CON_CODIGO
             INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
             INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-            INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table_reference_consulta.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
             INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-            WHERE CON_CODIGO = $codigo";
+            WHERE $table.DIG_CODIGO = $codigo";
 
             $resultado = executarQuery($conexao, $sql);
-            $consulta = $resultado->fetch();
+            $diagnostico = $resultado->fetch();
 
-            echo json_encode($consulta);
+            echo json_encode($diagnostico);
         }
     } catch (Exception $e) {
         echo '{"status" : "erro-select", "erro" : "' . $e . '" }';
@@ -211,18 +192,19 @@ if ($_POST["operation"] == "create") {
 } else if ($_POST["operation"] == "load_page") {
 
     $sql = "SELECT * FROM $table 
+    INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_consulta.CON_CODIGO
     INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
     INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-    INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+    INNER JOIN $table_reference_veterinario ON $table_reference_consulta.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
     INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-    ORDER BY CON_DATA, CON_HORA";
+    ORDER BY ANI_NOME, CON_DATA, CON_HORA;";
 
     $resultado = executarQuery($conexao, $sql);
 
-    $consultas = [];
+    $diagnosticos = [];
 
     while ($row = $resultado->fetch()) {
-        $consultas[] = [
+        $diagnosticos[] = [
             'donoCodigo' => $row['DON_CODIGO'],
             'donoNome' => $row['DON_NOME'],
             'animalCodigo' => $row['ANI_CODIGO'],
@@ -233,26 +215,36 @@ if ($_POST["operation"] == "create") {
             'consultaCodigo' => $row['CON_CODIGO'],
             'consultaData' => $row['CON_DATA'],
             'consultaHora' => $row['CON_HORA'],
+
+            'diagnosticoCodigo' => $row['DIG_CODIGO'],
         ];
     }
-    if (empty($consultas)) {
+    if (empty($diagnosticos)) {
         echo '{"status":"vazio"}';
     } else {
-        $total = count($consultas);
-        $consultas = json_encode($consultas);
-        echo '{"total" : "' . $total . '", "dados" : ' . $consultas . '}';
+        $total = count($diagnosticos);
+        $diagnosticos = json_encode($diagnosticos);
+        echo '{"total" : "' . $total . '", "dados" : ' . $diagnosticos . '}';
     }
 } else if ($_POST["operation"] == "search") {
     try {
         if (isset($_POST["nome"])) {
             $nome = $_POST["nome"];
 
-            $sql = "SELECT * FROM $table 
+            /* $sql = "SELECT * FROM $table 
                 INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
                 INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
                 INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
                 INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
-                WHERE ANI_NOME LIKE :ANI_NOME ORDER BY CON_DATA, CON_HORA;";
+                WHERE ANI_NOME LIKE :ANI_NOME ORDER BY CON_DATA, CON_HORA;"; */
+
+            $sql = "SELECT * FROM $table 
+            INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_consulta.CON_CODIGO
+            INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
+            INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
+            INNER JOIN $table_reference_veterinario ON $table_reference_consulta.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
+            INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+            WHERE ANI_NOME LIKE :ANI_NOME ORDER BY ANI_NOME, CON_DATA, CON_HORA;";
 
             $stmt = $conexao->prepare($sql);
             $stmt->execute(['ANI_NOME' => '%' . $nome . '%']);
@@ -271,6 +263,7 @@ if ($_POST["operation"] == "create") {
                     'consultaCodigo' => $row['CON_CODIGO'],
                     'consultaData' => $row['CON_DATA'],
                     'consultaHora' => $row['CON_HORA'],
+                    'diagnosticoCodigo' => $row['DIG_CODIGO'],
                 ];
             }
             if (empty($animais)) {
@@ -288,9 +281,7 @@ if ($_POST["operation"] == "create") {
 
     $sql = "SELECT * FROM $table 
         INNER JOIN $table_reference_animal ON $table.ANI_CODIGO = $table_reference_animal.ANI_CODIGO
-        INNER JOIN $table_reference_dono ON $table_reference_animal.DON_CODIGO = $table_reference_dono.DON_CODIGO
-        INNER JOIN $table_reference_veterinario ON $table.VET_CODIGO = $table_reference_veterinario.VET_CODIGO
-        INNER JOIN $table_reference_especialidade ON $table_reference_veterinario.ESP_CODIGO = $table_reference_especialidade.ESP_CODIGO
+        INNER JOIN $table_reference_consulta ON $table.CON_CODIGO = $table_reference_animal.CON_CODIGO
         ORDER BY CON_DATA, CON_HORA";
 
     $resultado = executarQuery($conexao, $sql);

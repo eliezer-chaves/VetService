@@ -12,6 +12,7 @@ try {
 
 if ($_POST["operation"] == "create") {
     if (empty($_POST["nome"]) || empty($_POST["donoNome"]) || empty($_POST["donoCodigo"])) {
+        //echo var_dump($_POST["nome"], $_POST["donoNome"], $_POST["donoCodigo"]);
         echo '{"resultado": "Preencha todos os campos", "status": "incomplete"}';
         return;
     } else {
