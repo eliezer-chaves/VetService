@@ -92,6 +92,7 @@
                 <tr class="text-center">
                   <th scope="col">Código</th>
                   <th scope="col">Nome</th>
+                  <th scope="col">Animais cadastrados</th>
                   <th scope="col">CPF</th>
                   <th scope="col">Telefone</th>
                   <th scope="col">Ações</th>

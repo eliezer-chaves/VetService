@@ -81,12 +81,13 @@ function readAll() {
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
         var donoTelefone = obj.dados[i].donoTelefone;
+        var totalAnimais = obj.dados[i].animais;
 
         if (donoTelefone == "") {
           donoTelefone = "Não informado";
         }
 
-        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+        fillTable(donoCodigo, donoNome, donoCPF, totalAnimais, donoTelefone);
       }
       var total = obj.total;
       $("#total_donos").html(total);
@@ -116,11 +117,12 @@ $("#table_count").on("change", function () {
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
         var donoTelefone = obj.dados[i].donoTelefone;
+        var totalAnimais = obj.dados[i].animais;
 
         if (donoTelefone == "") {
           donoTelefone = "Não informado";
         }
-        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+        fillTable(donoCodigo, donoNome, donoCPF, totalAnimais, donoTelefone);
       }
     }
   });
@@ -165,6 +167,7 @@ function loadData() {
       quantidade: quantidade,
     },
   }).done(function (resposta) {
+    
     $("#donos").empty();
     var obj = $.parseJSON(resposta);
 
@@ -193,12 +196,14 @@ function loadData() {
         var donoNome = obj.dados[i].donoNome;
         var donoCPF = obj.dados[i].donoCPF;
         var donoTelefone = obj.dados[i].donoTelefone;
+        var totalAnimais = obj.dados[i].animais;
+
 
         if (donoTelefone == "") {
           donoTelefone = "Não informado";
         }
 
-        fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+        fillTable(donoCodigo, donoNome, donoCPF, totalAnimais, donoTelefone);
       }
     } else {
       $("#conteudo").hide();
@@ -238,12 +243,13 @@ function pesquisarDono() {
           var donoNome = obj.dados[i].donoNome;
           var donoCPF = obj.dados[i].donoCPF;
           var donoTelefone = obj.dados[i].donoTelefone;
+          var totalAnimais = obj.dados[i].animais;
 
           if (donoTelefone == "") {
             donoTelefone = "Não informado";
           }
 
-          fillTable(donoCodigo, donoNome, donoCPF, donoTelefone);
+          fillTable(donoCodigo, donoNome, donoCPF, totalAnimais, donoTelefone);
         }
       } else {
         $("#table").hide();
@@ -260,7 +266,7 @@ function pesquisarDono() {
   }
 }
 
-function fillTable(donoCodigo, donoNome, donoCPF, donoTelefone) {
+function fillTable(donoCodigo, donoNome, donoCPF, totalAnimais, donoTelefone) {
   var nova_linha = "";
   var nova_linha =
     '<tr class="item"> ' +
@@ -271,6 +277,9 @@ function fillTable(donoCodigo, donoNome, donoCPF, donoTelefone) {
     "</th>" +
     '<td class="align-middle text-center">' +
     donoNome +
+    "</td>" +
+    '<td class="align-middle text-center">' +
+    totalAnimais +
     "</td>" +
     '<td class="align-middle text-center">' +
     donoCPF +

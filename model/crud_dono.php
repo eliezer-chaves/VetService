@@ -71,6 +71,7 @@ if ($_POST["operation"] == "create") {
     $donos = [];
 
     while ($row = $resultado->fetch()) {
+        
         $donos[] = [
             'donoCodigo' => $row['DON_CODIGO'],
             'donoNome' => $row['DON_NOME'],
@@ -82,7 +83,8 @@ if ($_POST["operation"] == "create") {
             'donoBairro' => $row['DON_BAIRRO'],
             'donoUF' => $row['DON_UF'],
             'donoTelefone' => $row['DON_TELEFONE'],
-            'donoCidade' => $row['DON_CIDADE']
+            'donoCidade' => $row['DON_CIDADE'],
+            'animais' => countTableAnimais($row['DON_CODIGO'])
         ];
     }
 
@@ -136,6 +138,7 @@ if ($_POST["operation"] == "create") {
         $donos = [];
 
         while ($row = $resultado->fetch()) {
+            
             $donos[] = [
                 'donoCodigo' => $row['DON_CODIGO'],
                 'donoNome' => $row['DON_NOME'],
@@ -147,7 +150,8 @@ if ($_POST["operation"] == "create") {
                 'donoBairro' => $row['DON_BAIRRO'],
                 'donoUF' => $row['DON_UF'],
                 'donoTelefone' => $row['DON_TELEFONE'],
-                'donoCidade' => $row['DON_CIDADE']
+                'donoCidade' => $row['DON_CIDADE'],
+                'animais' => countTableAnimais($row['DON_CODIGO'])
             ];
         }
         if (empty($donos)) {
@@ -172,6 +176,7 @@ if ($_POST["operation"] == "create") {
             $donos = [];
 
             while ($row = $stmt->fetch()) {
+                
                 $donos[] = [
                     'donoCodigo' => $row['DON_CODIGO'],
                     'donoNome' => $row['DON_NOME'],
@@ -183,7 +188,8 @@ if ($_POST["operation"] == "create") {
                     'donoBairro' => $row['DON_BAIRRO'],
                     'donoUF' => $row['DON_UF'],
                     'donoTelefone' => $row['DON_TELEFONE'],
-                    'donoCidade' => $row['DON_CIDADE']
+                    'donoCidade' => $row['DON_CIDADE'],
+                    'animais' => countTableAnimais($row['DON_CODIGO']) 
                 ];
             }
             if (empty($donos)) {
@@ -192,6 +198,7 @@ if ($_POST["operation"] == "create") {
             } else {
                 $total = count($donos);
                 $donos = json_encode($donos);
+                
                 echo '{"total" : "' . $total . '", "dados" : ' . $donos . '}';
             }
         }
@@ -252,4 +259,13 @@ function countTable(){
     $stmt = executarQuery($conexao, $sql);
     $totalROWS = $stmt->fetchColumn();
     return $totalROWS;
+}
+
+function countTableAnimais($donoCodigo){
+    global $conexao;
+    $sql = "SELECT COUNT(*) FROM TBL_ANIMAL WHERE DON_CODIGO = $donoCodigo;";
+    $stmt = executarQuery($conexao, $sql);
+    $totalAnimais = $stmt->fetchColumn();
+    
+    return $totalAnimais;
 }

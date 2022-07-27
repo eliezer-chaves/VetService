@@ -391,6 +391,8 @@ function deleteAnimal(codigo) {
       operation: "delete",
     },
   }).done(function (resposta) {
+    console.log(resposta)
+
     var obj = $.parseJSON(resposta);
     if (obj.status == "deletado") {
       clearFillds();
