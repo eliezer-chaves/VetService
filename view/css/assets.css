@@ -125,3 +125,13 @@ textarea:focus {
   z-index: 9999;
   border-radius: 0px;
 }
+
+#line::after{
+  content: "";
+  height: 2px;
+  width: 300px;
+  background-color: black;
+  display: block;
+  margin: 0 auto;
+  margin-top: 5px;
+}
