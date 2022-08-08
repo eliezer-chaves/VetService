@@ -49,7 +49,7 @@ function loadCalendar() {
     },
     //hiddenDays: [0],
     //weekends: false,
-    initialView: "timeGridWeek",
+    initialView: "listMonth",
     views: {
       listWeek: {
         buttonText: "Consultas da semana",

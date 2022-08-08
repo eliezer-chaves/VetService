@@ -31,10 +31,7 @@
     <?php include 'componentes/header.html'; ?>
     <!-- Main -->
     <div class="d-flex" id="main">
-      <!-- Sidebar -->
-      <div class="bg-white shadow" id="sidebar">
-        <?php include 'componentes/sidebar.html'; ?>
-      </div>
+      
       <!-- Content -->
       <div class="container-fluid w-75">
         <div class="">
