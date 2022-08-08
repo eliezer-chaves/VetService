@@ -14,11 +14,9 @@
   <!-- Fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!--CSS-->
-  <link rel="stylesheet" href="../css/header.css" />
   <link rel="stylesheet" href="../css/assets.css" />
   <link rel="stylesheet" href="../css/sidebar.css" />
   <link rel="stylesheet" href="../css/footer.css" />
-  <link rel="stylesheet" href="../css/main.css" />
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
@@ -33,12 +31,12 @@
     <div class="d-flex" id="main">
       
       <!--Content -->
-      <div class="container-fluid mb-3">
-        <div id="conteudo">
+      <div class="container-fluid mb-3 d-flex justify-content-center">
+        <div id="conteudo" class=" w-100">
           <div class="bg-body shadow mt-5 p-3 bg-body rounded" id="content-header">
             <div class="d-flex justify-content-between" id="">
               <div>
-                <a href="../pages/add_consulta.php">
+                <a href="../pages/calendar.php">
                   <button class="btn btn-success" type="submit">
                     <i class="me-2 fa-solid fa-calendar-days"></i>
                     Adicionar consulta
@@ -131,11 +129,10 @@
           </div>
         </div>
 
-        <div id="semConsulta" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
+        <div id="semConsulta" class="mt-5 bg-white shadow rounded p-5 w-50" style="display: flex; justify-content: center; align-items: center;">
           <div>
             <b class="h3">Nenhuma consulta a ser realizada!</b>
           </div>
-
         </div>
 
       </div>

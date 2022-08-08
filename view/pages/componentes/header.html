@@ -12,9 +12,9 @@
         <div class="dropdown">
           <button class="dropbtn">cadastros</button>
           <div class="dropdown-content">
-            <a href="load_animais.php" class="item">Animais</a>
-            <a href="load_donos.php" class="item">Donos</a>
-            <a href="load_veterinarios.php" class="item">Veterinários</a>
+            <a href="load_animais.php" class="dropdown-content-item">Animais</a>
+            <a href="load_donos.php" class="dropdown-content-item">Donos</a>
+            <a href="load_veterinarios.php" class="dropdown-content-item">Veterinários</a>
             <a href="load_especialidades.php">Especialidades</a>
           </div>
         </div>
@@ -22,7 +22,8 @@
         <div class="dropdown">
           <button class="dropbtn">consultas</button>
           <div class="dropdown-content">
-            <a href="calendar.php" class="item">Ver calendário</a>
+            <a href="calendar.php" class="dropdown-content-item">Ver calendário</a>
+            <a href="load_consultas.php" class="dropdown-content-item">Consultas a realizar</a>
             <a href="load_diagnosticos.php">Consultar diagnósticos</a>
           </div>
         </div>
@@ -97,7 +98,7 @@
   .dropdown:hover .dropbtn {
     font-weight: bold;
   }
-  .item{
+  .dropdown-content-item{
     border-bottom: 1px solid #1C6EA4;
   }
 </style>

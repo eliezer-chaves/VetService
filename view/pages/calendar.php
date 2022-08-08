@@ -20,11 +20,9 @@
   <!-- Fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!--CSS-->
-  <link rel="stylesheet" href="../css/header.css" />
   <link rel="stylesheet" href="../css/assets.css" />
   <link rel="stylesheet" href="../css/sidebar.css" />
   <link rel="stylesheet" href="../css/footer.css" />
-  <link rel="stylesheet" href="../css/main.css" />
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
@@ -34,6 +32,7 @@
     .fc-timegrid {
       cursor: pointer;
     }
+    
   </style>
 </head>
 
@@ -42,13 +41,11 @@
     <!-- Header -->
     <?php include 'componentes/header.html'; ?>
     <!-- Main -->
-    <div class="d-flex" id="main">
-      
+    <div >
       <!--Content -->
-      <div class="container-fluid ">
-        <div class="bg-white rounded shadow mt-3 mb-5 p-3">
+      <div class="container-fluid">
+        <div class="bg-white rounded shadow mt-3 mb-5 p-3 h-75">
           <div id="calendar"></div>
-
         </div>
       </div>
     </div>

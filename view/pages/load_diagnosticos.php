@@ -14,11 +14,9 @@
   <!-- Fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!--CSS-->
-  <link rel="stylesheet" href="../css/header.css" />
   <link rel="stylesheet" href="../css/assets.css" />
   <link rel="stylesheet" href="../css/sidebar.css" />
   <link rel="stylesheet" href="../css/footer.css" />
-  <link rel="stylesheet" href="../css/main.css" />
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.0/jquery.mask.js"></script>
@@ -34,7 +32,7 @@
       <!-- Content -->
       <div class="container-fluid w-75 mb-3">
         <div id="conteudo">
-          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-between" id="content-header">
+          <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-center" id="content-header">
             <div>
               <!-- <a href="../pages/add_animais.php">
                 <button class="btn btn-success" type="submit">
@@ -43,7 +41,7 @@
                 </button>
               </a> -->
             </div>
-            <div class="d-flex w-50">
+            <div class="d-flex w-100">
               <input class="form-control me-2" type="search" placeholder="Buscar diagnóstico por animal" id="nome_search" />
               <button class="btn btn-primary" type="submit" id="search">
                 <i class="fa-solid fa-magnifying-glass"></i>

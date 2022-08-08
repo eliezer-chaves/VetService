@@ -555,14 +555,14 @@ function fillTable(
     consultaHora +
     "</td>" +
     '<td class="text-center text-center">' +
-    '<button class="btn btn-warning me-2" id="editar' +
+    '<button class="btn btn-success me-2" id="editar' +
     diagnosticoCodigo +
-    '" data-bs-toggle="modal" data-bs-target="#modalEditarDiagnostico" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar consulta">' +
-    '<i class="fa-solid fa-pen-to-square"></i>' +
+    '" data-bs-toggle="modal" data-bs-target="#modalEditarDiagnostico" data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar diagnóstico">' +
+    '<i class="fa-solid fa-magnifying-glass"></i>' +
     "</button>" +
     '<button class="btn btn-danger" id="excluir' +
     diagnosticoCodigo +
-    '" data-bs-toggle="modal" data-bs-target="#modalExcluirDiagnostico" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir consulta">' +
+    '" data-bs-toggle="modal" data-bs-target="#modalExcluirDiagnostico" data-bs-toggle="tooltip" data-bs-placement="top" title="Excluir diagnóstico">' +
     '<i class="fa-solid fa-trash-can"></i>' +
     "</button>" +
     "</td>" +
