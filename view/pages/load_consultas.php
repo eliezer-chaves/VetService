@@ -130,7 +130,7 @@
         </div>
 
         <div id="semConsulta" class="mt-5 bg-white shadow rounded p-5 w-50" style="display: flex; justify-content: center; align-items: center;">
-          <div>
+          <div class="text-center">
             <b class="h3">Nenhuma consulta a ser realizada!</b>
           </div>
         </div>

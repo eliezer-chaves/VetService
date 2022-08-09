@@ -43,10 +43,8 @@ function loadCalendar() {
         endTime: "23:59",
       },
     ],
-    
     dayHeaderFormat: {
       weekday: "long",
-      
     },
     //hiddenDays: [0],
     //weekends: false,

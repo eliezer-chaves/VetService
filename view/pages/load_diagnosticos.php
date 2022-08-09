@@ -30,8 +30,8 @@
     <div class="d-flex" id="main">
      
       <!-- Content -->
-      <div class="container-fluid w-75 mb-3">
-        <div id="conteudo">
+      <div class="container-fluid mb-3 d-flex justify-content-center">
+        <div id="conteudo"  class=" w-100">
           <div class="mt-5 shadow p-3 bg-body rounded d-flex justify-content-center" id="content-header">
             <div>
               <!-- <a href="../pages/add_animais.php">
@@ -103,9 +103,9 @@
           </div>
         </div>
 
-        <div id="semConsulta" class="mt-5 bg-white shadow rounded h-25 w-100" style="display: flex; justify-content: center; align-items: center;">
-          <div>
-            <b class="h3">Diagnóstico animal(a) cadastrado!</b>
+        <div id="semConsulta" class="mt-5 bg-white shadow rounded p-5 w-50" style="display: flex; justify-content: center; align-items: center;">
+        <div class="text-center">
+            <b class="h3">Nenhum diagnóstico encontrado!</b>
           </div>
         </div>
 
@@ -125,9 +125,17 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
-                <div class="input-group mb-3 d-none">
-                  <span class="input-group-text">Código</span>
+                <div class="input-group mb-3 ">
+                  <span class="input-group-text">Animal Código</span>
                   <input type="text" class="form-control" id="modalCodigoAnimal" disabled />
+                </div>
+                <div class="input-group mb-3 ">
+                  <span class="input-group-text">Diagnóstico código</span>
+                  <input type="text" class="form-control" id="diagnosticoCodigo" disabled />
+                </div>
+                <div class="input-group mb-3 ">
+                  <span class="input-group-text">Consulta código</span>
+                  <input type="text" class="form-control" id="consultaCodigo" disabled />
                 </div>
               </div>
               <div class="row">
@@ -224,10 +232,9 @@
           <div class="modal-body">
             <form class="p-3">
               <div class="row">
-                <p><b>Ao excluir este animal, você irá excluir todas as consultas dele.</b></p>
-                <div class="input-group mb-3 d-none">
+                <div class="input-group mb-3 ">
                   <span class="input-group-text">Código</span>
-                  <input type="text" class="form-control" id="modalExcluirAnimalCodigo" disabled />
+                  <input type="text" class="form-control" id="modalExcluirDiagnosticoCodigo" disabled />
                 </div>
               </div>
 
@@ -242,7 +249,7 @@
 
               <div class="row">
                 <div class="input-group">
-                  <span class="input-group-text">Nome</span>
+                  <span class="input-group-text">Animal</span>
                   <input type="text" class="form-control" id="modalExcluirAnimalNome" disabled />
                 </div>
               </div>
@@ -253,7 +260,7 @@
             <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
               Fechar
             </button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalExcluirAnimal" id="deleteAnimal">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#modalExcluirDiagnostico" id="deleteDiagnostico">
               Excluir
             </button>
           </div>

@@ -125,22 +125,24 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "update") {
     try {
-        $ANI_CODIGO = $_POST["animalCodigo"];
-        $CON_CODIGO = $_POST["consultaCodigo"];
-        $VET_CODIGO = $_POST["veterinarioCodigo"];
-        $CON_DATA = $_POST["consultaData"];
-        $CON_HORA = $_POST["consultaHora"];
-        $CON_HORA_FIM = $_POST["consultaHoraFim"];
+        $DIG_CODIGO = $_POST["diagnosticoCodigo"];
+        $DIG_PESO = $_POST["peso"];
+        $DIG_ALTURA = $_POST["altura"];
+        $DIG_BPM = $_POST["bpm"];
+        $DIG_TEMPERATURA = $_POST["temperatura"];
+        $DIG_PRESSAO = $_POST["pressao"];
+        $DIG_SINTOMAS = $_POST["sintomas"];
 
-        $sql = "UPDATE " . $table . " SET ANI_CODIGO = :ANI_CODIGO, VET_CODIGO = :VET_CODIGO, CON_DATA = :CON_DATA, CON_HORA = :CON_HORA, CON_HORA_FIM = :CON_HORA_FIM WHERE CON_CODIGO = :CON_CODIGO;";
+        $sql = "UPDATE " . $table . " SET DIG_PESO = :DIG_PESO, DIG_ALTURA = :DIG_ALTURA, DIG_BPM = :DIG_BPM, DIG_TEMPERATURA = :DIG_TEMPERATURA, DIG_PRESSAO = :DIG_PRESSAO, DIG_SINTOMAS = :DIG_SINTOMAS WHERE DIG_CODIGO = :DIG_CODIGO;";
 
         $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(':ANI_CODIGO', $ANI_CODIGO);
-        $stmt->bindParam(':CON_CODIGO', $CON_CODIGO);
-        $stmt->bindParam(':VET_CODIGO', $VET_CODIGO);
-        $stmt->bindParam(':CON_DATA', $CON_DATA);
-        $stmt->bindParam(':CON_HORA', $CON_HORA);
-        $stmt->bindParam(':CON_HORA_FIM', $CON_HORA_FIM);
+        $stmt->bindParam(':DIG_CODIGO', $DIG_CODIGO);
+        $stmt->bindParam(':DIG_PESO', $DIG_PESO);
+        $stmt->bindParam(':DIG_ALTURA', $DIG_ALTURA);
+        $stmt->bindParam(':DIG_BPM', $DIG_BPM);
+        $stmt->bindParam(':DIG_TEMPERATURA', $DIG_TEMPERATURA);
+        $stmt->bindParam(':DIG_PRESSAO', $DIG_PRESSAO);
+        $stmt->bindParam(':DIG_SINTOMAS', $DIG_SINTOMAS);
         $stmt->execute();
 
         echo '{"status" : "alterado"}';
@@ -149,11 +151,11 @@ if ($_POST["operation"] == "create") {
     }
 } else if ($_POST["operation"] == "delete") {
     try {
-        $CON_CODIGO = $_POST["codigo"];
-        $sql = "DELETE FROM " . $table . " WHERE CON_CODIGO = :CON_CODIGO;";
+        $DIG_CODIGO = $_POST["codigo"];
+        $sql = "DELETE FROM " . $table . " WHERE DIG_CODIGO = :DIG_CODIGO;";
 
         $stmt = $conexao->prepare($sql);
-        $stmt->bindParam(':CON_CODIGO', $CON_CODIGO);
+        $stmt->bindParam(':DIG_CODIGO', $DIG_CODIGO);
         $stmt->execute();
         echo '{"status":"deletado"}';
     } catch (Exception $e) {

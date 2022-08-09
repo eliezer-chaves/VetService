@@ -9,26 +9,26 @@ $("#aviso").hide();
 $("#semConsulta").hide();
 
 function showAlertSuccess() {
-  $("#consultaAlterado")
+  $("#diagnosticoAlterado")
     .fadeTo(1000, 500)
     .fadeIn(1000, function () {
-      $("#consultaAlterado").fadeOut(1000);
+      $("#diagnosticoAlterado").fadeOut(1000);
     });
 }
 
 function showAlertSuccessDeletado() {
-  $("#consultaExcluido")
+  $("#diagnosticoExcluido")
     .fadeTo(1000, 500)
     .fadeIn(1000, function () {
-      $("#consultaExcluido").fadeOut(1000);
+      $("#diagnosticoExcluido").fadeOut(1000);
     });
 }
 
 function showAlertWarning() {
-  $("#consultaErro")
+  $("#diagnosticoErro")
     .fadeTo(3000, 500)
     .fadeIn(3000, function () {
-      $("#consultaErro").fadeOut(3000);
+      $("#diagnosticoErro").fadeOut(3000);
     });
 }
 
@@ -98,7 +98,7 @@ function showAlertWarning() {
   });
 }); */
 
-function filterTable(veterinarioCodigo) {
+/* function filterTable(veterinarioCodigo) {
   var quantidade = $("#table_count").val();
   $.ajax({
     method: "POST",
@@ -159,21 +159,18 @@ function filterTable(veterinarioCodigo) {
       $("#total_consultas").html(total);
     }
   });
-}
+} */
 
 loadData();
 
 function readAll() {
   var quantidade = $("#table_count").val();
-  var veterinarioCodigo = $("#modal_veterinario_codigo").val();
-  veterinarioCodigo = veterinarioCodigo.split("_")[0];
-  veterinarioCodigo = "";
+
   $.ajax({
     method: "POST",
-    url: urlCRUDConsulta,
+    url: urlCRUDDiagnostico,
     data: {
       operation: "read_all",
-      veterinarioCodigo: veterinarioCodigo,
       quantidade: quantidade,
     },
   }).done(function (resposta) {
@@ -209,21 +206,18 @@ function readAll() {
         var donoNome = obj.dados[i].donoNome;
         var animalNome = obj.dados[i].animalNome;
         var veterinarioNome = obj.dados[i].veterinarioNome;
-        var veterinarioEspecialidade = obj.dados[i].veterinarioEspecialidade;
-        var especialidadeCodigo = obj.dados[i].especialidadeCodigo;
-        var consultaCodigo = obj.dados[i].consultaCodigo;
         var consultaData = obj.dados[i].consultaData;
         var consultaHora = obj.dados[i].consultaHora;
         var consultaData = obj.dados[i].consultaData;
+        var diagnosticoCodigo = obj.dados[i].diagnosticoCodigo;
 
         fillTable(
           donoNome,
           animalNome,
           veterinarioNome,
-          consultaCodigo,
           consultaData,
           consultaHora,
-          veterinarioEspecialidade
+          diagnosticoCodigo
         );
       }
       var total = obj.total;
@@ -243,8 +237,8 @@ $(document).on("click", "button", function (element) {
   } else if (id == "updateDiagnostico") {
     var codigo = $("#codigo").val();
     updateDiagnostico(codigo);
-  } else if (id == "deleteConsulta") {
-    var codigo = $("#excluirConsultaCodigo").val();
+  } else if (id == "deleteDiagnostico") {
+    var codigo = $("#modalExcluirDiagnosticoCodigo").val();
     deleteConsulta(codigo);
   } else if (id.includes("diagnostico")) {
     var codigo = id.replace("diagnostico", "");
@@ -572,32 +566,35 @@ function fillTable(
 }
 
 function updateDiagnostico() {
-  var animalCodigo = $("#editarAnimalCodigo").val();
-  var consultaCodigo = $("#editarConsultaCodigo").val();
-  var veterinarioCodigo = $("#modal_veterinario_codigo").val();
-  var veterinarioNome = $("#modal_veterinario_opcao").val();
-  var consultaData = $("#editarDataConsulta").val();
-  var consultaHora = $("#editarHoraConsulta").val();
-  var consultaHoraFim = $("#hora_consulta_fim").val();
+  //var animalCodigo = $("#modalCodigoAnimal").val();
+  //var consultaCodigo = $("#editarConsultaCodigo").val();
+
+  var diagnosticoCodigo = $("#diagnosticoCodigo").val();
+  var peso = $("#peso").val();
+  var altura = $("#altura").val();
+  var bpm = $("#bpm").val();
+  var temperatura = $("#temperatura").val();
+  var pressao = $("#pressao").val();
+  var sintomas = $("#sintomas").val();
 
   $.ajax({
     method: "POST",
-    url: urlCRUDConsulta,
+    url: urlCRUDDiagnostico,
     data: {
-      animalCodigo: animalCodigo,
-      consultaCodigo: consultaCodigo,
-      veterinarioCodigo: veterinarioCodigo,
-      consultaData: consultaData,
-      consultaHora: consultaHora,
-      consultaHoraFim: consultaHoraFim,
+      diagnosticoCodigo: diagnosticoCodigo,
+      peso: peso,
+      altura: altura,
+      bpm: bpm,
+      temperatura: temperatura,
+      pressao: pressao,
+      sintomas: sintomas,
       operation: "update",
     },
   }).done(function (resposta) {
     var obj = $.parseJSON(resposta);
     if (obj.status == "alterado") {
-      $("#veterinario_opcao").val(veterinarioNome);
       clearFillds();
-      $("#modalEditarConsulta").modal("hide");
+      $("#modalEditarDiagnostico").modal("hide");
       readAll();
       showAlertSuccess();
     } else {
@@ -609,7 +606,7 @@ function updateDiagnostico() {
 function deleteConsulta(codigo) {
   $.ajax({
     method: "POST",
-    url: urlCRUDConsulta,
+    url: urlCRUDDiagnostico,
     data: {
       codigo: codigo,
       operation: "delete",
@@ -644,7 +641,9 @@ function fillFilds(codigo) {
 
     var consultaData = obj.CON_DATA;
     var consultaHora = obj.CON_HORA;
+    var consultaCodigo = obj.CON_CODIGO;
 
+    var diagnosticoCodigo = obj.DIG_CODIGO;
     var peso = obj.DIG_PESO;
     var altura = obj.DIG_ALTURA;
     var bpm = obj.DIG_BPM;
@@ -657,9 +656,11 @@ function fillFilds(codigo) {
     $("#modalNomeAnimal").val(animalNome);
     $("#modalNomeDono").val(donoNome);
 
+    $("#consultaCodigo").val(consultaCodigo);
     $("#dataConsulta").val(consultaData);
     $("#horaConsulta").val(consultaHora);
 
+    $("#diagnosticoCodigo").val(diagnosticoCodigo);
     $("#peso").val(peso);
     $("#altura").val(altura);
     $("#bpm").val(bpm);
@@ -675,16 +676,9 @@ function fillFilds(codigo) {
       ("0" + ano).slice(-2) + "/" + ("0" + mes).slice(-2) + "/" + dia;
 
     //Modal Excluir
-    /*  $("#excluirConsultaCodigo").val(consultaCodigo);
-    $("#excluirAnimalCodigo").val(animalCodigo);
-    $("#excluirAnimalNome").val(animalNome);
-    $("#excluirDonoCodigo").val(donoCodigo);
-    $("#excluirDonoNome").val(donoNome);
-    $("#excluirConsultaData").val(consultaData);
-    $("#editarHoraConsulta").val(consultaHora);
-    $("#excluirVeterinarioNome").val(veterinarioNome);
-    $("#excluirVeterinarioCodigo").val(veterinarioCodigo);
-    $("#excluirVeterinarioEspecialidadeNome").val(veterinarioEspecialidade); */
+    $("#modalExcluirDiagnosticoCodigo").val(diagnosticoCodigo);
+    $("#modalExcluirAnimalDonoNome").val(donoNome);
+    $("#modalExcluirAnimalNome").val(animalNome);
   });
 }
 
@@ -704,14 +698,7 @@ function clearFillds() {
   $("#especialidadeCodigo").val("");
 
   //Modal Excluir
-  $("#excluirConsultaCodigo").val("");
-  $("#excluirAnimalCodigo").val("");
-  $("#excluirAnimalNome").val("");
-  $("#excluirDonoCodigo").val("");
-  $("#excluirDonoNome").val("");
-  $("#excluirConsultaData").val("");
-  $("#editarHoraConsulta").val("");
-  $("#excluirVeterinarioNome").val("");
-  $("#excluirVeterinarioCodigo").val("");
-  $("#excluirVeterinarioEspecialidadeNome").val("");
+  $("#modalExcluirDiagnosticoCodigo").val("");
+  $("#modalExcluirAnimalDonoNome").val("");
+  $("#modalExcluirAnimalNome").val("");
 }
