@@ -32,7 +32,10 @@
     .fc-timegrid {
       cursor: pointer;
     }
-    
+    #calendar .fc-bgevent {
+    background: #000000;
+}
+
   </style>
 </head>
 
@@ -41,15 +44,15 @@
     <!-- Header -->
     <?php include 'componentes/header.html'; ?>
     <!-- Main -->
-    <div >
+    <div>
       <!--Content -->
       <div class="container-fluid">
-        <div class="bg-white rounded shadow mt-3 mb-5 p-3 h-75">
+        <div class="bg-white rounded shadow mt-2 p-3 h-75">
           <div id="calendar"></div>
         </div>
       </div>
     </div>
-    
+
     <!-- Modal Warning Campos Faltando -->
     <div id="modalAviso" class="modal fade" role="dialog">
       <div class="modal-dialog modal-dialog-centered">
@@ -151,7 +154,7 @@
                 <div class="col">
                   <div class="input-group ">
                     <span class="input-group-text">Hora</span>
-                    <input type="time" class="form-control" id="editarHoraConsulta" step="300"/>
+                    <input type="time" class="form-control" id="editarHoraConsulta" step="300" />
                   </div>
                 </div>
                 <div class="col">
@@ -288,6 +291,7 @@
     </div>
 
     <script src="../../controller/calendar.js"></script>
+
 </body>
 
 </html>

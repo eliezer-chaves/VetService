@@ -18,7 +18,9 @@ function showAlertWarning() {
       $("#consultaErro").fadeOut(3000);
     });
 }
-
+let inicio = "00:00"
+let fim = "24:00"
+let dias = [0]
 loadCalendar();
 
 function loadCalendar() {
@@ -27,26 +29,30 @@ function loadCalendar() {
     locale: "pt-br",
     themeSystem: "bootstrap5",
     //expandRows: true,
-    //slotMinTime: '08:00',
-    //slotMaxTime: '20:00',
+    slotMinTime: inicio,
+    slotMaxTime: fim,
     headerToolbar: {
       left: "prev,next today",
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek,listMonth",
     },
     //default: [1],
-    businessHours: [
+    //businessHours: [
       // specify an array instead
-      {
-        daysOfWeek: [1, 2, 3, 4, 5], // Monday, Tuesday, Wednesday
-        startTime: "00:00",
-        endTime: "23:59",
-      },
-    ],
+      //{
+        //daysOfWeek: daysOfWeek, // Monday, Tuesday, Wednesday
+        //startTime: "08:00",
+        //endTime: "18:00",
+      //},
+    //],
+    //slotDuration: "01:00:00",
+    height: "80vh",
+    //aspectRatio: 3,
+
     dayHeaderFormat: {
       weekday: "long",
     },
-    //hiddenDays: [0],
+    hiddenDays: dias,
     //weekends: false,
     initialView: "timeGridWeek",
     views: {

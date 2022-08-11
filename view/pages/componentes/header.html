@@ -1,20 +1,24 @@
 <header class="bg-primary shadow">
   <div id="header" class="d-flex justify-content-between align-items-center">
     <div class="brand ms-2">
-      <img src="../assets/brand.svg" alt="" style="height: 50px" />
+      <a href="../../index.php">
+        <img src="../assets/brand.svg" alt="" style="height: 50px" />
+      </a>
     </div>
 
     <div>
       <div class="d-flex justify-content-center">
-        <a href="calendar.php">
-            <button class="dropbtn">visão geral</button>
+        <a href="../../index.php">
+          <button class="dropbtn">visão geral</button>
         </a>
         <div class="dropdown">
           <button class="dropbtn">cadastros</button>
           <div class="dropdown-content">
             <a href="load_animais.php" class="dropdown-content-item">Animais</a>
             <a href="load_donos.php" class="dropdown-content-item">Donos</a>
-            <a href="load_veterinarios.php" class="dropdown-content-item">Veterinários</a>
+            <a href="load_veterinarios.php" class="dropdown-content-item"
+              >Veterinários</a
+            >
             <a href="load_especialidades.php">Especialidades</a>
           </div>
         </div>
@@ -22,8 +26,12 @@
         <div class="dropdown">
           <button class="dropbtn">consultas</button>
           <div class="dropdown-content">
-            <a href="calendar.php" class="dropdown-content-item">Ver calendário</a>
-            <a href="load_consultas.php" class="dropdown-content-item">Consultas a realizar</a>
+            <a href="calendar.php" class="dropdown-content-item"
+              >Ver calendário</a
+            >
+            <a href="load_consultas.php" class="dropdown-content-item"
+              >Consultas a realizar</a
+            >
             <a href="load_diagnosticos.php">Consultar diagnósticos</a>
           </div>
         </div>
@@ -99,7 +107,7 @@
   .dropdown:hover .dropbtn {
     font-weight: bold;
   }
-  .dropdown-content-item{
+  .dropdown-content-item {
     border-bottom: 1px solid #0d6efd;
   }
 </style>

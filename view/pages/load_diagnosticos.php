@@ -125,15 +125,15 @@
           <div class="modal-body">
             <form class="">
               <div class="row">
-                <div class="input-group mb-3 ">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Animal Código</span>
                   <input type="text" class="form-control" id="modalCodigoAnimal" disabled />
                 </div>
-                <div class="input-group mb-3 ">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Diagnóstico código</span>
                   <input type="text" class="form-control" id="diagnosticoCodigo" disabled />
                 </div>
-                <div class="input-group mb-3 ">
+                <div class="input-group mb-3 d-none">
                   <span class="input-group-text">Consulta código</span>
                   <input type="text" class="form-control" id="consultaCodigo" disabled />
                 </div>
@@ -232,7 +232,7 @@
           <div class="modal-body">
             <form class="p-3">
               <div class="row">
-                <div class="input-group mb-3 ">
+                <div class="input-group d-none">
                   <span class="input-group-text">Código</span>
                   <input type="text" class="form-control" id="modalExcluirDiagnosticoCodigo" disabled />
                 </div>
@@ -240,7 +240,7 @@
 
               <div class="row">
                 <div class="col">
-                  <div class="input-group mb-3">
+                  <div class="input-group mb-2">
                     <span class="input-group-text">Dono</span>
                     <input type="text" class="form-control" id="modalExcluirAnimalDonoNome" disabled />
                   </div>
