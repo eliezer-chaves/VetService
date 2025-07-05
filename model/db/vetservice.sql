@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05/07/2025 às 21:34
+-- Tempo de geração: 05/07/2025 às 22:04
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -56,17 +56,9 @@ CREATE TABLE `tbl_consulta` (
   `VET_CODIGO` int(11) NOT NULL,
   `CON_DATA` date NOT NULL,
   `CON_HORA` time NOT NULL,
-  `CON_HORA_FIM` time DEFAULT NULL
+  `CON_HORA_FIM` time DEFAULT NULL,
+  `CON_REALIZADA` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `tbl_consulta`
---
-
-INSERT INTO `tbl_consulta` (`CON_CODIGO`, `ANI_CODIGO`, `VET_CODIGO`, `CON_DATA`, `CON_HORA`, `CON_HORA_FIM`) VALUES
-(1, 1, 1, '2025-07-09', '01:30:00', '17:00:00'),
-(2, 1, 1, '2025-07-05', '17:30:00', '23:59:00'),
-(3, 2, 2, '2025-07-05', '16:32:00', '18:00:00');
 
 -- --------------------------------------------------------
 
@@ -225,13 +217,13 @@ ALTER TABLE `tbl_animal`
 -- AUTO_INCREMENT de tabela `tbl_consulta`
 --
 ALTER TABLE `tbl_consulta`
-  MODIFY `CON_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `CON_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `tbl_diagnostico`
 --
 ALTER TABLE `tbl_diagnostico`
-  MODIFY `DIG_CODIGO` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `DIG_CODIGO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `tbl_dono`

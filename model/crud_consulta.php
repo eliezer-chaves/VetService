@@ -23,11 +23,12 @@ if ($_POST["operation"] == "create") {
             $data = $_POST["data"];
             $hora = $_POST["horaInicio"];
             $horaFim = $_POST["horaFim"];
+            $conRealizada = false;
 
             $sql = "INSERT INTO " . $table .
-                "(ANI_CODIGO, VET_CODIGO, CON_DATA, CON_HORA, CON_HORA_FIM)" .
+                "(ANI_CODIGO, VET_CODIGO, CON_DATA, CON_HORA, CON_HORA_FIM, CON_REALIZADA)" .
                 " VALUES " .
-                "(:ANI_CODIGO, :VET_CODIGO, :CON_DATA, :CON_HORA, :CON_HORA_FIM);";
+                "(:ANI_CODIGO, :VET_CODIGO, :CON_DATA, :CON_HORA, :CON_HORA_FIM, :CON_REALIZADA);";
 
             $stmt = $conexao->prepare($sql);
             $stmt->bindParam(':ANI_CODIGO', $animalCodigo);
@@ -35,6 +36,7 @@ if ($_POST["operation"] == "create") {
             $stmt->bindParam(':CON_DATA', $data);
             $stmt->bindParam(':CON_HORA', $hora);
             $stmt->bindParam(':CON_HORA_FIM', $horaFim);
+            $stmt->bindParam(':CON_REALIZADA', $conRealizada);
             $stmt->execute();
 
             echo '{ "resultado": "Consulta cadastrada", "status": "cadastrado", "data": "' . $data . '", "hora": "' . $hora . '", "horaFim":"' . $horaFim . '", "animal":"' . $_POST['animalNome'] . '", "dono" : "' . $_POST['donoNome'] . '", "veterinario":"' . $_POST['veterinario'] . '", "especialidade":"' . $_POST['especialidade'] . '" }';

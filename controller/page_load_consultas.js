@@ -467,7 +467,6 @@ function loadData() {
     },
   }).done(function (resposta) {
     $("#consultas").empty();
-    console.log(resposta);
     var obj = $.parseJSON(resposta);
 
     if (obj.status != "vazio") {
