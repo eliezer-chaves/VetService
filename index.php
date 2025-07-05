@@ -188,9 +188,9 @@
             </div>
 
           </div>
-          <div class="p-3 bg-light mt-5 shadow p-3 rounded w-75">
+          <!-- <div class="p-3 bg-light mt-5 shadow p-3 rounded w-75">
             a
-          </div>
+          </div> -->
         </div>
 
       </div>

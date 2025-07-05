@@ -111,9 +111,8 @@ function filterTable(veterinarioCodigo) {
     },
   }).done(function (resposta) {
     $("#consultas").empty();
-
+    console.log(resposta);
     var obj = $.parseJSON(resposta);
-
     if (obj.total == undefined) {
       $("#conteudo").hide();
       $("#semConsulta").show();
@@ -468,7 +467,7 @@ function loadData() {
     },
   }).done(function (resposta) {
     $("#consultas").empty();
-
+    console.log(resposta);
     var obj = $.parseJSON(resposta);
 
     if (obj.status != "vazio") {
